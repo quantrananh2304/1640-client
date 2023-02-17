@@ -1,5 +1,4 @@
 import reactLogo from "./assets/react.svg";
-import "./App.css";
 import { Provider } from "react-redux";
 import store, {
   Counteractions,
@@ -10,6 +9,7 @@ import store, {
 import { PersistGate } from "redux-persist/integration/react";
 import { RESETTABLE_REDUCER, RootState } from "./types/reduxs";
 import { useEffect } from "react";
+import Wrapper from "./wrapper";
 
 function AppContent() {
   const counter = useSelector((state: RootState) => state.counter.counter);
@@ -62,7 +62,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppContent />
+        <Wrapper/>
       </PersistGate>
     </Provider>
   );
