@@ -5,6 +5,7 @@ import Auth from '~/wrapper/Auth';
 const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
 const About = loadable(() => import('~/pages/about'));
+const Register = loadable(() => import('~/pages/register'));
 
 export const ROUTES = {
 
@@ -13,6 +14,7 @@ export const ROUTES = {
 
   // no auth
   Login: '/login',
+  Register: '/register'
 };
 
 const routes = [
@@ -21,6 +23,7 @@ const routes = [
 
   // no auth
   { exact: true, path: ROUTES.Login, component: Login, isAuth: false },
+  { exact: true, path: ROUTES.Register, component: Register, isAuth: false },
 ];
 
 export default routes;
