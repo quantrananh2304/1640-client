@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import styles from './styles.module.scss'
-import { Button, Checkbox, Form, Input } from 'antd'
+import React, { useState } from 'react';
+import styles from './styles.module.scss';
+import { Button, Checkbox, Form, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 
