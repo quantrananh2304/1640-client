@@ -41,6 +41,7 @@ const IdeaList = (props: Prop) => {
                 key="ellipsis"
               />,
             ]}
+            extra={item.time}
           >
             <Meta
               avatar={<Avatar src={item.avatar} />}
