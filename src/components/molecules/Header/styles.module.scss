@@ -13,10 +13,13 @@
     padding: 16px 8px;
 
     .title {
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 20px;
+      .logo {
+        width: 50px !important;
+      }
     }
 
     .info {

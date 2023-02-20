@@ -7,8 +7,11 @@ import iconSearch from '~/assets/images/iconSearch.svg';
 import iconDetail from '~/assets/images/iconDetail.svg';
 import iconNotification from '~/assets/images/iconNotification.svg';
 import iconAvatar from '~/assets/images/iconAvatar.svg';
+import logo from '~/assets/images/1640-logos_white.png';
 
 import styles from './styles.module.scss';
+import { removeCookie } from '~/utils/cookie';
+import { ROUTES } from '~/routes';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
@@ -16,7 +19,8 @@ const { Header: LayoutHeader } = Layout;
 export default function Header() {
 
   const logout = () => {
-    //Code here
+    removeCookie('token');
+    history.push(ROUTES.Login);
   };
 
   const handleClickLogo = () => {
@@ -40,7 +44,8 @@ export default function Header() {
           className={`${styles.title} cursor-pointer`}
           tabIndex={0}
         >
-          Title
+          <Svg className={styles.logo} src={logo}/>
+          <h3>UniCollective</h3>
         </div>
         <div className={styles.info}>
           <Svg src={iconSearch} alt='icon search' className={styles.iconSearch} />

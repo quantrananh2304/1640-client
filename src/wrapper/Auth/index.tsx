@@ -8,7 +8,7 @@ import { ROUTES } from '~/routes';
 
 import styles from './styles.module.scss';
 import loadable from '~/utils/loadable';
-import {UnorderedListOutlined, HomeOutlined} from '@ant-design/icons'
+import {UnorderedListOutlined, CustomerServiceOutlined} from '@ant-design/icons'
 import { animated } from '@react-spring/web';
 import { Footer } from 'antd/es/layout/layout';
 import Header from '~/components/molecules/Header';
@@ -26,22 +26,16 @@ function Auth(props: Props) {
 
   const menuLeft: MenuItem[] = useMemo(() => [
     {
-      key: ROUTES.Home,
-      label: 'Home',
-      icon: <HomeOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.Home,
-    },
-    {
-      key: ROUTES.About,
-      label: <Link to={ROUTES.About}>About</Link>,
-      icon: <UnorderedListOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.About,
-    },
-    {
       key: ROUTES.Ideas,
       label: <Link to={ROUTES.Ideas}>Ideas</Link>,
       icon: <UnorderedListOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.Ideas,
+    },
+    {
+      key: ROUTES.About,
+      label: <Link to={ROUTES.About}>About</Link>,
+      icon: <CustomerServiceOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.About,
     },
   ], []);
 

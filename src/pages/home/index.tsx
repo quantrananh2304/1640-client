@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '~/routes';
+import Spin from '~/components/atoms/Spin';
+import { getCookie } from '~/utils/cookie';
 
-const Home = () => {
+
+export default function Home() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!getCookie('token')) {
+     navigate(ROUTES.Login) 
+    } else {
+      navigate(ROUTES.Ideas);
+    }
+  }, [navigate, getCookie]);
+
   return (
-    <div>Home</div>
-  )
+    <div className='d-flex justify-content-center align-items-center w-100 h-100'>
+      <Spin spinning />
+    </div>
+  );
 }
-
-export default Home
