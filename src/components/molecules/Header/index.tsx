@@ -1,17 +1,19 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Dropdown, Layout, MenuProps } from 'antd';
 
 import history from '~/utils/history';
 import loadable from '~/utils/loadable';
+import iconSearch from '~/assets/images/iconSearch.svg';
+import iconDetail from '~/assets/images/iconDetail.svg';
+import iconNotification from '~/assets/images/iconNotification.svg';
+import iconAvatar from '~/assets/images/iconAvatar.svg';
 
 import styles from './styles.module.scss';
 
-const DropdownComponent = loadable(() => import('~/components/atoms/DropdownComponent'));
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
 
 export default function Header() {
-
 
   const logout = () => {
     //Code here
@@ -21,7 +23,7 @@ export default function Header() {
     history.push('/');
   };
 
-  const menu = [
+  const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
@@ -41,17 +43,17 @@ export default function Header() {
           Title
         </div>
         <div className={styles.info}>
-          {/* <Svg src={iconSearch} alt='icon search' className={styles.iconSearch} />
+          <Svg src={iconSearch} alt='icon search' className={styles.iconSearch} />
           <Svg src={iconDetail} alt='icon detail' className={styles.iconDetail} />
-          <Svg src={iconNotification} alt='icon notification' className={styles.iconNotification} /> */}
-          <DropdownComponent menu={menu}>
+          <Svg src={iconNotification} alt='icon notification' className={styles.iconNotification} />
+          <Dropdown menu={{items}}>
             <div className={styles.coverInfo}>
               <div className={styles.avatar}>
-                {/* <Svg src={iconAvatar} alt='icon avatar' className={styles.iconAvatar} /> */}
+                <Svg src={iconAvatar} alt='icon avatar' className={styles.iconAvatar} />
               </div>
-              <div className={styles.name}>{''}</div>
+              <div className={styles.name}>{'hieu.trantrung'}</div>
             </div>
-          </DropdownComponent>
+          </Dropdown>
         </div>
       </LayoutHeader>
     </Layout>

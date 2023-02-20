@@ -1,5 +1,5 @@
 import React from 'react';
-import { getFileName } from 'utils/helper';
+import { getFileName } from '~/utils/helper';
 
 interface Props extends React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> {
   displayName?: string;

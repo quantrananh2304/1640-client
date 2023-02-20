@@ -21,7 +21,6 @@
 .pageWrapper {
   height: 100vh;
   width: 100vw;
-
   .mainWrapper {
     max-height: 100%;
     flex: 1;
@@ -32,7 +31,6 @@
       .pageContent {
         flex: 1;
         margin-top: 48px;
-
         &.headerTop {
           margin-top: 0;
           max-width: 100vw;
