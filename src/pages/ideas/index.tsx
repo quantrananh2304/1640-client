@@ -1,5 +1,7 @@
 import React from 'react'
-import IdeasList from '~/components/molecules/IdeasList'
+import loadable from '~/utils/loadable';
+
+const IdeasList = loadable(() => import('~/components//molecules/IdeasList'));
 
 const Ideas = () => {
   return (

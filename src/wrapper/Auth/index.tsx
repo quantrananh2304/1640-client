@@ -8,7 +8,11 @@ import { ROUTES } from '~/routes';
 
 import styles from './styles.module.scss';
 import loadable from '~/utils/loadable';
-import {UnorderedListOutlined, CustomerServiceOutlined} from '@ant-design/icons'
+import {
+  UnorderedListOutlined,
+  CustomerServiceOutlined,
+  TagsOutlined,
+  DashboardOutlined } from '@ant-design/icons'
 import { animated } from '@react-spring/web';
 import { Footer } from 'antd/es/layout/layout';
 import Header from '~/components/molecules/Header';
@@ -36,6 +40,18 @@ function Auth(props: Props) {
       label: <Link to={ROUTES.About}>About</Link>,
       icon: <CustomerServiceOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.About,
+    },
+    {
+      key: ROUTES.Category,
+      label: <Link to={ROUTES.Category}>Category</Link>,
+      icon: <TagsOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Category,
+    },
+    {
+      key: ROUTES.DashBoard,
+      label: <Link to={ROUTES.DashBoard}>DashBoard</Link>,
+      icon: <DashboardOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.DashBoard,
     },
   ], []);
 

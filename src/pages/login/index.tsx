@@ -7,7 +7,10 @@ import { ROUTES } from '~/routes';
 import { getToken } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
 import { getCookie } from '~/utils/cookie';
-import Spin from '~/components/atoms/Spin';
+import loadable from '~/utils/loadable';
+
+
+const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const Login = () => {
   const [form] = Form.useForm();
