@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
-import { Avatar, Card, List, Spin } from 'antd'
+import { Avatar, Card, List } from 'antd'
 import { LikeOutlined,MessageOutlined, DislikeOutlined} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
+import loadable from '~/utils/loadable';
+
 import styles from './styles.module.scss'
 
+
+const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
   data?: any
 }

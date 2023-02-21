@@ -1,7 +1,11 @@
 import React from 'react'
-import IdeaList from './List'
-import Filter from './Filter';
+
 import { useIdeas } from '~/hooks/useIdeas';
+import loadable from '~/utils/loadable';
+
+
+const IdeaList = loadable(() => import('~/components/molecules/IdeasList/List'));
+const Filter = loadable(() => import('~/components/molecules/IdeasList/Filter'));
 
 const IdeasList = () => {
   const { data } = useIdeas()

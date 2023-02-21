@@ -1,5 +1,7 @@
 import React from 'react';
 import { Dropdown, Layout, MenuProps } from 'antd';
+import { removeCookie } from '~/utils/cookie';
+import { ROUTES } from '~/routes';
 
 import history from '~/utils/history';
 import loadable from '~/utils/loadable';
@@ -10,8 +12,6 @@ import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
 
 import styles from './styles.module.scss';
-import { removeCookie } from '~/utils/cookie';
-import { ROUTES } from '~/routes';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
