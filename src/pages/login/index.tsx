@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 
-import { getToken } from '~/api/login';
+import { setLogin } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
 import { getCookie } from '~/utils/cookie';
 import loadable from '~/utils/loadable';
-
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const Login = () => {
   const [form] = Form.useForm();
-  const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -22,19 +20,24 @@ const Login = () => {
 
   const handleGetCookie = async (formValues: any) => {
     setLoading(true)
-    const res = await getToken()
-    const token = res?.data?.token
-    setTimeout(() => {
-      handleLogin({
-        accessToken: token
-      })
-      setLoading(false);
-    }, 2000)
+    if (form) {
+      const fmData = {
+        email: formValues.userName,
+        password: formValues.password
+      }
+      const res = await setLogin(fmData)
+      if (res) {
+        const token = res?.data?.token
+        handleLogin({
+          accessToken: token
+        })
+        setLoading(false)
+      }
+    }
   }
 
   useEffect(() => {
     const token = getCookie('token');
-    
     if (token) {
       navigate(callbackUrl);
       return;
@@ -66,15 +69,6 @@ const Login = () => {
             >
               <Input.Password/>
             </Form.Item>
-            <Form.Item 
-              className={styles.checkBox} 
-              name="remember" 
-              valuePropName="checked"
-            >
-              <Checkbox
-                onChange={(e) => setChecked(e.target.checked)}
-              >Remember me</Checkbox>
-            </Form.Item>
             <Form.Item>
             <Button 
               className={styles.btnLogin}
@@ -85,8 +79,8 @@ const Login = () => {
             </Button>
             </Form.Item>
           </Form>
-          <div className={styles.createAccount}>
-            <p>Don't have account?</p> &nbsp; <Link to={ROUTES.Register}>Create new account</Link>
+          <div className={styles.forgotPassword}>
+            <p>Forgot password?</p> &nbsp; <Link to={ROUTES.Register}>Reset password here!</Link>
           </div>
         </div>
       </div>

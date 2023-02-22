@@ -27,9 +27,29 @@ export default function Header() {
     history.push('/');
   };
 
+  const showProfile = () => {
+    history.push(ROUTES.Profile);
+  }
+
+  const handleSetting = () => {
+    //Code here
+  }
+
   const items: MenuProps['items'] = [
     {
       key: '1',
+      label: (
+        <div onClick={showProfile}>Profile</div>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <div onClick={handleSetting}>Setting</div>
+      ),
+    },
+    {
+      key: '3',
       label: (
         <div onClick={logout}>Logout</div>
       ),

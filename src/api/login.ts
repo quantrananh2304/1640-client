@@ -1,13 +1,3 @@
-export const dataUser = (() => {
-  const user = {
-    token: 'qweuhdasdjk'
-  }
+import { sendPost } from "~/utils/axios";
 
-  return user;
-})();
-
-export const getToken = () => Promise.resolve({
-  data: dataUser,
-  message: 'null',
-  error: null
-});
+export const setLogin = (params: any) => sendPost('/auth/login', params);

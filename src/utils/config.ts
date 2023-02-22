@@ -1,2 +1,2 @@
-export const HOST_API_URL =
-  process.env.REACT_APP_HOST_API_URL || "http://localhost:443";
+export const HOST_API_URL = 'https://server-1640.herokuapp.com/api/'
+

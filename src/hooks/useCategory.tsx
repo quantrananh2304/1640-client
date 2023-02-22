@@ -1,7 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '~/api/categories';
-import { getIdeas } from '~/api/ideas';
 
 export const QK_CATEGORY = 'categories';
 

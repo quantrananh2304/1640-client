@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 import { getCookie } from '~/utils/cookie';
 import loadable from '~/utils/loadable';
+import { getLocalStorage } from '~/utils/localStorage';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 
@@ -10,7 +11,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getCookie('token')) {
+    if (!getCookie('token') && !getLocalStorage('token')) {
      navigate(ROUTES.Login) 
     } else {
       navigate(ROUTES.Ideas);

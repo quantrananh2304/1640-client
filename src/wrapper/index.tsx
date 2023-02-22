@@ -1,10 +1,13 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import routes from '~/routes';
 import Blank from '~/layouts';
+import { getCookie } from '~/utils/cookie';
+import NotFound from '~/pages/404';
 
 function Wrapper() {
+  const token = getCookie('token');
   return (
     <Routes>
       {routes.map((route, index) => {
@@ -14,8 +17,9 @@ function Wrapper() {
             <Route
               key={index}
               path={route.path}
-              element={
-                (
+              element={!token
+                ? <Navigate replace to="/login" />
+                : (
                   <React.Fragment>
                     <Blank>
                       <Layout>
@@ -43,7 +47,7 @@ function Wrapper() {
           />
         );
       })}
-      {/* <Route path="*" element={<NotFound />} /> */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
