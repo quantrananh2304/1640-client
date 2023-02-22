@@ -12,21 +12,18 @@
   .formContainer {
     box-shadow: 10px 10px 20px #cbced1;
     border-radius: 1rem;
-    padding: 70px 30px;
+    padding: 80px 30px;
     background-color: #ffffff;
     text-align: center;
     h1{
       margin-bottom: 50px;
     }
-    .checkBox {
-      display: flex;
-      :global {
-        .ant-checkbox+span {
-          align-self: flex-start;
-        }
-      }
+    .btnLogin {
+      margin-top: 40px;
+      width: 287px;
     }
-    .createAccount{
+    .forgotPassword{
+      justify-content: center;
       p{
         margin: 0;
       }
@@ -35,9 +32,6 @@
         text-decoration: none;
         color: #4096ff;
       }
-    }
-    .btnLogin {
-      width: 287px;
     }
   }
 }

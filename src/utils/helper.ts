@@ -1,6 +1,7 @@
 import { ROUTES } from "~/routes";
 import { getCookie, setCookie } from "./cookie";
 import history from './history';
+import { setLocalStorage } from "./localStorage";
 
 
 export const getFileName = (path: string) => {

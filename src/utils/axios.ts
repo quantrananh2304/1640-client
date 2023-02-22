@@ -6,7 +6,7 @@ import {HOST_API_URL} from './config';
 
 const axiosInstance = Axios.create({
   timeout: 3 * 60 * 1000,
-  baseURL: HOST_API_URL,
+  baseURL:HOST_API_URL,
 });
 
 axiosInstance.interceptors.request.use(
