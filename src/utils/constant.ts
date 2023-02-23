@@ -16,6 +16,13 @@ export enum Gender {
   'FEMALE' = 'Female',
 }
 
+export enum Role {
+  'ADMIN' = 'Admin',
+  'STAFF' = 'Staff',
+  'QUALITY_ASSURANCE_MANAGER' = 'Quality assurance manager',
+  'QUALITY_ASSURANCE_COORDINATOR' = 'Quality assurance coordinator',
+}
+
 export const userIcon = {
   [-1]: '',
   [UserStatus.ACTIVE]: dotGreen,

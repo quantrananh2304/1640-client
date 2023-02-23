@@ -32,7 +32,7 @@ export default function Header() {
   }
 
   const handleSetting = () => {
-    //Code here
+    history.push(ROUTES.Setting);
   }
 
   const items: MenuProps['items'] = [
