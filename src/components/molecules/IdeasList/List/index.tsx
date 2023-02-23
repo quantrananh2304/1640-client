@@ -32,7 +32,7 @@ const IdeaList = (props: Prop) => {
       className={styles.listContainer}
       itemLayout="vertical"
       size="small"
-      style={{ maxHeight: '600px', overflowY: 'scroll' }}
+      style={{ maxHeight: '60vh', overflowY: 'scroll' }}
       dataSource={props?.data}
       renderItem={(item: any) => (
         <div key={item.id}>

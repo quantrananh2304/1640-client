@@ -17,35 +17,37 @@
   background-color: transparent;
   border-bottom-right-radius: 100%;
 }
-
-.pageWrapper {
+.layoutContainer{
   height: 100vh;
   width: 100vw;
-  .mainWrapper {
-    max-height: 100%;
-    flex: 1;
-    overflow-y: auto;
-    .coverContent {
-      display: flex;
-      overflow: hidden;
-      .pageContent {
-        flex: 1;
-        margin-top: 48px;
-        &.headerTop {
-          margin-top: 0;
-          max-width: 100vw;
-        }
-      }
-    }
-  }
-
 }
+// .pageWrapper {
+//   height: 100vh;
+//   width: 100vw;
+//   .mainWrapper {
+//     max-height: 100%;
+//     flex: 1;
+//     overflow-y: auto;
+//     .coverContent {
+//       display: flex;
+//       overflow: hidden;
+//       .pageContent {
+//         flex: 1;
+//         margin-top: 48px;
+//         &.headerTop {
+//           margin-top: 0;
+//           max-width: 100vw;
+//         }
+//       }
+//     }
+//   }
+// }
 
-:global{
-  .ant-picker-month-panel{
-    width: 210px !important;
-  }
-  .ant-picker-month-panel .ant-picker-content{
-    height: 180px !important;
-  }
-}
+// :global{
+//   .ant-picker-month-panel{
+//     width: 210px !important;
+//   }
+//   .ant-picker-month-panel .ant-picker-content{
+//     height: 180px !important;
+//   }
+// }

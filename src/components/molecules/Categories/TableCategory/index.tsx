@@ -77,7 +77,7 @@ const CategoryTable = (props: Props) => {
         <Spin spinning={false}>
           <Table
             className={styles.tableContainer}
-            scroll={{ y: '70vh' }}
+            scroll={{ y: '60vh' }}
             columns={columns}
             rowKey={(record: any) => record.id}
             dataSource={categories}

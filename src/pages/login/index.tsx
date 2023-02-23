@@ -51,7 +51,6 @@ const Login = () => {
         <h1>Login</h1>
           <Form
             form={form}
-            autoComplete="off"
             layout='vertical'
             onFinish={handleGetCookie}
           >
