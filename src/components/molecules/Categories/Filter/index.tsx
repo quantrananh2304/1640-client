@@ -12,7 +12,7 @@ const Filter = () => {
 
   return (
     <div className={styles.filterContainer}>
-        <div className={styles.titleHead}>Category</div>
+        {/* <div className={styles.titleHead}>Category</div> */}
         <div>
           <Button
             className={styles.btnAdd}

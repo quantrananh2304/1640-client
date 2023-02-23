@@ -1,5 +1,4 @@
 .container {
-  margin: 16px 16px 0px 16px;
   :global { 
     .ant-table-cell-scrollbar:not([rowspan]){
       box-shadow: none;
@@ -37,43 +36,6 @@
   .groupSave {
     display: flex;
     justify-content: space-around;
-  }
-  .customerName{
-    color: #096DD9;
-    cursor: pointer;
-    font-weight: 500;
-    line-height: 22px;
-   }
-  .headContainer {
-    display: flex;
-    align-items: center;
-    height         : 52px;
-    justify-content: space-between;
-    background     : #FFFFFF;
-    box-shadow     : 0px 2px 8px rgba(0, 0, 0, 0.15);
-    border-radius  : 2px;
-  
-    .icon {
-      width : 14px;
-      height: 14px;
-    }
-    .rightGroup{
-      display: flex;
-      .btnAdd {
-        display: flex;
-        justify-content: space-between;
-        width: 151px;
-        align-items: center;
-        margin-right: 8px;
-        .icon {
-          margin-right: 9px;
-        }
-      }
-    }
-    .selectStatus{
-      margin-left: 16px;
-      width: 184px;
-    }
   }
 }
 .headerConfirmDelete{

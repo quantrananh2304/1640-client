@@ -11,7 +11,7 @@ const IdeasList = () => {
   const { data } = useIdeas()
   return (
     <>
-      <Filter/>
+      {/* <Filter/> */}
       <IdeaList data={data?.data}/>
     </>
   )

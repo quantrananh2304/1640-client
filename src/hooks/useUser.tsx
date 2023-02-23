@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { setLogin } from '~/api/login';
+import { getUserInfo } from '~/api/user';
 
-export const QK_LOGIN = 'login';
+export const QK_USER = 'user';
 
-export function useUser(params: any) {
-  const res = useQuery([QK_LOGIN, {params}], () => setLogin(params), {
-    enabled: Boolean(params),
+export function useUser() {
+  const res = useQuery([QK_USER], () => getUserInfo(), {
+    enabled: true,
     keepPreviousData: true,
     refetchOnWindowFocus: false
   });

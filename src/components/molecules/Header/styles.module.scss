@@ -1,16 +1,10 @@
 .header {
   .coverHeader {
-    height: 6vh;
-    background: #001529;
     box-shadow: inset 0px -1px 0px #f0f0f0;
     align-items: center;
     display: flex;
     color: #ffffff;
-    position: fixed;
-    top: 0;
     width: 100%;
-    z-index: 15;
-    padding: 16px 8px;
 
     .title {
       display: flex;
