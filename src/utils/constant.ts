@@ -5,6 +5,7 @@ export const DATE = 'yyyy/MM/dd';
 export const DATE_VI_FORMAT = 'dd/MM/yyyy';
 export const DATE_SIMPLE = 'MM/dd';
 
+export const SUCCESS = 'Success'
 
 export enum UserStatus {
   'ACTIVE' = 'Active',
@@ -14,6 +15,13 @@ export enum UserStatus {
 export enum Gender {
   'MALE' = 'Male',
   'FEMALE' = 'Female',
+}
+
+export enum Role {
+  'ADMIN' = 'Admin',
+  'STAFF' = 'Staff',
+  'QUALITY_ASSURANCE_MANAGER' = 'Quality assurance manager',
+  'QUALITY_ASSURANCE_COORDINATOR' = 'Quality assurance coordinator',
 }
 
 export const userIcon = {

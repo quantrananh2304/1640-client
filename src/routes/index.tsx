@@ -10,6 +10,7 @@ const Register = loadable(() => import('~/pages/register'));
 const Category = loadable(() => import('~/pages/category'));
 const DashBoard = loadable(() => import('~/pages/dashboard'));
 const Profile = loadable(() => import('~/pages/profile'));
+const Setting = loadable(() => import('~/pages/systemSetting'));
 
 export const ROUTES = {
 
@@ -19,6 +20,7 @@ export const ROUTES = {
   Category: '/category',
   DashBoard: '/dashboard',
   Profile: '/profile',
+  Setting: '/setting',
 
   // no auth
   Login: '/login',
@@ -32,6 +34,7 @@ const routes = [
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Profile, component: Profile, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.Setting, component: Setting, layout: Auth, isAuth: true },
 
   // no auth
   { exact: true, path: ROUTES.Login, component: Login, isAuth: false },
