@@ -1,19 +1,27 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import routes, { ROUTES } from '~/routes';
 import Blank from '~/layouts';
 import { getCookie } from '~/utils/cookie';
 import NotFound from '~/pages/404';
+import { useAppDispatch,  } from '~/store';
+import { useUser } from '~/hooks/useUser';
+import { setUserInfo } from '~/store/userInfo';
 
 function Wrapper() {
   const token = getCookie('token');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { data: user } = useUser();
+
   useEffect(() => {
     if (!token) {
       navigate(ROUTES.Login)
+    } else {
+      dispatch(setUserInfo(user?.data))
     }
-  }, [token])
+  }, [token, user, dispatch])
   
   return (
     <Routes>

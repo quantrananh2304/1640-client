@@ -12,11 +12,13 @@ import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
 
 import styles from './styles.module.scss';
+import { RootState, useAppSelector } from '~/store';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
 
 export default function Header() {
+  const me = useAppSelector((state: RootState) => state.userInfo.userData);
 
   const logout = () => {
     removeCookie('token');
@@ -76,7 +78,7 @@ export default function Header() {
               <div className={styles.avatar}>
                 <Svg src={iconAvatar} alt='icon avatar' className={styles.iconAvatar} />
               </div>
-              <div className={styles.name}>{'hieu.trantrung'}</div>
+              <div className={styles.name}>{me?.firstName} {me?.lastName}</div>
             </div>
           </Dropdown>
         </div>

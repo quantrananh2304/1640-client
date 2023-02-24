@@ -16,7 +16,7 @@ const ViewProfile = () => {
   const userData = data?.data;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const status: Status['value'] = userData?.status;
-  
+
   return (
     <div>
       <div className={styles.mainContainer}>

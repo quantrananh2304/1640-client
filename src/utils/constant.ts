@@ -5,6 +5,7 @@ export const DATE = 'yyyy/MM/dd';
 export const DATE_VI_FORMAT = 'dd/MM/yyyy';
 export const DATE_SIMPLE = 'MM/dd';
 
+export const SUCCESS = 'Success'
 
 export enum UserStatus {
   'ACTIVE' = 'Active',

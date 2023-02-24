@@ -1,38 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import styles from './styles.module.scss';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
-
-import { setLogin } from '~/api/login';
+import { setActive, setLogin } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
 import { getCookie } from '~/utils/cookie';
+import { SUCCESS } from '~/utils/constant';
+
 import loadable from '~/utils/loadable';
+import Svg from '~/components/atoms/Svg';
+import iconWarning from '~/assets/images/warning.svg'
+import styles from './styles.module.scss';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
+const Modal = loadable(() => import('~/components/atoms/Modal'));
 
 const Login = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [visibleModalWarning, setVisibleModalWarning] = useState(false);
+  const [activeCode, setActiveCode] = useState('')
+  const [emailNotActive, setEmailNotActive] = useState('')
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
 
+
+  const handlModalActive = (email: any) => {
+    if (email) {
+      setEmailNotActive(email)
+      setVisibleModalWarning(true)
+    }
+  }
+
   const handleGetCookie = async (formValues: any) => {
     setLoading(true)
-    if (form) {
-      const fmData = {
-        email: formValues.userName,
-        password: formValues.password
+    try {
+      if (form) {
+        const fmData = {
+          email: formValues.userName,
+          password: formValues.password
+        }
+        const res = await setLogin(fmData)
+        if (res) {
+          if (res.message === 'Account is not activated'){
+            handlModalActive(fmData.email)
+          }
+          if (res.message === SUCCESS) {
+            const token = res?.data?.token
+            handleLogin({
+              accessToken: token
+            })
+            setLoading(false)
+          }
+        }
       }
-      const res = await setLogin(fmData)
-      if (res) {
-        const token = res?.data?.token
-        handleLogin({
-          accessToken: token
-        })
-        setLoading(false)
-      }
+    } catch (error: any) {
+      message.error(error)
+    }
+  }
+
+
+  const handleActiveAccount = async () => {
+    const res = await setActive(activeCode, {email: emailNotActive})
+    if (res.message === SUCCESS){
+      message.success('Active account success')
+      setVisibleModalWarning(false)
     }
   }
 
@@ -45,45 +78,65 @@ const Login = () => {
   }, [navigate, callbackUrl]);
   
   return (
-    <Spin spinning={loading}>
-      <div className={styles.loginContainer}>
-        <div className={styles.formContainer}>
-        <h1>Login</h1>
-          <Form
-            form={form}
-            layout='vertical'
-            onFinish={handleGetCookie}
-          >
-            <Form.Item 
-              name='userName'
-              label='Username'
-              rules={[{ required: true, message: 'Please input your username!' }]}
+    <>
+      <Spin spinning={loading}>
+        <div className={styles.loginContainer}>
+          <div className={styles.formContainer}>
+          <h1>Login</h1>
+            <Form
+              form={form}
+              layout='vertical'
+              onFinish={handleGetCookie}
             >
-              <Input/>
-            </Form.Item>
-            <Form.Item 
-              name='password'
-              label='Password'
-              rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-              <Input.Password/>
-            </Form.Item>
-            <Form.Item>
-            <Button 
-              className={styles.btnLogin}
-              type="primary"
-              htmlType="submit"
-            >
-              Login
-            </Button>
-            </Form.Item>
-          </Form>
-          <div className={styles.forgotPassword}>
-            <p>Forgot password?</p> &nbsp; <Link to={ROUTES.Register}>Reset password here!</Link>
+              <Form.Item 
+                name='userName'
+                label='Username'
+                rules={[{ required: true, message: 'Please input your username!' }]}
+              >
+                <Input/>
+              </Form.Item>
+              <Form.Item 
+                name='password'
+                label='Password'
+                rules={[{ required: true, message: 'Please input your password!' }]}
+              >
+                <Input.Password/>
+              </Form.Item>
+              <Form.Item>
+              <Button 
+                className={styles.btnLogin}
+                type="primary"
+                htmlType="submit"
+              >
+                Login
+              </Button>
+              </Form.Item>
+            </Form>
+            <div className={styles.forgotPassword}>
+              <p>Forgot password?</p> &nbsp; <Link to={ROUTES.Register}>Reset password here!</Link>
+            </div>
           </div>
         </div>
+      </Spin> 
+      <Modal
+        open={visibleModalWarning}
+        centered
+        onCancel={() => setVisibleModalWarning(false)}
+        onOk={handleActiveAccount}
+      >
+      <div className={styles.headerConfirm}>
+          <Svg className={styles.iconWarning} src={iconWarning} alt="icon warning" />
+          <span className={styles.title}>Account is not activated</span>
       </div>
-    </Spin> 
+      <div className={styles.warningContent}>
+        Check code in your email and active here
+      </div>
+      <Input
+        placeholder='Active code'
+        onChange={(e: any) => setActiveCode(e.target.value)}
+      />
+      </Modal>
+    </>
   )
 }
 

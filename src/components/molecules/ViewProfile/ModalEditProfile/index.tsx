@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Button, Form, Modal, message } from 'antd';
 import loadable from '~/utils/loadable';
 
 import styles from './styles.module.scss'
-import { DATE, Gender } from '~/utils/constant';
+import { DATE, Gender, SUCCESS } from '~/utils/constant';
 import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
@@ -46,13 +46,14 @@ const ProfileModal = (props: Props) => {
   const handleSave = async (formValues: any) => {
     try {
       let res: any = null;
-      const { dob, ...rest} = formValues
+      const { dob, phoneNumber, ...rest} = formValues
       const fmData = {
         ...rest,
+        phoneNumber: String(formValues?.phoneNumber),
         dob: format(new Date(formValues?.dob), DATE)
       }
       res = await updateUserInfo( userData?._id, fmData);
-      if (res?.data) {
+      if (res.message === SUCCESS) {
         message.success('User information updated successfully')
         if (afterSuccess){
           afterSuccess()
