@@ -11,6 +11,7 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
+import { getResetPasswordCode } from '~/api/resetPassword';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -90,8 +91,15 @@ const Login = () => {
             >
               <Form.Item 
                 name='userName'
-                label='Username'
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                label='Email'
+                rules={[
+                  { required: true, message: 'Please input your email!' },
+                  {
+                    required: true,
+                    type: "email",
+                    message: "The input is not valid E-mail!",
+                  }, 
+                ]}
               >
                 <Input/>
               </Form.Item>
@@ -113,7 +121,7 @@ const Login = () => {
               </Form.Item>
             </Form>
             <div className={styles.forgotPassword}>
-              <p>Forgot password?</p> &nbsp; <Link to={ROUTES.Register}>Reset password here!</Link>
+              <p>Forgot password?</p> &nbsp; <Link to={ROUTES.ResetPasswordCode}>Get reset password code here!</Link>
             </div>
           </div>
         </div>

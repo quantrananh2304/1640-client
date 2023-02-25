@@ -32,17 +32,6 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     const data: any = error.response?.data;
-    if (error.response?.status === 404 && data?.message === 'user.not.exist') {
-      if (typeof window === 'undefined') return;
-      if (id) {
-        clearTimeout(id);
-      }
-      id = setTimeout(() => {
-        if (typeof window === 'undefined') return;
-        history.push('/403');
-      }, 200);
-      return Promise.reject(error);
-    }
     if (error.response?.status !== 401) {
       return Promise.reject(error);
     }
