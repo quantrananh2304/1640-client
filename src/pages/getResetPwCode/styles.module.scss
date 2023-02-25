@@ -1,0 +1,55 @@
+.registerContainer {
+  background-image: url('~/assets/images/bg.jpg');
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  .formContainer {
+    box-shadow: 10px 10px 20px #cbced1;
+    border-radius: 1rem;
+    padding: 70px 30px;
+    background-color: #ffffff;
+    text-align: center;
+    h1{
+      margin-bottom: 50px;
+    }
+    .checkBox {
+      display: flex;
+      :global {
+        .ant-checkbox+span {
+          align-self: flex-start;
+        }
+      }
+    }
+    .createAccount{
+      p{
+        margin: 0;
+      }
+      display: flex;
+      a{
+        text-decoration: none;
+        color: #4096ff;
+      }
+    }
+    .btnLogin {
+      width: 287px;
+    }
+    .forgotPassword{
+      justify-content: center;
+      p{
+        margin: 0;
+      }
+      display: flex;
+      a{
+        text-decoration: none;
+        color: #4096ff;
+      }
+    }
+  }
+}
+

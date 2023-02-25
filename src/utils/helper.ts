@@ -1,5 +1,5 @@
 import { ROUTES } from "~/routes";
-import { getCookie, setCookie } from "./cookie";
+import { getCookie, removeCookie, setCookie } from "./cookie";
 import history from './history';
 import { setLocalStorage } from "./localStorage";
 
@@ -24,5 +24,14 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogi
   if (getCookie('token')) {
     history.push(callbackUrl ?? ROUTES.Ideas);
     // window.location.reload();
+  }
+};
+
+export const handleLogout = (callbackUrl = ROUTES.Ideas) => {
+  removeCookie('token');
+  removeCookie('refreshToken');
+  localStorage.clear();
+  if (callbackUrl) {
+    history.push(callbackUrl);
   }
 };
