@@ -78,7 +78,7 @@ function Auth(props: Props) {
           <Content style={{ padding: '0 24px', height: '75vh' }}>{children}</Content>
         </Layout>
       </Content>
-      <Footer className={styles.footer} style={{ textAlign: 'center' }}>1640 ©2023 Created by Group 3</Footer>
+      <Footer className={styles.footer} style={{ textAlign: 'center', zIndex: 0 }}>1640 ©2023 Created by Group 3</Footer>
     </Layout>
   );
 }
