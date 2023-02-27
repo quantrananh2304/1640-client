@@ -27,6 +27,13 @@ function App() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
 
+        console.log(snapshot);
+
+        const { metadata } = snapshot;
+
+        // metadata.contentType
+        // metadata.name
+
         setProgressPercent(progress);
       },
       (error) => {
@@ -35,6 +42,8 @@ function App() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setImgUrl(downloadUrl);
+
+          // downloadUrl
         });
       }
     );
