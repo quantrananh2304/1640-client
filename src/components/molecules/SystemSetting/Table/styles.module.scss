@@ -1,40 +1,62 @@
-.container{
-  background-color: #fff;
-  box-shadow: 1px 0px 8px 4px rgb(0 0 0 / 10%);
-
-  .totalMember{
-    display: flex;
-    align-items: center;
-    padding-left: 32px;
-    height: 62px;
-    font-size: 16px;
-    line-height: 24px;
-
-    .title{
-      margin-right: 6px;
+.container {
+  .tableContainer {
+    p {
+      margin: 0;
     }
-  }
-
-  .listsMember{
-    max-height: calc(100vh - 250px);
-    overflow: hidden scroll ;
-    padding: 0 16px;
-    .item{
-      margin: 0 !important;
-      border-radius: 10px;
-      border:1px solid #D9D9D9 !important;
-      box-shadow: 0px 0px 8px 0px #00000033;
-    }
-
-    :global{
-      .ant-col{
-        padding: 5px 8px;
+    :global { 
+      .ant-table-cell-scrollbar:not([rowspan]){
+        box-shadow: none;
+        background-color: #002766 
+      }
+      .ant-table-thead{
+        height: 60px;
+      }
+      .ant-table-thead >tr>th {
+        color: #FFFFFF;
+      }
+      .ant-table-thead >tr>td {
+        background-color: #002766 
+      }
+      
+      .ant-table-cell:nth-last-child(2)::before{
+        background-color: #002766 !important;
+      }
+      .ant-form-item {
+        margin: 0;
+      }
+      .ant-table-body {
+        font-size: 12px !important;
+      }
+      .ant-table-column-sorter{
+        color: #fff !important;
+      }
+      .ant-table-thead th,
+      .ant-table-column-has-sorters {
+        background: #002766 !important;
+        color: #fff !important;
+      }
+  
+      .ant-table-cell::before,
+      .ant-table-thead th.ant-table-column-has-sorters:hover:before,
+      .ant-table-thead th.ant-table-column-sort:before {
+        background-color: #fff !important;
       }
     }
-
-    .background{
-      background-color: #fafafa;
+    .groupSave {
+      display: flex;
+      justify-content: space-around;
     }
   }
-
+}
+.headerConfirmDelete{
+  display: flex;
+  .iconWarning{
+    width: 20px !important;
+  }
+  .title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    margin-left: 16px;
+  }
 }

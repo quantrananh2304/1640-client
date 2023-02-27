@@ -1,6 +1,8 @@
 export interface IParam {
   take?: number,
   page?: number,
+  limit?: number,
+  sort?: string
 }
 
 export type UserInfoState = {

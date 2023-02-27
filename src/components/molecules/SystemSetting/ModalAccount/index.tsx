@@ -120,25 +120,26 @@ const AccountModal = (props: Props) => {
           placeholder='Enter last name'
         />
       </Form.Item>
-      <Form.Item 
-        label='Email' 
-        name='email' 
-        rules={[
-            {
-              type: 'email',
-              message: 'The input is not valid E-mail!',
-            },
-            {
-              message: 'Email field is required!',
-              required: true,
-            },
-        ]}>
-        <Input
-          maxLength={50}
-          placeholder='Enter email'
-          
-        />
-      </Form.Item>
+      { !userData ?
+        <Form.Item 
+          label='Email' 
+          name='email' 
+          rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                message: 'Email field is required!',
+                required: true,
+              },
+        ]}>  
+          <Input
+            maxLength={50}
+            placeholder='Enter email'
+          />
+        </Form.Item> : null
+      }
       <Form.Item label='Birth day' name='dob' required>
         <DatePicker/>
       </Form.Item>

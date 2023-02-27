@@ -7,6 +7,12 @@ export const DATE_SIMPLE = 'MM/dd';
 
 export const SUCCESS = 'Success'
 
+export const COMMON_PARAMS = {
+  page: 1,
+  limit: 5,
+  sort: 'NAME_ASC'
+}
+
 export enum UserStatus {
   'ACTIVE' = 'Active',
   'INACTIVE' = 'Inactive',

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import history from '~/utils/history';
 import { MenuProps } from 'antd';
-
 import { Menu } from 'antd';
 import { useLocation } from 'react-router-dom';
 

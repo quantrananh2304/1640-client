@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { Button, Form, Modal, message } from 'antd';
-import loadable from '~/utils/loadable';
-
-import styles from './styles.module.scss'
 import { DATE, Gender, SUCCESS } from '~/utils/constant';
 import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
+
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss'
 
 const Input = loadable(() => import('~/components/atoms/Input'));
 const InputNumber = loadable(() => import('~/components/atoms/InputNumber'));
@@ -29,7 +29,7 @@ const ProfileModal = (props: Props) => {
     userData,
     afterSuccess,
   } = props;
-
+  const rules = [{ required: true, message: '' }];
   const genderOption = useMemo(() => Object.entries(Gender)
   // render options gender
   .map((item: any, index) => (
@@ -94,31 +94,55 @@ const ProfileModal = (props: Props) => {
         }
       }
     >
-      <Form.Item label='First Name' name='firstName'>
+      <Form.Item 
+        label='First Name'
+        name='firstName'
+        rules={rules}
+      >
         <Input
           maxLength={50}
           placeholder='Enter first name'
         />
       </Form.Item>
-      <Form.Item label='Last Name' name='lastName'>
+      <Form.Item 
+        label='Last Name'
+        name='lastName'
+        rules={rules}
+      >
         <Input
           maxLength={50}
           placeholder='Enter last name'
         />
       </Form.Item>
-      <Form.Item label='Birth day' name='dob'>
+      <Form.Item
+        label='Birth day'
+        name='dob'
+        rules={rules}
+      >
         <DatePicker/>
       </Form.Item>
-      <Form.Item label='Phone' name='phoneNumber'>
+      <Form.Item
+        label='Phone'
+        rules={rules}
+        name='phoneNumber'
+      >
         <InputNumber/>
       </Form.Item>
-      <Form.Item label='Address' name='address'>
+      <Form.Item
+        label='Address'
+        name='address'
+        rules={rules}
+      >
         <Input
           maxLength={255}
           placeholder='Enter address'
         />
       </Form.Item>
-      <Form.Item label='Gender' name='gender'>
+      <Form.Item
+        label='Gender'
+        name='gender'
+        rules={rules}
+      >
         <Select
           placeholder='Select gender'
         >
