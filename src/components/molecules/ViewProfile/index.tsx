@@ -1,21 +1,57 @@
 import React, { useState } from 'react';
-import styles from './styles.module.scss';
-import { Avatar, Button, Divider } from 'antd';
-
-import avatar from '~/assets/images/astronout.png';
-import iconEdit from '~/assets/images/iconEdit.svg';
-import Svg from '~/components/atoms/Svg';
+import { Avatar, Button, Divider, Upload, message } from 'antd';
 import { useUser } from '~/hooks/useUser';
 import { format } from 'date-fns';
-import { DATE, Status, UserStatus, userIcon } from '~/utils/constant';
-import ProfileModal from './ModalEditProfile';
-import Spin from '~/components/atoms/Spin';
+import { DATE, SUCCESS, Status, UserStatus, userIcon } from '~/utils/constant';
+import {
+  UserOutlined
+} from '@ant-design/icons'
+import { RcFile } from 'antd/es/upload';
+import { setAvatar } from '~/api/user';
+
+import iconEdit from '~/assets/images/iconEdit.svg';
+import Svg from '~/components/atoms/Svg';
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss';
+
+const ProfileModal = loadable(() => import('~/components/molecules/ViewProfile/ModalEditProfile'));
+const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const ViewProfile = () => {
   const { data, isLoading, isFetching, refetch } = useUser()
   const userData = data?.data;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const status: Status['value'] = userData?.status;
+
+  const beforeUpload = (file: RcFile): boolean => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+  const handleImageUpload = async (file: any) => {
+    try {
+      if (!(file?.file instanceof Blob)) {
+        throw new Error('Invalid file type');
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file.file);
+      reader.onload = async () => {
+        const base64String = reader.result;
+        const response = await setAvatar(userData?._id, { img: base64String });
+        if (response.message === SUCCESS) {
+          refetch()
+        }
+      };
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -30,10 +66,28 @@ const ViewProfile = () => {
             </Button>
           </div>
           <div className={styles.avatarContainer}>
-            <Avatar
-              size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
-              icon={<Svg src={avatar}></Svg>}
-            />
+            <Upload
+              name="avatar"
+              listType="picture-circle"
+              className="avatar-uploader"
+              showUploadList={false}
+              accept="image/*"
+              beforeUpload={beforeUpload}
+              customRequest={(file: any ) => handleImageUpload(file)}
+            >
+              {userData?.avatar ? (
+                <Avatar 
+                  size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
+                  src={userData?.avatar}
+                  
+                />
+              ) : (
+                <Avatar 
+                  size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
+                  icon={<UserOutlined />}
+                />
+              )}
+            </Upload>
             <div className='mt-2 text-center'>
               {userData?.firstName} &nbsp; {userData?.lastName}
             </div>
