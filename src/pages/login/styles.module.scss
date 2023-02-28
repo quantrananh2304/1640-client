@@ -12,7 +12,7 @@
   .formContainer {
     box-shadow: 10px 10px 20px #cbced1;
     border-radius: 1rem;
-    padding: 80px 30px;
+    padding: 80px 3x0px;
     background-color: #ffffff;
     text-align: center;
     h1{
@@ -52,3 +52,61 @@
   margin-bottom: 0.25rem;
 }
 
+
+/*mobile width < 740px */
+@media only screen and (max-width : 46.1875em){
+  .formContainer {
+    box-shadow: 10px 10px 10px #cbced1;
+    border-radius: 1rem;
+    padding: 80px 20px;
+    background-color: #ffffff;
+    text-align: center;
+    h1{
+      margin-bottom: 50px;
+    }
+    .btnLogin {
+      margin-top: 40px;
+      width: 287px;
+    }
+    .forgotPassword{
+      justify-content: center;
+      p{
+        margin: 0;
+      }
+      display: flex;
+      a{
+        text-decoration: none;
+        color: #4096ff;
+      }
+    }
+  }
+}
+
+/*table: width >= 740px and width <= 1024px */
+@media only screen and (min-width : 46.25em) and (max-width : 63.9375em){
+  .formContainer {
+    box-shadow: 10px 10px 20px #cbced1;
+    border-radius: 1rem;
+    padding: 80px 30px;
+    background-color: #ffffff;
+    text-align: center;
+    h1{
+      margin-bottom: 50px;
+    }
+    .btnLogin {
+      margin-top: 40px;
+      width: 287px;
+    }
+    .forgotPassword{
+      justify-content: center;
+      p{
+        margin: 0;
+      }
+      display: flex;
+      a{
+        text-decoration: none;
+        color: #4096ff;
+      }
+    }
+  }
+}
