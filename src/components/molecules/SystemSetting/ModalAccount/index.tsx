@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { Button, Form, Modal, message } from 'antd';
-import { DATE, Gender, SUCCESS } from '~/utils/constant';
+import loadable from '~/utils/loadable';
+
+import styles from './styles.module.scss'
+import { DATE, Gender, Role } from '~/utils/constant';
 import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
-
-import loadable from '~/utils/loadable';
-import styles from './styles.module.scss'
+import { createAccount } from '~/api/account';
 
 const Input = loadable(() => import('~/components/atoms/Input'));
 const InputNumber = loadable(() => import('~/components/atoms/InputNumber'));
@@ -21,7 +22,7 @@ interface Props {
   afterSuccess?: () => void;
 }
 
-const ProfileModal = (props: Props) => {
+const AccountModal = (props: Props) => {
   const [form] = Form.useForm();
   const {
     visible,
@@ -29,8 +30,14 @@ const ProfileModal = (props: Props) => {
     userData,
     afterSuccess,
   } = props;
-  const rules = [{ required: true, message: '' }];
+
   const genderOption = useMemo(() => Object.entries(Gender)
+  // render options gender
+  .map((item: any, index) => (
+    { id: index, name: item[1], value: item[0] }
+  )), []);
+
+  const roleOption = useMemo(() => Object.entries(Role)
   // render options gender
   .map((item: any, index) => (
     { id: index, name: item[1], value: item[0] }
@@ -49,12 +56,17 @@ const ProfileModal = (props: Props) => {
       const { dob, phoneNumber, ...rest} = formValues
       const fmData = {
         ...rest,
-        phoneNumber: String(formValues?.phoneNumber),
-        dob: format(new Date(formValues?.dob), DATE)
+        dob: format(new Date(formValues?.dob), DATE),
+        phoneNumber : String(formValues?.phoneNumber),
+        avatar: ''
       }
-      res = await updateUserInfo( userData?._id, fmData);
-      if (res.message === SUCCESS) {
-        message.success('User information updated successfully')
+      if (!userData) {
+        res = await createAccount(fmData)
+      } else {
+        res = await updateUserInfo( userData?._id, fmData);
+      }
+      if (res?.data) {
+        message.success(!userData ? 'Create Account success' : 'Update account success')
         if (afterSuccess){
           afterSuccess()
         }
@@ -75,7 +87,7 @@ const ProfileModal = (props: Props) => {
       className={styles.modalContainer}
     >
     <div>
-      <h3>Edit infomation</h3>
+      <h3>{userData ? 'Edit account' : 'Create account'}</h3>
     </div>
     <Form
       form={form}
@@ -83,66 +95,75 @@ const ProfileModal = (props: Props) => {
       onFinish={handleSave}
       autoComplete="off"
       className={styles.formContainer}
-      initialValues={ userData &&
+      initialValues={ userData ?
         { 
           firstName: userData.firstName,
           lastName: userData.lastName,
           dob: new Date(userData.dob),
           phoneNumber: userData.phoneNumber,
           address: userData.address,
+          role: userData.role,
           gender: userData.gender,
         }
+        : {}
       }
     >
-      <Form.Item 
-        label='First Name'
-        name='firstName'
-        rules={rules}
-      >
+      <Form.Item label='First Name' name='firstName' required>
         <Input
           maxLength={50}
           placeholder='Enter first name'
         />
       </Form.Item>
-      <Form.Item 
-        label='Last Name'
-        name='lastName'
-        rules={rules}
-      >
+      <Form.Item label='Last Name' name='lastName' required>
         <Input
           maxLength={50}
           placeholder='Enter last name'
         />
       </Form.Item>
-      <Form.Item
-        label='Birth day'
-        name='dob'
-        rules={rules}
-      >
+      { !userData ?
+        <Form.Item 
+          label='Email' 
+          name='email' 
+          rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                message: 'Email field is required!',
+                required: true,
+              },
+        ]}>  
+          <Input
+            maxLength={50}
+            placeholder='Enter email'
+          />
+        </Form.Item> : null
+      }
+      <Form.Item label='Birth day' name='dob' required>
         <DatePicker/>
       </Form.Item>
-      <Form.Item
-        label='Phone'
-        rules={rules}
-        name='phoneNumber'
-      >
-        <InputNumber/>
+      <Form.Item label='Phone' name='phoneNumber' required>
+        <InputNumber
+          placeholder='Enter phone number'
+        />
       </Form.Item>
-      <Form.Item
-        label='Address'
-        name='address'
-        rules={rules}
-      >
+      <Form.Item label='Address' name='address' required>
         <Input
           maxLength={255}
           placeholder='Enter address'
         />
       </Form.Item>
-      <Form.Item
-        label='Gender'
-        name='gender'
-        rules={rules}
-      >
+      <Form.Item label='Role' name='role' required>
+        <Select
+          placeholder='Select role'
+        >
+          {roleOption?.map((item: any) =>
+            <Option key={item.id} value={item.value}>{item.name}</Option>
+          )}
+        </Select>
+      </Form.Item>
+      <Form.Item label='Gender' name='gender' required>
         <Select
           placeholder='Select gender'
         >
@@ -170,4 +191,4 @@ const ProfileModal = (props: Props) => {
   )
 }
 
-export default ProfileModal
+export default AccountModal

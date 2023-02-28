@@ -1,15 +1,19 @@
 
 import loadable from '~/utils/loadable';
 import Auth from '~/wrapper/Auth';
+import RefreshToken from '~/pages/refresh-token';
 
 const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
 const About = loadable(() => import('~/pages/about'));
 const Ideas = loadable(() => import('~/pages/ideas'));
-const Register = loadable(() => import('~/pages/register'));
+const ResetPassword = loadable(() => import('~/pages/resetPassword'));
 const Category = loadable(() => import('~/pages/category'));
 const DashBoard = loadable(() => import('~/pages/dashboard'));
 const Profile = loadable(() => import('~/pages/profile'));
+const Setting = loadable(() => import('~/pages/systemSetting'));
+const ResetPasswordCode = loadable(() => import('~/pages/getResetPwCode'));
+
 
 export const ROUTES = {
 
@@ -19,10 +23,13 @@ export const ROUTES = {
   Category: '/category',
   DashBoard: '/dashboard',
   Profile: '/profile',
+  Setting: '/setting',
+  RefreshToken: '/refresh-token',
 
   // no auth
   Login: '/login',
-  Register: '/register'
+  ResetPasswordCode: '/get-code',
+  ResetPassword: '/resetPassword'
 };
 
 const routes = [
@@ -32,10 +39,13 @@ const routes = [
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Profile, component: Profile, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.RefreshToken, component: RefreshToken, isAuth: true },
+  { exact: true, path: ROUTES.Setting, component: Setting, layout: Auth, isAuth: true },
 
   // no auth
   { exact: true, path: ROUTES.Login, component: Login, isAuth: false },
-  { exact: true, path: ROUTES.Register, component: Register, isAuth: false },
+  { exact: true, path: ROUTES.ResetPasswordCode, component: ResetPasswordCode, isAuth: false },
+  { exact: true, path: ROUTES.ResetPassword, component: ResetPassword, isAuth: false },
 ];
 
 export default routes;
