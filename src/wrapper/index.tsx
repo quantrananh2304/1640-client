@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import routes, { ROUTES } from '~/routes';
@@ -13,15 +13,24 @@ function Wrapper() {
   const token = getCookie('token');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: user } = useUser();
+  const [enable, setEnable] = useState(false)
+  const { data: user, refetch } = useUser(enable);
 
   useEffect(() => {
     if (!token) {
       navigate(ROUTES.Login)
-    } else {
-      dispatch(setUserInfo(user?.data))
     }
   }, [token, user, dispatch])
+
+  useLayoutEffect(() => {
+    if (token) {
+      setEnable(true)
+      refetch()
+    }
+    if (user){
+      dispatch(setUserInfo(user?.data))
+    }
+  }, [user?.data?._id, token, dispatch])
   
   return (
     <Routes>

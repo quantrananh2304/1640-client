@@ -6,6 +6,7 @@ export const DATE_VI_FORMAT = 'dd/MM/yyyy';
 export const DATE_SIMPLE = 'MM/dd';
 
 export const SUCCESS = 'Success'
+export const KEY_MESSAGE = 'message'
 
 export const COMMON_PARAMS = {
   page: 1,
@@ -28,6 +29,20 @@ export enum Role {
   'STAFF' = 'Staff',
   'QUALITY_ASSURANCE_MANAGER' = 'Quality assurance manager',
   'QUALITY_ASSURANCE_COORDINATOR' = 'Quality assurance coordinator',
+}
+
+export enum Category {
+  'ADMIN' = 'Admin',
+  'STAFF' = 'Staff',
+  'QUALITY_ASSURANCE_MANAGER' = 'Quality assurance manager',
+  'QUALITY_ASSURANCE_COORDINATOR' = 'Quality assurance coordinator',
+}
+
+export enum UserRole {
+  Admin = 'ADMIN',
+  Staff = 'STAFF',
+  QA_M = 'QUALITY_ASSURANCE_MANAGER',
+  QA_C = 'QUALITY_ASSURANCE_COORDINATOR',
 }
 
 export const userIcon = {

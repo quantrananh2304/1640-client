@@ -1,7 +1,6 @@
 
 import loadable from '~/utils/loadable';
 import Auth from '~/wrapper/Auth';
-import RefreshToken from '~/pages/refresh-token';
 
 const Home = loadable(() => import('~/pages/home'));
 const Login = loadable(() => import('~/pages/login'));
@@ -24,7 +23,6 @@ export const ROUTES = {
   DashBoard: '/dashboard',
   Profile: '/profile',
   Setting: '/setting',
-  RefreshToken: '/refresh-token',
 
   // no auth
   Login: '/login',
@@ -39,7 +37,6 @@ const routes = [
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Profile, component: Profile, layout: Auth, isAuth: true },
-  { exact: true, path: ROUTES.RefreshToken, component: RefreshToken, isAuth: true },
   { exact: true, path: ROUTES.Setting, component: Setting, layout: Auth, isAuth: true },
 
   // no auth

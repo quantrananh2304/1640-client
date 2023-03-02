@@ -2,11 +2,15 @@
   margin: 10px 100px;
   :global {
     .ant-card .ant-card-actions {
-      max-width: 150px;
       padding-left: 24px;
+      li {
+        width: fit-content !important;
+        margin-right: 30px;
+      }
     }
   }
   .comment{
+
     margin-top: 20px;
     margin-left: 50px;
   }
