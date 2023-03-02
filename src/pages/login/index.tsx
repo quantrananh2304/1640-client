@@ -11,7 +11,7 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
-import { getResetPasswordCode } from '~/api/resetPassword';
+import { addDays, addMinutes } from 'date-fns';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -50,9 +50,12 @@ const Login = () => {
           if (res.message === SUCCESS) {
             const token = res?.data?.token
             handleLogin({
-              accessToken: token
+              accessToken: token,
             })
             setLoading(false)
+          }
+          else {
+            message.error(res.message)
           }
         }
       }
@@ -60,7 +63,6 @@ const Login = () => {
       message.error(error)
     }
   }
-
 
   const handleActiveAccount = async () => {
     const res = await setActive(activeCode, {email: emailNotActive})

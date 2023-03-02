@@ -3,9 +3,9 @@ import { getUserInfo } from '~/api/user';
 
 export const QK_USER = 'user';
 
-export function useUser() {
+export function useUser(enable: boolean) {
   const res = useQuery([QK_USER], () => getUserInfo(), {
-    enabled: true,
+    enabled: enable,
     keepPreviousData: true,
     refetchOnWindowFocus: false
   });

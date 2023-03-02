@@ -68,9 +68,9 @@ function Auth(props: Props) {
         <Header/>
       </div>
       <Content style={{ padding: '0 50px'}}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
+        {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>{convertPathName}</Breadcrumb.Item>
-        </Breadcrumb>
+        </Breadcrumb> */}
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
             <SideNav menus={menuLeft}/>

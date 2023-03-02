@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Dropdown, Layout, MenuProps } from 'antd';
 import { removeCookie } from '~/utils/cookie';
 import { ROUTES } from '~/routes';
@@ -12,16 +12,19 @@ import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
 
 import styles from './styles.module.scss';
-import { RootState, useAppSelector } from '~/store';
+import { RootState, useAppDispatch, useAppSelector } from '~/store';
+import { setUserInfo } from '~/store/userInfo';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
 
 export default function Header() {
   const me = useAppSelector((state: RootState) => state.userInfo.userData);
+  const dispatch = useAppDispatch();
 
   const logout = () => {
     removeCookie('token');
+    dispatch(setUserInfo({}));
     history.push(ROUTES.Login);
   };
 

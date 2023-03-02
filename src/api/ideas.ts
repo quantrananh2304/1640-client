@@ -1,4 +1,4 @@
-import { sendGet } from 'utils/axios';
+import { sendGet, sendPost } from '~/utils/axios';
 
 export const dataIdeas = (() => {
   const ideas = Array.from({ length: 23 }).map((_, i) => ({
@@ -31,4 +31,4 @@ export const getIdeas = () => Promise.resolve({
   error: null
 });
 
-// export const getIdeas = (params: IParam) => sendGet('/ideas', params);
+export const setIdea = (params: any) => sendPost('/idea/create', params);

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/routes';
-import styles from './styles.module.scss';
 import { getResetPasswordCode } from '~/api/resetPassword';
 import { SUCCESS } from '~/utils/constant';
 import Spin from '~/components/atoms/Spin';
+import styles from './styles.module.scss';
 
 const GetResetPassword = () => {
   const [form] = Form.useForm();

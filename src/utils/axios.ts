@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
     }
     id = setTimeout(() => {
       if (typeof window === 'undefined') return;
-      history.push(`/refresh-token?callbackUrl=${window.location.pathname}`);
+      history.push(`/login`);
     }, 200);
     console.error(error);
   }

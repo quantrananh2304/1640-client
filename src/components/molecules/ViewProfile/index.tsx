@@ -18,7 +18,7 @@ const ProfileModal = loadable(() => import('~/components/molecules/ViewProfile/M
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 
 const ViewProfile = () => {
-  const { data, isLoading, isFetching, refetch } = useUser()
+  const { data, isLoading, isFetching, refetch } = useUser(true)
   const userData = data?.data;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const status: Status['value'] = userData?.status;

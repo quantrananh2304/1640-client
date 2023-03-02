@@ -6,7 +6,7 @@ import { COMMON_PARAMS } from '~/utils/constant'
 
 const SystemSetting = () => {
   const [params, setParams] = useState(COMMON_PARAMS)
-  const { data, isFetching, isLoading } = useAccounts(params)
+  const { data, isFetching, isLoading, refetch } = useAccounts(params)
   return (
     <>
       <Filter/>
@@ -15,6 +15,7 @@ const SystemSetting = () => {
         isLoading={isLoading}
         isFetching={isFetching}
         setParams={setParams}
+        refetch={refetch}
       />
     </>
   )

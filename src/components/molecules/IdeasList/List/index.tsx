@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Avatar, Card, List } from 'antd'
+import { Avatar, Card, Divider, List, Statistic } from 'antd'
 import { LikeOutlined,MessageOutlined, DislikeOutlined} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
@@ -37,13 +37,31 @@ const IdeaList = (props: Prop) => {
       renderItem={(item: any) => (
         <div key={item.id}>
           <Card
+            className='mt-2'
             actions={[
-              <LikeOutlined key="setting" />,
-              <DislikeOutlined key="edit"/>,
-              <MessageOutlined
-                onClick={() => handleShowComment(item.id)}
-                key="ellipsis"
+              <Statistic 
+                value={128} 
+                prefix={<LikeOutlined />}
+                valueStyle={{fontSize: '16px'}}
               />,
+              <Statistic
+                value={128}
+                prefix={<DislikeOutlined />}
+                valueStyle={{fontSize: '16px'}}
+              />,
+              <Statistic
+                valueStyle={{fontSize: '16px'}}
+                prefix={
+                  <MessageOutlined 
+                    onClick={() => handleShowComment(item.id)}
+                  />
+                } 
+              />,
+              // <DislikeOutlined key="edit"/>,
+              // <MessageOutlined
+              //   onClick={() => handleShowComment(item.id)}
+              //   key="ellipsis"
+              // />,
             ]}
             extra={item.time}
           >
