@@ -10,6 +10,7 @@ import Select from '~/components/atoms/Select';
 import { Category, KEY_MESSAGE } from '~/utils/constant';
 import storage from '~/utils/firebase';
 import { setIdea } from '~/api/ideas';
+import { useCategories } from '~/hooks/useCategory';
 
 
 interface Props {
@@ -30,12 +31,20 @@ const ModalIdeas = (props: Props) => {
 
   const [metaData, setMetaData] = useState({});
   const rules = [{ required: true, message: '' }];
+  const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories({
+    page: 1,
+    limit: 999,
+    sort: 'NAME_DESC'
+  });
 
-  const categoryOption = useMemo(() => Object.values(Category)
+  const categories = data?.data?.categories;
+
+  const categoryOption = useMemo(() => 
   // render options gender
-  .map((item: any, index) => (
-    { id: index, name: item, }
-  )), []);
+  categories?.map((item: any) => (
+    { id: item._id, name: item.name, }
+  )), [categories]);
+
 
   const handleClose = () => {
     if (setVisible) {
@@ -154,6 +163,8 @@ const ModalIdeas = (props: Props) => {
       >
         <Select
           mode='multiple'
+          placeholder={'Select category'}
+          loading={loadingCategories || fetchingCategories}
         >
           {categoryOption?.map((item: any) =>
             <Option key={item.id} value={item.id}>{item.name}</Option>

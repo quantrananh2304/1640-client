@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 
-import { Breadcrumb, Layout, Menu, MenuProps, theme } from 'antd';
+import {  Layout, MenuProps, theme } from 'antd';
 
 import { ROUTES } from '~/routes';
 
@@ -10,7 +10,8 @@ import styles from './styles.module.scss';
 import {
   UnorderedListOutlined,
   TagsOutlined,
-  DashboardOutlined } from '@ant-design/icons'
+  DashboardOutlined,
+  BookOutlined } from '@ant-design/icons'
 import { Content, Footer } from 'antd/es/layout/layout';
 import Header from '~/components/molecules/Header';
 import Sider from 'antd/es/layout/Sider';
@@ -40,12 +41,12 @@ function Auth(props: Props) {
       url: ROUTES.Ideas,
       content: 'Ideas'
     },
-    // {
-    //   key: ROUTES.About,
-    //   label: <Link to={ROUTES.About}>About</Link>,
-    //   icon: <CustomerServiceOutlined style={{fontSize: '18px'}}/>,
-    //   url: ROUTES.About,
-    // },
+    {
+      key: ROUTES.Thread,
+      label: <Link to={ROUTES.Thread}>Thread</Link>,
+      icon: <BookOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Thread,
+    },
     {
       key: ROUTES.Category,
       label: <Link to={ROUTES.Category}>Category</Link>,

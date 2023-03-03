@@ -9,11 +9,11 @@ interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   category?: any;
-  refetch: () => void;
+  refetch?: () => void;
   setCategory?: React.Dispatch<any>;
 }
 
-const CategoryModal = (props: Props) => {
+const ThreadModal = (props: Props) => {
   const [form] = Form.useForm();
   const {
     visible,
@@ -48,10 +48,9 @@ const CategoryModal = (props: Props) => {
       let res: any = null;
       res = await createCategory(formValues)
       if (res.message === SUCCESS) {
-        message.success(!category ? 'Add category success' : 'Update category success')
+        message.success(!category ? 'Add thread success' : 'Update thread success')
         setVisible(false);
-        form.resetFields()
-        refetch()
+        // refetch()
       } else {
         message.error(res.message)
       }
@@ -105,4 +104,4 @@ const CategoryModal = (props: Props) => {
   )
 }
 
-export default CategoryModal
+export default ThreadModal
