@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Divider, Upload, message } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Upload, message } from 'antd';
 import { useUser } from '~/hooks/useUser';
 import { format } from 'date-fns';
 import { DATE, SUCCESS, Status, UserStatus, userIcon } from '~/utils/constant';
@@ -93,54 +93,29 @@ const ViewProfile = () => {
             </div>
           </div>
           <Divider/>
-          <div className={styles.info}>
-            <div className={styles.infoLeft}>
-              <div className={styles.infoItem}>
-                <strong>Role:</strong>
-                &nbsp;
-                <span> {userData?.role} </span>
-              </div>
-              <div className={styles.infoItem}>
-                <strong>Phone:</strong>
-                &nbsp;
-                <span> {userData?.phoneNumber} </span>
-              </div>
-              <div className={styles.infoItem}>
-                <strong>Email:</strong>
-                &nbsp;
-                <span> {userData?.email} </span>
-              </div>
-              <div className={styles.infoItem}>
-                <strong>Gender:</strong>
-                &nbsp;
-                <span> {userData?.gender} </span>
-              </div>
-            </div>
-            <div className={styles.infoRight}>
-              <div className={styles.infoItem}>
-                <strong>Birthday:</strong>
-                &nbsp;
-                <span> {userData?.dob && format(new Date(userData.dob), DATE)} </span>
-              </div>
-              <div className={styles.infoItem}>
-                <strong>Address:</strong>
-                &nbsp;
-                <span> {userData?.address || '-'} </span>
-              </div>
-              <div className={styles.infoItem}>
-                <strong>Status:</strong>
-                &nbsp;
-                <span> 
-                  {userData?.status}
-                  <Svg
-                    className='ml-2'
-                    src={userIcon[UserStatus[status] ?? -1]}
-                    alt="status"
-                  />
-                </span>
-              </div>
-            </div>
-          </div>
+          <Descriptions
+            className={styles.info}
+            column={{xxl: 3, md: 2,  sm: 1}}
+          >
+            <Descriptions.Item label="Role">{userData?.role}</Descriptions.Item>
+            <Descriptions.Item label="Telephone">{userData?.phoneNumber}</Descriptions.Item>
+            <Descriptions.Item label="Email">{userData?.email}</Descriptions.Item>
+            <Descriptions.Item label="Gender">{userData?.gender}</Descriptions.Item>
+            <Descriptions.Item label="Birthday">
+              {userData?.dob && format(new Date(userData.dob), DATE)}
+            </Descriptions.Item>
+            <Descriptions.Item label="Address">
+              {userData?.address || '-'}
+            </Descriptions.Item>
+            <Descriptions.Item label="Status">
+              {userData?.status}
+              <Svg
+                className='ml-2'
+                src={userIcon[UserStatus[status] ?? -1]}
+                alt="status"
+              />
+            </Descriptions.Item>
+          </Descriptions>
         </div>
         </Spin>
       </div>

@@ -8,6 +8,7 @@ const About = loadable(() => import('~/pages/about'));
 const Ideas = loadable(() => import('~/pages/ideas'));
 const ResetPassword = loadable(() => import('~/pages/resetPassword'));
 const Category = loadable(() => import('~/pages/category'));
+const Thread = loadable(() => import('~/pages/thread'));
 const DashBoard = loadable(() => import('~/pages/dashboard'));
 const Profile = loadable(() => import('~/pages/profile'));
 const Setting = loadable(() => import('~/pages/systemSetting'));
@@ -20,6 +21,7 @@ export const ROUTES = {
   About: '/about',
   Ideas: '/ideas',
   Category: '/category',
+  Thread: '/thread',
   DashBoard: '/dashboard',
   Profile: '/profile',
   Setting: '/setting',
@@ -35,6 +37,7 @@ const routes = [
   { exact: true, path: ROUTES.About, component: About, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Ideas, component: Ideas, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Category, component: Category, layout: Auth, isAuth: true },
+  { exact: true, path: ROUTES.Thread, component: Thread, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.DashBoard, component: DashBoard, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Profile, component: Profile, layout: Auth, isAuth: true },
   { exact: true, path: ROUTES.Setting, component: Setting, layout: Auth, isAuth: true },

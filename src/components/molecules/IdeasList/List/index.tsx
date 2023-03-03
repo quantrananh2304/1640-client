@@ -5,90 +5,100 @@ import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
 import styles from './styles.module.scss'
+import { format } from 'date-fns';
+import { DATE } from '~/utils/constant';
 
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
-  data?: any
+  dataIdeas?: any;
+  isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 const IdeaList = (props: Prop) => {
+  const {dataIdeas, isFetching, isLoading} = props;
   const [showCommentMap, setShowCommentMap] = useState<any>({})
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingComment, setIsLoadingComment] = useState(false)
 
   const handleShowComment = (itemId: string) => {
     setShowCommentMap({
       ...showCommentMap,
       [itemId]: !showCommentMap[itemId]
     })
-    setIsLoading(true)
+    setIsLoadingComment(true)
 
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoadingComment(false)
     }, 2000)
   }
   return (
-    <List
-      className={styles.listContainer}
-      itemLayout="vertical"
-      size="small"
-      style={{ maxHeight: '60vh', overflowY: 'scroll' }}
-      dataSource={props?.data}
-      renderItem={(item: any) => (
-        <div key={item.id}>
-          <Card
-            className='mt-2'
-            actions={[
-              <Statistic 
-                value={128} 
-                prefix={<LikeOutlined />}
-                valueStyle={{fontSize: '16px'}}
-              />,
-              <Statistic
-                value={128}
-                prefix={<DislikeOutlined />}
-                valueStyle={{fontSize: '16px'}}
-              />,
-              <Statistic
-                valueStyle={{fontSize: '16px'}}
-                prefix={
-                  <MessageOutlined 
-                    onClick={() => handleShowComment(item.id)}
-                  />
-                } 
-              />,
-              // <DislikeOutlined key="edit"/>,
-              // <MessageOutlined
-              //   onClick={() => handleShowComment(item.id)}
-              //   key="ellipsis"
-              // />,
-            ]}
-            extra={item.time}
-          >
-            <Meta
-              avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{item.title}</a>}
-              description={item.description}
-            />
-            {item.content}
-          </Card>
-          
-          { showCommentMap[item.id] &&
-            <Spin spinning={isLoading}>
-            {item?.comment?.map((comment: any, index: number) =>
+    <Spin spinning={isLoading || isFetching}>
+      <List
+        className={styles.listContainer}
+        itemLayout="vertical"
+        size="small"
+        style={{ maxHeight: '60vh', overflowY: 'scroll' }}
+        dataSource={dataIdeas}
+        renderItem={(item: any) => (
+          <div key={item._id}>
+            <Card
+              className='mt-2'
+              actions={[
+                <Statistic 
+                  value={item?.likeCount} 
+                  prefix={<LikeOutlined />}
+                  valueStyle={{fontSize: '16px'}}
+                />,
+                <Statistic
+                  value={item.dislikeCount}
+                  prefix={<DislikeOutlined />}
+                  valueStyle={{fontSize: '16px'}}
+                />,
+                <Statistic
+                  value={item.commentsCount}
+                  valueStyle={{fontSize: '16px'}}
+                  prefix={
+                    <MessageOutlined 
+                      onClick={() => handleShowComment(item._id)}
+                    />
+                  } 
+                />,
+                // <DislikeOutlined key="edit"/>,
+                // <MessageOutlined
+                //   onClick={() => handleShowComment(item.id)}
+                //   key="ellipsis"
+                // />,
+              ]}
+              extra={format(new Date(item.createdAt), DATE)}
+            >
               <Meta
-                key={index}
-                className={styles.comment}
-                avatar={<><Avatar src={comment.userAvatar}/> {comment.userName}</>}
-                description={comment.content}
+                avatar={<Avatar src={'https://joesch.moe/api/v1/random'} />}
+                title={<a href={item.href}>{item.title}</a>}
+                description={item.description}
               />
-              ) 
+              {item.content}
+            </Card>
+            
+            { showCommentMap[item._id] &&
+              <Spin spinning={isLoadingComment}>
+                <div className={styles.commentContainer}>
+                {item?.comments?.map((comment: any) =>
+                  <Meta
+                    key={comment._id}
+                    className={styles.comment}
+                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> {comment.createdBy?.firstName} {comment.createdBy?.lastName}</>}
+                    description={comment.content}
+                  />
+                  ) 
+                }
+                </div>
+              </Spin>
             }
-            </Spin>
-          }
-        </div>
-      )}
-    />
+          </div>
+        )}
+      />
+    </Spin>
   )
 }
 
