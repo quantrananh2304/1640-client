@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
-import iconEdit from '~/assets/images/iconEdit.svg';
-import iconDelete from '~/assets/images/iconDelete.svg';
-import iconWarning from '~/assets/images/warning.svg';
-
-import styles from './styles.module.scss';
-import Svg from '~/components/atoms/Svg';
-import CategoryModal from '../CategoryModal';
-import Spin from '~/components/atoms/Spin';
-import Table from '~/components/atoms/Table';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { Tag, message } from 'antd';
 import { inactiveCategory } from '~/api/categories';
-import ModalConfirm from '~/components/atoms/ModalConfirm';
 import { SorterResult } from 'antd/es/table/interface';
+
+import iconEdit from '~/assets/images/iconEdit.svg';
+import iconWarning from '~/assets/images/warning.svg';
+
+import Svg from '~/components/atoms/Svg';
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss';
+
+const Table = loadable(() => import('~/components/atoms/Table'));
+const ModalConfirm = loadable(() => import('~/components/atoms/ModalConfirm'));
+const Spin = loadable(() => import('~/components/atoms/Spin'));
+const CategoryModal = loadable(() => import('~/components/molecules/Categories/CategoryModal'));
 
 interface Props {
   categories?: any;
@@ -124,9 +126,6 @@ const CategoryTable = (props: Props) => {
           <div className={styles.groupSave}>
             <a onClick={() => handleEdit(record)}>
               <Svg src={iconEdit} alt="icon Edit" />
-            </a>
-            <a onClick={() => modalConfirmDelete(record)}>
-              <Svg src={iconDelete} alt="icon Delete" />
             </a>
           </div>
         </>

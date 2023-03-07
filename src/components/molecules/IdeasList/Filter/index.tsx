@@ -1,19 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Form, Upload, UploadProps, message } from 'antd';
-
+import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
+import { SortIdeas } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import iconPlus from '~/assets/images/iconPlus.svg';
-import { UploadOutlined } from '@ant-design/icons';
-import storage from '~/utils/firebase';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+
 import styles from './styles.module.scss';
-import { KEY_MESSAGE, SortIdeas } from '~/utils/constant';
-import ModalIdeas from '../ModalIdeas';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
+const ModalIdeas = loadable(() => import('~/components/molecules/IdeasList/ModalIdeas'));
 
 interface Props {
   afterSuccess?: () => void;

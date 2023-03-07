@@ -25,6 +25,7 @@ function Wrapper() {
   useLayoutEffect(() => {
     if (token) {
       setEnable(true)
+      refetch()
     }
     if (user){
       dispatch(setUserInfo(user?.data))

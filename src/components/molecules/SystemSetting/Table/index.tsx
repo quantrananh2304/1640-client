@@ -1,27 +1,30 @@
 import React, { useMemo, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import iconEdit from '~/assets/images/iconEdit.svg';
-import iconDelete from '~/assets/images/iconDelete.svg';
 import iconWarning from '~/assets/images/warning.svg';
 
 import {format} from 'date-fns'
-import styles from './styles.module.scss';
-import Svg from '~/components/atoms/Svg';
-import Spin from '~/components/atoms/Spin';
-import Table from '~/components/atoms/Table';
-import { COMMON_PARAMS, DATE, SUCCESS } from '~/utils/constant';
-import AccountModal from '../ModalAccount';
+import { DATE, SUCCESS } from '~/utils/constant';
 import { Tag, message } from 'antd';
 import { SorterResult } from 'antd/es/table/interface';
-import Modal from '~/components/atoms/Modal';
 import { inactiveAcount } from '~/api/account';
+
+import Svg from '~/components/atoms/Svg';
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss';
+
+const Modal = loadable(() => import('~/components/atoms/Modal'));
+const Table = loadable(() => import('~/components/atoms/Table'));
+const Spin = loadable(() => import('~/components/atoms/Spin'));
+const AccountModal = loadable(() => import('~/components/molecules/SystemSetting/ModalAccount'));
+const ModalChangeDepartment = loadable(() => import('~/components/molecules/SystemSetting/ModalChangeDepartment'));
 
 interface Props {
   dataAccount?: any;
   isLoading?: boolean;
   isFetching?: boolean;
   setParams?: (value: any) => void;
-  refetch?: () => void;
+  refetch: () => void;
 }
 
 const TableAccount = (props: Props) => {
@@ -29,7 +32,9 @@ const TableAccount = (props: Props) => {
   const dataUser = dataAccount?.users;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ visibleModalConfirm, setVisibleModalConfirm ] = useState(false);
+  const [ visibleModalChangeDepartment, setVisibleModalChangeDepartment ] = useState(false);
   const [ userData, setUserData ] = useState({});
+  const [ recordChange, setRecordChange ] = useState<any>({});
   const [ idInactive, setIdInactive ] = useState();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
@@ -58,10 +63,6 @@ const TableAccount = (props: Props) => {
     setIsModalVisible(true)
   }
 
-  const modalConfirmDelete = (record: any) => {
-    //Code here
-  }
-
   const handleShowModal = (record: any) => {
     setVisibleModalConfirm(true)
     setIdInactive(record)
@@ -79,6 +80,11 @@ const TableAccount = (props: Props) => {
         message.error(res.message)
       }
     }
+  }
+
+  const handleOpenModal = (record: any) => {
+    setRecordChange(record);
+    setVisibleModalChangeDepartment(true)
   }
 
   const columns: ColumnsType<any> = [
@@ -119,7 +125,13 @@ const TableAccount = (props: Props) => {
       dataIndex: 'department',
       width: '20%',
       render: (_: string, record: any) => (
-        <Tag color="blue">{record.department.name}</Tag>
+        <Tag 
+          className='cursor-pointer'
+          color="blue"
+          onClick={() => handleOpenModal(record)}
+        >
+          {record.department.name}
+        </Tag>
       )
     },
     {
@@ -146,9 +158,6 @@ const TableAccount = (props: Props) => {
           <div className={styles.groupSave}>
             <a onClick={() => handleEdit(record)}>
               <Svg src={iconEdit} alt="icon Edit" />
-            </a>
-            <a onClick={() => modalConfirmDelete(record)}>
-              <Svg src={iconDelete} alt="icon Delete" />
             </a>
           </div>
         </>
@@ -188,6 +197,13 @@ const TableAccount = (props: Props) => {
           <span className={styles.title}>Are you sure to INACTIVE this account?</span>
       </div>
       </Modal>
+      <ModalChangeDepartment
+        visible={visibleModalChangeDepartment}
+        setVisible={setVisibleModalChangeDepartment}
+        user={recordChange}
+        refetch={refetch}
+        setRecord={setRecordChange}
+      />
     </>  
   )
 }

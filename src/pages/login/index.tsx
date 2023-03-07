@@ -11,7 +11,6 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
-import { addDays, addMinutes } from 'date-fns';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -56,6 +55,7 @@ const Login = () => {
           }
           else {
             message.error(res.message)
+            setLoading(false)
           }
         }
       }
