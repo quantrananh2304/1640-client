@@ -7,7 +7,6 @@ export function useUser(enable: boolean) {
   const res = useQuery([QK_USER], () => getUserInfo(), {
     enabled: enable,
     keepPreviousData: true,
-    refetchOnWindowFocus: false
   });
   return res;
 }

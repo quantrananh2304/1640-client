@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
-import { Avatar, Card, Divider, List, Statistic } from 'antd'
-import { LikeOutlined,MessageOutlined, DislikeOutlined} from '@ant-design/icons';
+import React, { useLayoutEffect, useState } from 'react'
+import { Avatar, Card, List, Statistic } from 'antd'
+import {
+  LikeOutlined,
+  MessageOutlined,
+  DislikeOutlined,
+  LikeTwoTone,
+  DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
 import styles from './styles.module.scss'
 import { format } from 'date-fns';
-import { DATE } from '~/utils/constant';
+import { DATE, SUCCESS } from '~/utils/constant';
+import { updateAction } from '~/api/ideas';
+import { useAppSelector } from '~/store';
 
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
@@ -14,13 +21,25 @@ interface Prop {
   dataIdeas?: any;
   isLoading?: boolean;
   isFetching?: boolean;
+  refetch: () => void;
 }
 
 const IdeaList = (props: Prop) => {
-  const {dataIdeas, isFetching, isLoading} = props;
+  const {dataIdeas, isFetching, isLoading, refetch} = props;
+  const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
   const [isLoadingComment, setIsLoadingComment] = useState(false)
+  const [userLike, setUserLike] = useState()
+  const [userDislike, setUserDislike] = useState()
 
+  // useLayoutEffect(() => {
+  //   if (userData && dataIdeas){
+  //     const userL = dataIdeas.like?.find((item: any) => console.log(item.user?._id === userData._id))
+  //     const userDL = dataIdeas.dislike?.find((item: any) => console.log(item.user?._id === userData._id))
+  //     console.log(userL, user)
+  //   }
+
+  // }, [userData, dataIdeas])
   const handleShowComment = (itemId: string) => {
     setShowCommentMap({
       ...showCommentMap,
@@ -31,6 +50,13 @@ const IdeaList = (props: Prop) => {
     setTimeout(() => {
       setIsLoadingComment(false)
     }, 2000)
+  }
+
+  const handleLike_Dislike = async (itemId: string, action: string) => {
+    const res = await updateAction(itemId, action)
+    if (res.message === SUCCESS) {
+      refetch()
+    }
   }
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -47,12 +73,27 @@ const IdeaList = (props: Prop) => {
               actions={[
                 <Statistic 
                   value={item?.likeCount} 
-                  prefix={<LikeOutlined />}
+                  prefix={
+                    item.like?.find((e: any) => e.user?._id === userData?._id) ?
+                    <LikeTwoTone
+                    />
+                    :
+                    <LikeOutlined
+                      onClick={() => handleLike_Dislike(item._id, 'like')}
+                    />
+                  }
                   valueStyle={{fontSize: '16px'}}
                 />,
                 <Statistic
                   value={item.dislikeCount}
-                  prefix={<DislikeOutlined />}
+                  prefix={
+                    item.dislike?.find((e: any) => e.user?._id === userData?._id) ?
+                    <DislikeTwoTone/>
+                    :
+                    <DislikeOutlined 
+                      onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                    />
+                  }
                   valueStyle={{fontSize: '16px'}}
                 />,
                 <Statistic
@@ -64,11 +105,6 @@ const IdeaList = (props: Prop) => {
                     />
                   } 
                 />,
-                // <DislikeOutlined key="edit"/>,
-                // <MessageOutlined
-                //   onClick={() => handleShowComment(item.id)}
-                //   key="ellipsis"
-                // />,
               ]}
               extra={format(new Date(item.createdAt), DATE)}
             >

@@ -2,6 +2,8 @@ import Axios, { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie'
 import history from './history';
 import {HOST_API_URL} from './config';
+import { handleLogout } from './helper';
+import { ROUTES } from '~/routes';
 
 
 const axiosInstance = Axios.create({
@@ -32,17 +34,17 @@ axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     const data: any = error.response?.data;
-    if (error.response?.status !== 401) {
-      return Promise.reject(error);
+    if (data?.errorCode === '403') {
+      handleLogout(ROUTES.Login)
     }
-    if (id) {
-      clearTimeout(id);
-    }
-    id = setTimeout(() => {
-      if (typeof window === 'undefined') return;
-      history.push(`/login`);
-    }, 200);
-    console.error(error);
+    // if (id) {
+    //   clearTimeout(id);
+    // }
+    // id = setTimeout(() => {
+    //   if (typeof window === 'undefined') return;
+    //   history.push(`/login`);
+    // }, 200);
+    // console.error(error);
   }
 );
 
