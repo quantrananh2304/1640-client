@@ -14,6 +14,22 @@ export const COMMON_PARAMS = {
   sort: 'NAME_ASC'
 }
 
+export const PARAMS_FILTER = {
+  page: 1,
+  limit: 999,
+}
+
+export enum SortIdeas {
+  'POPULARITY_ASC' = 'Popularity (Ascending)',
+  'POPULARITY_DESC' = 'Popularity (Descending)',
+  'DATE_CREATED_ASC' = 'Date create (Ascending)',
+  'DATE_CREATED_DESC' = 'Date create (Descending)',
+  'LIKE_ASC' = 'Like (Accending)',
+  'LIKE_DESC' = 'Like (Descending)',
+  'DISLIKE_ASC' = 'Dislike (Ascending)',
+  'DISLIKE_DESC' = 'Dislike (Descending)',
+}
+
 export enum UserStatus {
   'ACTIVE' = 'Active',
   'INACTIVE' = 'Inactive',
