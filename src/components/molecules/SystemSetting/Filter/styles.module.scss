@@ -55,6 +55,146 @@
           margin-right: 8px;
         }
       }
+
+      .btnAdd::after{
+        content: 'Add new account';
+      }
     }
   }
+}
+
+@media only screen and (max-width: 500px){
+  .memberHead {
+    background: #fff;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: 100vw;
+    .contentWrapper {
+      display        : flex;
+      flex-direction : column;
+      justify-content: space-between;
+      padding         : 10px 5px;
+      height         : 100%;
+  
+      .titleHead {
+        height     : 28px;
+        font-size  : 16px;
+        font-weight: 500;
+        line-height: 28px;
+        color      : rgba(0, 0, 0, 0.85);
+      }
+  
+      .optionsWrapper {
+        display        : flex;
+        justify-content: space-between;
+        .searchName{ 
+          width: 190px;
+        }
+        .filterWrapper {
+          display: flex;
+  
+          :global {
+            .ant-form-item {
+              margin: 0;
+            }
+          }
+  
+          .rangePicker {
+            width       : 256px;
+            margin-right: 8px;
+          }
+  
+          .selectProject,
+          .selectStatus,
+          .selectMember {
+            width       : 97px;
+            margin-right: 8px;
+          }
+  
+        }
+  
+        .btnAdd {
+          display    : flex;
+          align-items: center;
+          padding: 4px 5px;
+          .iconPlus {
+            width       : 10.75px;
+            height      : 11.25px;
+            margin-right: 8px;
+          }
+        }
+  
+        .btnAdd::after{
+          content: 'New account';
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 501px) and (max-width: 1024px){
+  .memberHead {
+    background: #fff;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: 100vw;
+    .contentWrapper {
+      display        : flex;
+      flex-direction : column;
+      justify-content: space-between;
+      padding         : 20px 24px;
+      height         : 100%;
+  
+      .titleHead {
+        height     : 28px;
+        font-size  : 16px;
+        font-weight: 500;
+        line-height: 28px;
+        color      : rgba(0, 0, 0, 0.85);
+      }
+  
+      .optionsWrapper {
+        display        : flex;
+        justify-content: space-between;
+        .searchName{ 
+          width: 190px;
+        }
+        .filterWrapper {
+          display: flex;
+  
+          :global {
+            .ant-form-item {
+              margin: 0;
+            }
+          }
+  
+          .rangePicker {
+            width       : 256px;
+            margin-right: 8px;
+          }
+  
+          .selectProject,
+          .selectStatus,
+          .selectMember {
+            width       : 160px;
+            margin-right: 8px;
+          }
+  
+        }
+  
+        .btnAdd {
+          display    : flex;
+          align-items: center;
+          .iconPlus {
+            width       : 10.75px;
+            height      : 11.25px;
+            margin-right: 8px;
+          }
+        }
+  
+        .btnAdd::after{
+          content: 'Add new account';
+        }
+      }
+    }
+  }
+  
 }

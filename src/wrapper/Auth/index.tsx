@@ -68,15 +68,15 @@ function Auth(props: Props) {
       <div className="header">
         <Header/>
       </div>
-      <Content style={{ padding: '0 50px'}}>
+      <Content className={styles.contentMain}>
         {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>{convertPathName}</Breadcrumb.Item>
         </Breadcrumb> */}
-        <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
-          <Sider style={{ background: colorBgContainer }} width={200}>
+        <Layout className={styles.contentNav} style={{ padding: '24px 0', background: colorBgContainer }}>
+          <Sider className={styles.contentSider} style={{ background: colorBgContainer }}>
             <SideNav menus={menuLeft}/>
           </Sider>
-          <Content style={{ padding: '0 24px', height: '75vh' }}>{children}</Content>
+          <Content className={styles.contentList}>{children}</Content>
         </Layout>
       </Content>
       <Footer className={styles.footer} style={{ textAlign: 'center' }}>1640 ©2023 Created by Group 3</Footer>

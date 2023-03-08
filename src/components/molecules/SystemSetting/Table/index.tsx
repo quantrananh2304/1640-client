@@ -104,7 +104,7 @@ const TableAccount = (props: Props) => {
     {
       title: 'Date',
       dataIndex: 'createdAt',
-      width: '15%',
+      width: '20%',
       sorter: true,
       render: (createdAt: string) => (
         <div>
@@ -123,7 +123,7 @@ const TableAccount = (props: Props) => {
     {
       title: 'Department',
       dataIndex: 'department',
-      width: '20%',
+      width: '10%',
       render: (_: string, record: any) => (
         <Tag 
           className='cursor-pointer'
@@ -152,7 +152,7 @@ const TableAccount = (props: Props) => {
     {
       title: '',
       dataIndex: 'optional',
-      width: '5%',
+      width: '10%',
       render: (_: any, record: any) => (
         <>
           <div className={styles.groupSave}>
@@ -172,6 +172,7 @@ const TableAccount = (props: Props) => {
         <Spin spinning={isLoading || isFetching}>
           <Table
             className={styles.tableContainer}
+            scroll={{ x: '110vh' }}
             columns={columns}
             rowKey={(record: any) => record._id}
             dataSource={dataUser}

@@ -52,7 +52,7 @@ const ViewProfile = () => {
       console.error(error);
     }
   };
-
+  
   return (
     <div>
       <div className={styles.mainContainer}>
@@ -95,7 +95,7 @@ const ViewProfile = () => {
           <Divider/>
           <Descriptions
             className={styles.info}
-            column={{xxl: 3, md: 2,  sm: 1}}
+            column={{xl: 3, sm: 2,  xs: 1}}
           >
             <Descriptions.Item label="Role">{userData?.role}</Descriptions.Item>
             <Descriptions.Item label="Telephone">{userData?.phoneNumber}</Descriptions.Item>

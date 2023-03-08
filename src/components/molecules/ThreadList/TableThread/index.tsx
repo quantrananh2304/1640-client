@@ -71,13 +71,14 @@ const ThreadTable = (props: Props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '15%',
+      width: '35%',
+      defaultSortOrder: 'descend',
       sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
-      width: '15%',
+      width: '35%',
       sorter: true,
       render: (date: any) => 
       <div>
@@ -122,7 +123,7 @@ const ThreadTable = (props: Props) => {
     {
       title: '',
       dataIndex: 'optional',
-      width: '4%',
+      width: '15%',
       render: (_: any, record: any) => (
         <>
           <div className={styles.groupSave}>

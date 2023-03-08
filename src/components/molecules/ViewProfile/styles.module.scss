@@ -20,3 +20,53 @@
     }
   }
 }
+
+@media only screen and (min-width: 501px) and (max-width: 1024px){
+  .mainContainer {
+    margin: 0;
+    .profile {
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+      height: 70vh;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .editInfo {
+        align-self: end;
+        margin: 16px;
+      }
+      .info {
+        width: 70%;
+        margin-bottom: 15vh;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px){
+  .mainContainer {
+    margin: 0;
+    .profile {
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+      height: 70vh;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .editInfo {
+        align-self: end;
+        margin: 16px;
+      }
+      .info {
+        width: 85%;
+        margin-bottom: 15vh;
+      }
+    }
+  }
+}
