@@ -4,6 +4,9 @@
       margin: 0;
     }
     :global { 
+      .ant-table {
+        overflow-x: auto;
+      }
       .ant-table-cell-scrollbar:not([rowspan]){
         box-shadow: none;
         background-color: #002766 

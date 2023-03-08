@@ -91,14 +91,14 @@ const CategoryTable = (props: Props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '15%',
+      width: '35%',
       defaultSortOrder: 'descend',
       sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
-      width: '15%',
+      width: '35%',
       sorter: true,
       render: (date: any) => 
       <div>
@@ -109,7 +109,7 @@ const CategoryTable = (props: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      width: '25%',
+      width: '15%',
       render: (status: string, record: any) =>
       (status === 'ACTIVE') ?
         <Tag className='cursor-pointer' onClick={() => showModalInactive(record?._id)} color="blue">{status}</Tag> 
@@ -120,7 +120,7 @@ const CategoryTable = (props: Props) => {
     {
       title: '',
       dataIndex: 'optional',
-      width: '4%',
+      width: '15%',
       render: (_: any, record: any) => (
         <>
           <div className={styles.groupSave}>
@@ -141,7 +141,7 @@ const CategoryTable = (props: Props) => {
         <Spin spinning={isLoading || isFetching}>
           <Table
             className={styles.tableContainer}
-            scroll={{ y: '60vh' }}
+            scroll={{ x: '60vh' }}
             columns={columns}
             rowKey={(record: any) => record._id}
             dataSource={categories}
@@ -167,5 +167,8 @@ const CategoryTable = (props: Props) => {
     </>  
   )
 }
+
+// mobile 10 10 10 6
+// tablet
 
 export default CategoryTable
