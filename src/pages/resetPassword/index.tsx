@@ -32,6 +32,9 @@ const ResetPassword = () => {
               navigate(ROUTES.Login) 
             }
           ,1500)
+        } else {
+          setLoading(false)
+          message.error(res.message)
         }
       }
     } catch (error: any) {

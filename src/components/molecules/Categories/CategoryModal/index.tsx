@@ -1,10 +1,10 @@
 import React, { useLayoutEffect } from 'react';
-import { Button, DatePicker, Form, Modal, message } from 'antd';
-import styles from './styles.module.scss'
-import Input, { TextArea } from '~/components/atoms/Input';
+import { Button, Form, Modal, message } from 'antd';
+import Input from '~/components/atoms/Input';
 import { createCategory } from '~/api/categories';
 import { SUCCESS } from '~/utils/constant';
 
+import styles from './styles.module.scss'
 interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;

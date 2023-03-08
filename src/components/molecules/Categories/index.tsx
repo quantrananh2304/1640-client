@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import CategoryTable from './TableCategory'
 import { useCategories } from '~/hooks/useCategory'
-import Filter from './Filter';
+import loadable from '~/utils/loadable';
+
+const Filter = loadable(() => import('~/components/molecules/Categories/Filter'));
+const CategoryTable = loadable(() => import('~/components/molecules/Categories/TableCategory'));
 
 const Categories = () => {
   const [params, setParams] = useState({

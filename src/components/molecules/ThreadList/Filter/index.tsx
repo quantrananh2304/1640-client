@@ -5,10 +5,10 @@ import Svg from '~/components/atoms/Svg'
 import iconPlus from '~/assets/images/iconPlus.svg'
 
 import styles from './styles.module.scss'
-import CategoryModal from '../ThreadModal'
+import ThreadModal from '../ThreadModal'
 
 interface Props {
-  refetch?: () => void;
+  refetch: () => void;
 }
 
 const Filter = (props: Props) => {
@@ -28,7 +28,7 @@ const Filter = (props: Props) => {
             Add thread
           </Button>
         </div>
-      <CategoryModal
+      <ThreadModal
         refetch={refetch}
         visible={isModalVisible}
         setVisible={setIsModalVisible}

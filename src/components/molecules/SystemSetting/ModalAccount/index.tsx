@@ -2,12 +2,14 @@ import React, { useLayoutEffect, useMemo } from 'react';
 import { Button, Form, Modal, message } from 'antd';
 import loadable from '~/utils/loadable';
 
-import styles from './styles.module.scss'
-import { DATE, Gender, Role } from '~/utils/constant';
+import { DATE, Gender, PARAMS_GET_ALL, Role, SUCCESS } from '~/utils/constant';
 import { Option } from '~/components/atoms/Select';
 import { updateUserInfo } from '~/api/user';
 import {format} from 'date-fns'
 import { createAccount } from '~/api/account';
+import { useDepartment } from '~/hooks/useDepartment';
+
+import styles from './styles.module.scss'
 
 const Input = loadable(() => import('~/components/atoms/Input'));
 const InputNumber = loadable(() => import('~/components/atoms/InputNumber'));
@@ -31,6 +33,9 @@ const AccountModal = (props: Props) => {
     afterSuccess,
   } = props;
 
+  const {data, isLoading, isFetching} = useDepartment(PARAMS_GET_ALL);
+  const dataDepartment = data?.data?.departments;
+  
   const genderOption = useMemo(() => Object.entries(Gender)
   // render options gender
   .map((item: any, index) => (
@@ -65,12 +70,14 @@ const AccountModal = (props: Props) => {
       } else {
         res = await updateUserInfo( userData?._id, fmData);
       }
-      if (res?.data) {
+      if (res?.message === SUCCESS) {
         message.success(!userData ? 'Create Account success' : 'Update account success')
         if (afterSuccess){
           afterSuccess()
         }
         handleClose()
+      } else {
+        message.error(res.message)
       }
     } catch (error: any) {
       message.error(error?.message)
@@ -104,6 +111,7 @@ const AccountModal = (props: Props) => {
           address: userData.address,
           role: userData.role,
           gender: userData.gender,
+          department: userData.department?._id
         }
         : {}
       }
@@ -163,6 +171,18 @@ const AccountModal = (props: Props) => {
           )}
         </Select>
       </Form.Item>
+
+      <Form.Item label='Department' name='department' required>
+        <Select
+          placeholder='Select department'
+          loading={isLoading || isFetching}
+        >
+          {dataDepartment?.map((item: any) =>
+            <Option key={item._id} value={item._value}>{item.name}</Option>
+          )}
+        </Select>
+      </Form.Item>
+
       <Form.Item label='Gender' name='gender' required>
         <Select
           placeholder='Select gender'

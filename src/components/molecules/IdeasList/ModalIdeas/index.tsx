@@ -2,15 +2,16 @@ import { Button, Form, Upload, message } from 'antd';
 import React, { useMemo, useState } from 'react'
 import Modal from '~/components/atoms/Modal'
 import { UploadOutlined } from '@ant-design/icons';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import { Option } from '~/components/atoms/Select';
 import styles from './styles.module.scss'
 import Input from '~/components/atoms/Input';
 import Select from '~/components/atoms/Select';
-import { Category, KEY_MESSAGE } from '~/utils/constant';
+import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS } from '~/utils/constant';
 import storage from '~/utils/firebase';
 import { setIdea } from '~/api/ideas';
 import { useCategories } from '~/hooks/useCategory';
+import { useThread } from '~/hooks/useThread';
 
 
 interface Props {
@@ -31,13 +32,11 @@ const ModalIdeas = (props: Props) => {
 
   const [metaData, setMetaData] = useState({});
   const rules = [{ required: true, message: '' }];
-  const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories({
-    page: 1,
-    limit: 999,
-    sort: 'NAME_DESC'
-  });
-
+  const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
   const categories = data?.data?.categories;
+
+  const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
+  const dataThread = threadList?.data?.threads;
 
   const categoryOption = useMemo(() => 
   // render options gender
@@ -45,6 +44,11 @@ const ModalIdeas = (props: Props) => {
     { id: item._id, name: item.name, }
   )), [categories]);
 
+  const threadOption = useMemo(() => 
+  // render options gender
+  dataThread?.map((item: any) => (
+    { id: item._id, name: item.name, }
+  )), [dataThread]);
 
   const handleClose = () => {
     if (setVisible) {
@@ -56,42 +60,36 @@ const ModalIdeas = (props: Props) => {
     const file = doc?.file;
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-    let metadata: any;
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // const progress = Math.round(
-        //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        //   );      
-        const { metadata: uploadMetadata } = snapshot;
-        // metadata.contentType
-        // metadata.name
-        if (uploadMetadata) {
-          metadata = {
-            name: uploadMetadata.name,
-            contentType: uploadMetadata.contentType
-          }
-        }
-      },
-      (error: any) => {
-        message.error({
-          content: error,
-          key: KEY_MESSAGE
-        });
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-          const result = {
-            ...metadata,
-            url: downloadUrl
-          };
-          setMetaData(result);
-        });
-      }  
-    );
-  }
+  
+    try {
+      // Wait for the upload to finish
+      const snapshot = await uploadTask;
+      
+      // Get the metadata using getMetadata() method
+      const metadata = await getMetadata(storageRef);
+  
+      // Create the result object with metadata and download URL
+      const result = {
+        name: metadata.name,
+        contentType: metadata.contentType,
+        url: await getDownloadURL(snapshot.ref)
+      };
+  
+      // Set the result in the state
+      setMetaData(result);
+  
+    } catch (error: any) {
+      message.error({
+        content: error,
+        key: KEY_MESSAGE
+      });
+    }
+  };
 
   const handleSave = async (formValues: any) => {
+    if (Object.keys(metaData).length === 0) {
+      return message.error('Please upload your document')
+    }
     try {
       let res: any = null;
       const {document, ...rest} = formValues;
@@ -99,8 +97,12 @@ const ModalIdeas = (props: Props) => {
         ...rest,
         documents: [metaData]
       }
-      // res = await setIdea(fmData)
-      console.log (res)
+      res = await setIdea(fmData)
+      if (res.message === SUCCESS) {
+        message.success('Upload idea success')
+      } else {
+        message.error(res.error)
+      }
     } catch (error) {
       
     }
@@ -147,7 +149,6 @@ const ModalIdeas = (props: Props) => {
       <Form.Item
         label='Document'
         name='document'
-        rules={rules}
       >
         <Upload
           onChange={(info) => info.file.status = 'done'}
@@ -174,9 +175,16 @@ const ModalIdeas = (props: Props) => {
       <Form.Item
         label='Thread'
         name='thread'
-        // rules={rules}
+        rules={rules}
       >
-        <Select></Select>
+        <Select
+          placeholder={'Select thread'}
+          loading={loadingThread || fetchingThread}
+        >
+          {threadOption?.map((item: any) =>
+            <Option key={item.id} value={item.id}>{item.name}</Option>
+          )}
+        </Select>
       </Form.Item>
       <div className={styles.btnGroup}>
         <Button

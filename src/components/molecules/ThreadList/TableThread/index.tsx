@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { ColumnsType, TableProps } from 'antd/es/table';
+import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/es/table';
 import iconEdit from '~/assets/images/iconEdit.svg';
 import iconDelete from '~/assets/images/iconDelete.svg';
 import iconWarning from '~/assets/images/warning.svg';
@@ -14,25 +14,31 @@ import { Tag, message } from 'antd';
 import { inactiveCategory } from '~/api/categories';
 
 interface Props {
-  categories?: any;
+  threads?: any;
   refetch?: () => void;
+  isLoading?: boolean;
+  isFetching?: boolean;
 }
 interface DataType {
   name: string;
   createdAt: Date;
   status: string;
-
 }
 
 const ThreadTable = (props: Props) => {
-  const { categories, refetch } = props;
+  const { threads, refetch, isLoading, isFetching } = props;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ visibleModalInactive, setVisibleModalInactive ] = useState(false);
   const [ idInactive, setIdInactive ] = useState();
-  const [ category, setCategory ] = useState({});
+  const [ thread, setThread ] = useState({});
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 5,
+    total: 10
+  });
   
   const handleEdit = (record: any) => {
-    setCategory(record)
+    setThread(record)
     setIsModalVisible(true)
   }
 
@@ -66,7 +72,6 @@ const ThreadTable = (props: Props) => {
       title: 'Name',
       dataIndex: 'name',
       width: '15%',
-      defaultSortOrder: 'descend',
       sorter: true
     },
     {
@@ -83,13 +88,36 @@ const ThreadTable = (props: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      width: '25%',
+      width: '15%',
       render: (status: string, record: any) =>
       (status === 'ACTIVE') ?
         <Tag className='cursor-pointer' onClick={() => showModalInactive(record?._id)} color="blue">{status}</Tag> 
         :
         <Tag color="red">{status}</Tag> 
       
+    },
+    {
+      title: 'Closure date',
+      dataIndex: 'closureDate',
+      width: '15%',
+      render: (closureDate: any) => 
+      <div>
+        {closureDate && format(new Date(closureDate), DATE)}
+      </div>
+    },
+    {
+      title: 'Final closure date',
+      dataIndex: 'finalClosureDate',
+      width: '15%',
+      render: (finalClosureDate: any) => 
+      <div>
+        {finalClosureDate && format(new Date(finalClosureDate), DATE)}
+      </div>
+    },
+    {
+      title: 'Note',
+      dataIndex: 'note',
+      width: '20%',
     },
     {
       title: '',
@@ -100,9 +128,6 @@ const ThreadTable = (props: Props) => {
           <div className={styles.groupSave}>
             <a onClick={() => handleEdit(record)}>
               <Svg src={iconEdit} alt="icon Edit" />
-            </a>
-            <a onClick={() => modalConfirmDelete(record)}>
-              <Svg src={iconDelete} alt="icon Delete" />
             </a>
           </div>
         </>
@@ -115,13 +140,13 @@ const ThreadTable = (props: Props) => {
       <div
         className={styles.container}
         >
-        <Spin spinning={false}>
+        <Spin spinning={isLoading || isFetching}>
           <Table
             className={styles.tableContainer}
-            scroll={{ y: '60vh' }}
+            pagination={pagination}
             columns={columns}
             rowKey={(record: any) => record._id}
-            dataSource={categories}
+            dataSource={threads}
             onChange={onChange}
           />
         </Spin>

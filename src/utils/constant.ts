@@ -14,6 +14,12 @@ export const COMMON_PARAMS = {
   sort: 'NAME_ASC'
 }
 
+export const PARAMS_GET_ALL = {
+  page: 1,
+  limit: 999,
+  sort: 'NAME_ASC'
+}
+
 export const PARAMS_FILTER = {
   page: 1,
   limit: 999,
@@ -28,6 +34,16 @@ export enum SortIdeas {
   'LIKE_DESC' = 'Like (Descending)',
   'DISLIKE_ASC' = 'Dislike (Ascending)',
   'DISLIKE_DESC' = 'Dislike (Descending)',
+}
+
+
+export enum SortAccount {
+  'EMAIL_ASC' = 'Email (Ascending)',
+  'EMAIL_DESC' = 'Email (Descending)',
+  'NAME_ASC' = 'Name (Ascending)',
+  'NAME_DESC' = 'Name (Descending)',
+  'DATE_CREATED_ASC' = 'Date create (Accending)',
+  'DATE_CREATED_DESC' = 'Date create (Descending)',
 }
 
 export enum UserStatus {

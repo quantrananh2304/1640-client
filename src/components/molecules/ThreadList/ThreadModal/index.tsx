@@ -2,15 +2,15 @@ import React, { useLayoutEffect } from 'react';
 import { Button, DatePicker, Form, Modal, message } from 'antd';
 import styles from './styles.module.scss'
 import Input, { TextArea } from '~/components/atoms/Input';
-import { createCategory } from '~/api/categories';
 import { SUCCESS } from '~/utils/constant';
+import { createThread } from '~/api/threads';
 
 interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
-  category?: any;
-  refetch?: () => void;
-  setCategory?: React.Dispatch<any>;
+  thread?: any;
+  refetch: () => void;
+  setThread?: React.Dispatch<any>;
 }
 
 const ThreadModal = (props: Props) => {
@@ -18,39 +18,45 @@ const ThreadModal = (props: Props) => {
   const {
     visible,
     setVisible,
-    category,
+    thread,
     refetch,
-    setCategory
+    setThread
   } = props;
+  const rules = [{ required: true, message: '' }];
+
 
   const handleClose = () => {
     if (setVisible) {
       setVisible(false);
-      if (!category) {
+      if (!thread) {
         form.resetFields();
       }
-      if (setCategory) {
-        setCategory({})
+      if (setThread) {
+        setThread({})
       }
     }
   };
 
   useLayoutEffect(() => {
-    if (category) {
+    if (thread) {
       form?.setFieldsValue({
-          name: category.name,
+        name: thread.name,
+        description: thread.description,
+        closureDate: thread.closureDate,
+        finalClosureDate: thread.finalClosureDate,
+        note: thread.note,
       });
     }
-  }, [category]);
+  }, [thread]);
 
   const handleSave = async (formValues: any) => {
     try {
       let res: any = null;
-      res = await createCategory(formValues)
+      res = await createThread(formValues)
       if (res.message === SUCCESS) {
-        message.success(!category ? 'Add thread success' : 'Update thread success')
+        message.success(!thread ? 'Add thread success' : 'Update thread success')
         setVisible(false);
-        // refetch()
+        refetch()
       } else {
         message.error(res.message)
       }
@@ -69,7 +75,7 @@ const ThreadModal = (props: Props) => {
       className={styles.modalContainer}
     >
     <div>
-      <h3>{category ? 'Edit category' : 'Add category'}</h3>
+      <h3>{thread ? 'Edit thread' : 'Add thread'}</h3>
     </div>
     <Form
       form={form}
@@ -79,10 +85,50 @@ const ThreadModal = (props: Props) => {
       autoComplete="off"
       className={styles.formContainer}
     >
-      <Form.Item label='Name' name='name'>
+      <Form.Item 
+        label='Name' 
+        name='name'
+        rules={rules}
+      >
         <Input
           maxLength={50}
-          placeholder='Enter category name'
+          placeholder='Enter thread name'
+        />
+      </Form.Item>
+      <Form.Item 
+        label='Description' 
+        name='description'
+        rules={rules}
+      >
+        <Input
+          maxLength={255}
+          placeholder='Description'
+        />
+      </Form.Item>
+      <Form.Item 
+        label='Closure date' 
+        name='closureDate'
+        // rules={rules}
+      >
+        <DatePicker
+        />
+      </Form.Item>
+      <Form.Item 
+        label='Final closure date' 
+        name='finalClosureDate'
+        // rules={rules}
+      >
+        <DatePicker
+        />
+      </Form.Item>
+      <Form.Item 
+        label='Note' 
+        name='note'
+        rules={rules}
+      >
+        <Input
+          maxLength={255}
+          placeholder='Note'
         />
       </Form.Item>
       <div className={styles.btnGroup}>
