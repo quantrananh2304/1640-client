@@ -71,14 +71,14 @@ const ThreadTable = (props: Props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '35%',
+      width: '15%',
       defaultSortOrder: 'descend',
       sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
-      width: '35%',
+      width: '15%',
       sorter: true,
       render: (date: any) => 
       <div>
@@ -89,7 +89,7 @@ const ThreadTable = (props: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      width: '15%',
+      width: '10%',
       render: (status: string, record: any) =>
       (status === 'ACTIVE') ?
         <Tag className='cursor-pointer' onClick={() => showModalInactive(record?._id)} color="blue">{status}</Tag> 
@@ -118,12 +118,12 @@ const ThreadTable = (props: Props) => {
     {
       title: 'Note',
       dataIndex: 'note',
-      width: '20%',
+      width: '10%',
     },
     {
       title: '',
       dataIndex: 'optional',
-      width: '15%',
+      width: '10%',
       render: (_: any, record: any) => (
         <>
           <div className={styles.groupSave}>
