@@ -1,4 +1,4 @@
-import { Button, Form, Upload, message } from 'antd';
+import { Button, Checkbox, Form, Switch, Upload, message } from 'antd';
 import React, { useMemo, useState } from 'react'
 import Modal from '~/components/atoms/Modal'
 import { UploadOutlined } from '@ant-design/icons';
@@ -100,11 +100,15 @@ const ModalIdeas = (props: Props) => {
       res = await setIdea(fmData)
       if (res.message === SUCCESS) {
         message.success('Upload idea success')
+        if (afterSuccess) {
+          afterSuccess()
+        }
+        setVisible(false)
       } else {
         message.error(res.error)
       }
     } catch (error) {
-      
+      console.log(error)
     }
   }
   return (
@@ -149,6 +153,7 @@ const ModalIdeas = (props: Props) => {
       <Form.Item
         label='Document'
         name='document'
+        valuePropName='fileList'
       >
         <Upload
           onChange={(info) => info.file.status = 'done'}
@@ -186,6 +191,13 @@ const ModalIdeas = (props: Props) => {
           )}
         </Select>
       </Form.Item>
+{/* 
+      <Form.Item
+        name='anonymously'
+        label='Anonymously'
+      >
+        <Switch/>
+      </Form.Item> */}
       <div className={styles.btnGroup}>
         <Button
           className={styles.btnClose}

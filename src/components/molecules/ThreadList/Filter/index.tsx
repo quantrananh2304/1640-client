@@ -25,7 +25,7 @@ const Filter = (props: Props) => {
             onClick={() => setIsModalVisible(true)}
           >
             <Svg className={styles.icon} src={iconPlus} />
-            Add thread
+            Add Campaign
           </Button>
         </div>
       <ThreadModal

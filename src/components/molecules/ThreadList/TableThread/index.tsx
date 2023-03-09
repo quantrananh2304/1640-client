@@ -12,12 +12,14 @@ import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { Tag, message } from 'antd';
 import { inactiveCategory } from '~/api/categories';
+import { SorterResult } from 'antd/es/table/interface';
 
 interface Props {
   threads?: any;
   refetch?: () => void;
   isLoading?: boolean;
   isFetching?: boolean;
+  setParams?: (value: any) => void;
 }
 interface DataType {
   name: string;
@@ -26,7 +28,7 @@ interface DataType {
 }
 
 const ThreadTable = (props: Props) => {
-  const { threads, refetch, isLoading, isFetching } = props;
+  const { threads, refetch, isLoading, isFetching, setParams } = props;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ visibleModalInactive, setVisibleModalInactive ] = useState(false);
   const [ idInactive, setIdInactive ] = useState();
@@ -63,22 +65,35 @@ const ThreadTable = (props: Props) => {
     }
   }
 
-  const onChange: TableProps<DataType>['onChange'] = (sorter) => {
-    console.log('params', sorter);
+  const handleTableChange = (
+    newPagination: TablePaginationConfig,
+    sorter: SorterResult<any>
+  ) => {
+    setPagination(newPagination);
+
+    const paramsfilters = {
+      sort: 'NAME_ASC',
+      oder: sorter.order,
+      page: newPagination.current,
+      limit: newPagination.pageSize
+    }; 
+    if (setParams) {
+      setParams(paramsfilters)
+    }
   };
+
 
   const columns: ColumnsType<any> = [
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '35%',
-      defaultSortOrder: 'descend',
+      width: '20%',
       sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
-      width: '35%',
+      width: '15%',
       sorter: true,
       render: (date: any) => 
       <div>
@@ -148,7 +163,6 @@ const ThreadTable = (props: Props) => {
             columns={columns}
             rowKey={(record: any) => record._id}
             dataSource={threads}
-            onChange={onChange}
           />
         </Spin>
       </div>

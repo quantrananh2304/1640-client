@@ -70,7 +70,7 @@ const Filter = (props: Props) => {
       <ModalIdeas
         visible={isModalVisible}
         setVisible={setIsModalVisible}
-        // afterSuccess={}
+        afterSuccess={afterSuccess}
       />
     </>
   );

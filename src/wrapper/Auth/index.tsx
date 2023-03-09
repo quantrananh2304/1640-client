@@ -42,10 +42,10 @@ function Auth(props: Props) {
       content: 'Ideas'
     },
     {
-      key: ROUTES.Thread,
-      label: <Link to={ROUTES.Thread}>Thread</Link>,
+      key: ROUTES.Campaign,
+      label: <Link to={ROUTES.Campaign}>Campaign</Link>,
       icon: <BookOutlined style={{fontSize: '18px'}}/>,
-      url: ROUTES.Thread,
+      url: ROUTES.Campaign,
     },
     {
       key: ROUTES.Category,
