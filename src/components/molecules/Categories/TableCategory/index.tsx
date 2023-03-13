@@ -29,7 +29,6 @@ interface DataType {
   name: string;
   createdAt: Date;
   status: string;
-
 }
 
 const CategoryTable = (props: Props) => {
@@ -49,10 +48,6 @@ const CategoryTable = (props: Props) => {
     setIsModalVisible(true)
   }
 
-  const modalConfirmDelete = (record: any) => {
-    //Code here
-  }
-
   const showModalInactive = (record: any) => {
     setVisibleModalInactive(true)
     setIdInactive(record)
@@ -63,6 +58,7 @@ const CategoryTable = (props: Props) => {
       const res = await inactiveCategory(idInactive);
       if (res.message === SUCCESS) {
         message.success('Inactive Category success')
+        setVisibleModalInactive(false)
         refetch();
       } else {
         message.error(res.message)
@@ -92,7 +88,6 @@ const CategoryTable = (props: Props) => {
       title: 'Name',
       dataIndex: 'name',
       width: '35%',
-      defaultSortOrder: 'descend',
       sorter: true
     },
     {
@@ -109,7 +104,7 @@ const CategoryTable = (props: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      width: '15%',
+      width: '20%',
       render: (status: string, record: any) =>
       (status === 'ACTIVE') ?
         <Tag className='cursor-pointer' onClick={() => showModalInactive(record?._id)} color="blue">{status}</Tag> 
@@ -120,7 +115,7 @@ const CategoryTable = (props: Props) => {
     {
       title: '',
       dataIndex: 'optional',
-      width: '15%',
+      width: '4%',
       render: (_: any, record: any) => (
         <>
           <div className={styles.groupSave}>

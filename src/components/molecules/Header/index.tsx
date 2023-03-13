@@ -14,6 +14,8 @@ import logo from '~/assets/images/1640-logos_white.png';
 import styles from './styles.module.scss';
 import { RootState, useAppDispatch, useAppSelector } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
+import { Authorization } from '~/wrapper/Authorization';
+import { UserRole } from '~/utils/constant';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
@@ -50,7 +52,9 @@ export default function Header() {
     {
       key: '2',
       label: (
-        <div onClick={handleSetting}>Setting</div>
+        <Authorization roles={[UserRole.Admin]}>
+          <div onClick={handleSetting}>Setting</div>
+        </Authorization>
       ),
     },
     {

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react'
-import { Avatar, Card, List, Statistic } from 'antd'
+import { Avatar, Button, Card, Form, List, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
@@ -12,8 +12,9 @@ import loadable from '~/utils/loadable';
 import styles from './styles.module.scss'
 import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
-import { updateAction } from '~/api/ideas';
+import { setComment, updateAction } from '~/api/ideas';
 import { useAppSelector } from '~/store';
+import { TextArea } from '~/components/atoms/Input';
 
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
@@ -28,34 +29,45 @@ const IdeaList = (props: Prop) => {
   const {dataIdeas, isFetching, isLoading, refetch} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
   const [showCommentMap, setShowCommentMap] = useState<any>({})
+  const [ideaId, setIdeaId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
-  const [userLike, setUserLike] = useState()
-  const [userDislike, setUserDislike] = useState()
+  const [form] = Form.useForm();
 
-  // useLayoutEffect(() => {
-  //   if (userData && dataIdeas){
-  //     const userL = dataIdeas.like?.find((item: any) => console.log(item.user?._id === userData._id))
-  //     const userDL = dataIdeas.dislike?.find((item: any) => console.log(item.user?._id === userData._id))
-  //     console.log(userL, user)
-  //   }
-
-  // }, [userData, dataIdeas])
   const handleShowComment = (itemId: string) => {
     setShowCommentMap({
-      ...showCommentMap,
+      // ...showCommentMap,
       [itemId]: !showCommentMap[itemId]
     })
+    form.resetFields()
     setIsLoadingComment(true)
 
     setTimeout(() => {
       setIsLoadingComment(false)
-    }, 2000)
+    }, 1000)
   }
 
   const handleLike_Dislike = async (itemId: string, action: string) => {
     const res = await updateAction(itemId, action)
     if (res.message === SUCCESS) {
       refetch()
+    }
+  }
+
+  const handleKeyPress = (event: any, ideaId: string) => {
+    setIdeaId(ideaId)
+    if (event.key === "Enter") {
+      form.submit();
+    }
+  }
+
+  const handleComment = async (formValues: any) => {
+    const res = await setComment(ideaId, formValues);
+    if (res.message === SUCCESS) {
+      message.success('Comment success')
+      refetch()
+      form.resetFields()
+    } else {
+      message.error(res.message)
     }
   }
   return (
@@ -128,6 +140,23 @@ const IdeaList = (props: Prop) => {
                   />
                   ) 
                 }
+                <div className={styles.commentArea}>
+                <Form
+                  form={form}
+                  layout='vertical'
+                  onFinish={handleComment}
+                  key={item._id}
+                >
+                  <Form.Item
+                    name='content'
+                  >
+                    <TextArea
+                      placeholder='Enter your comment'
+                      onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                    />
+                  </Form.Item>
+                </Form>
+                </div>
                 </div>
               </Spin>
             }

@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Filter from './Filter'
 import ThreadTable from './TableThread'
 import { COMMON_PARAMS } from '~/utils/constant'
 import { useThread } from '~/hooks/useThread'
 
 const Threads = () => {
-  const {data, isFetching, isLoading, refetch} = useThread(COMMON_PARAMS)
+  const [params, setParams] = useState({
+    page: 1,
+    limit: 5,
+    sort: 'NAME_DESC'
+  })
+  const {data, isFetching, isLoading, refetch} = useThread(params)
   const dataThread = data?.data.threads;
   return (
     <>
@@ -13,6 +18,7 @@ const Threads = () => {
         refetch={refetch}
       />
       <ThreadTable
+        setParams={setParams}
         threads={dataThread}
         refetch={refetch}
         isFetching={isFetching}

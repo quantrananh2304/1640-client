@@ -25,6 +25,7 @@ const IdeasList = () => {
     <>
       <Filter
         onChange={handleFilter}
+        afterSuccess={refetch}
       />
       <IdeaList 
         dataIdeas={data?.data?.ideas}
