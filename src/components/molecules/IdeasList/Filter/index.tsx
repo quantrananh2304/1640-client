@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { SortIdeas } from '~/utils/constant';
+import { NAME_ASC, SortIdeas } from '~/utils/constant';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
@@ -47,6 +47,9 @@ const Filter = (props: Props) => {
             <Form
               form={form}
               onValuesChange={handleValuesChange}
+              initialValues={{
+                sort: SortIdeas.POPULARITY_DESC
+              }}
             >
               <div className={styles.filterWrapper}>
                 <Form.Item name='sort'>
