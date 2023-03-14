@@ -11,11 +11,11 @@ import iconNotification from '~/assets/images/iconNotification.svg';
 import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
 
-import styles from './styles.module.scss';
 import { RootState, useAppDispatch, useAppSelector } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
 import { Authorization } from '~/wrapper/Authorization';
 import { UserRole } from '~/utils/constant';
+import styles from './styles.module.scss';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;

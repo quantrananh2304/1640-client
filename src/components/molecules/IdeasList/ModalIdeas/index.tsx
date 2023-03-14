@@ -7,11 +7,12 @@ import { Option } from '~/components/atoms/Select';
 import styles from './styles.module.scss'
 import Input from '~/components/atoms/Input';
 import Select from '~/components/atoms/Select';
-import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS } from '~/utils/constant';
+import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
 import storage from '~/utils/firebase';
 import { setIdea } from '~/api/ideas';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
+import { Link } from 'react-router-dom';
 
 
 interface Props {
@@ -34,7 +35,7 @@ const ModalIdeas = (props: Props) => {
   const rules = [{ required: true, message: '' }];
   const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
   const categories = data?.data?.categories;
-
+  const [showModalTerms, setShowModalTerms] = useState(false)
   const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
   const dataThread = threadList?.data?.threads;
 
@@ -60,6 +61,7 @@ const ModalIdeas = (props: Props) => {
     const file = doc?.file;
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
+    
   
     try {
       // Wait for the upload to finish
@@ -74,7 +76,6 @@ const ModalIdeas = (props: Props) => {
         contentType: metadata.contentType,
         url: await getDownloadURL(snapshot.ref)
       };
-  
       // Set the result in the state
       setMetaData(result);
   
@@ -92,8 +93,9 @@ const ModalIdeas = (props: Props) => {
     }
     try {
       let res: any = null;
-      const {document, ...rest} = formValues;
+      const {document, isAnonymous, ...rest} = formValues;
       const fmData = {
+        isAnonymous: isAnonymous ? isAnonymous : false,
         ...rest,
         documents: [metaData]
       }
@@ -111,6 +113,7 @@ const ModalIdeas = (props: Props) => {
       console.log(error)
     }
   }
+
   return (
     <Modal
       width={460}
@@ -150,18 +153,14 @@ const ModalIdeas = (props: Props) => {
           placeholder='Description'
         />
       </Form.Item>
-      <Form.Item
-        label='Document'
-        name='document'
-        valuePropName='fileList'
-      >
+      <div className={styles.uploadBtn}>
         <Upload
           onChange={(info) => info.file.status = 'done'}
           customRequest={(file: any ) => uploadFileToFirebase(file)}
         >
           <Button icon={<UploadOutlined />}>Upload Ideas</Button>
         </Upload>
-      </Form.Item>
+      </div>
       <Form.Item
         label='Categoty'
         name='category'
@@ -191,13 +190,31 @@ const ModalIdeas = (props: Props) => {
           )}
         </Select>
       </Form.Item>
-{/* 
+
       <Form.Item
-        name='anonymously'
-        label='Anonymously'
+        name='isAnonymous'
+        label='Anonymous'
+        valuePropName='checked'
       >
-        <Switch/>
-      </Form.Item> */}
+        <Switch
+        />
+      </Form.Item>
+      <Form.Item
+        name='termsAndConditions'
+        // label='Terms and conditions'
+      >
+        <>
+          <Checkbox
+          >
+            Agree terms and conditions
+          </Checkbox>
+          <a
+            onClick={() => setShowModalTerms(true)}
+          >
+            Read here
+          </a>
+        </>
+      </Form.Item>
       <div className={styles.btnGroup}>
         <Button
           className={styles.btnClose}
@@ -213,6 +230,17 @@ const ModalIdeas = (props: Props) => {
         </Button>                
       </div>
     </Form>
+    <Modal
+      open={showModalTerms}
+      centered
+      footer={false}
+      closable
+      className={styles.modalTerm}
+    >
+      <div>
+        <p className='m-0'>{termAndCondition}</p>
+      </div>
+    </Modal>
     </Modal>
   )
 }

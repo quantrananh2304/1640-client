@@ -135,8 +135,8 @@ const IdeaList = (props: Prop) => {
                   <Meta
                     key={comment._id}
                     className={styles.comment}
-                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> {comment.createdBy?.firstName} {comment.createdBy?.lastName}</>}
-                    description={comment.content}
+                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
+                    description={<p className={styles.commentContent}>{comment.content}</p>}
                   />
                   ) 
                 }
@@ -151,6 +151,7 @@ const IdeaList = (props: Prop) => {
                     name='content'
                   >
                     <TextArea
+                      className='mt-2'
                       placeholder='Enter your comment'
                       onKeyPress={(e: any) => handleKeyPress(e, item._id)}
                     />

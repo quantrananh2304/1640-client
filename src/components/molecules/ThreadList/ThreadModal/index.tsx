@@ -54,7 +54,7 @@ const ThreadModal = (props: Props) => {
       let res: any = null;
       res = await createThread(formValues)
       if (res.message === SUCCESS) {
-        message.success(!thread ? 'Add thread success' : 'Update thread success')
+        message.success(!thread ? 'Add campaign success' : 'Update campaign success')
         setVisible(false);
         refetch()
       } else {
@@ -75,7 +75,7 @@ const ThreadModal = (props: Props) => {
       className={styles.modalContainer}
     >
     <div>
-      <h3>{thread ? 'Edit thread' : 'Add thread'}</h3>
+      <h3>{thread ? 'Edit campaign' : 'Add campaign'}</h3>
     </div>
     <Form
       form={form}
@@ -92,7 +92,7 @@ const ThreadModal = (props: Props) => {
       >
         <Input
           maxLength={50}
-          placeholder='Enter thread name'
+          placeholder='Name'
         />
       </Form.Item>
       <Form.Item 
