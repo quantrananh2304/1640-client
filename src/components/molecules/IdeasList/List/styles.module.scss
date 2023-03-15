@@ -12,6 +12,14 @@
     .ant-card-actions>li:not(:last-child){
       border: none;
     }
+    .ant-card-meta-title {
+      margin-bottom: 0 !important;
+    }
+  }
+  .userIdea{
+    font-size: 12px;
+    color: #4096ff;
+    font-style: italic;
   }
   .commentContainer{
     .comment{ 

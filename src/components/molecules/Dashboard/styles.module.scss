@@ -1,4 +1,17 @@
-.chart {
-  // width: 50%;
-  height: 50%;
+.dashboardContainer {
+  background-color: aquamarine;
+  height: 100%;
+  
+  .chart{
+    height: 42%;
+    background-color: aliceblue;
+    border-radius: 0.5rem;
+    div[size-sensor-id="1"],
+    div[size-sensor-id="2"],
+    div[size-sensor-id="3"],
+    div[size-sensor-id="4"]{
+      height: 90% !important;
+    }
+    
+  }
 }

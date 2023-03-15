@@ -1,6 +1,7 @@
 import React from 'react';
 import { Column, Line } from '@ant-design/plots';
 import styles from './styles.module.scss';
+import { Row, Col } from 'antd';
 
 const Dashboards = () => {
   const data = [
@@ -17,23 +18,36 @@ const Dashboards = () => {
 
   const config = {
     data,
-    height: 100,
     xField: 'year',
     yField: 'value',
-    point: {
-      size: 5,
-      shape: 'diamond',
-    },
   };
   return (
-    <>
-      <div className={styles.chart}>
+    <Row 
+      className={styles.dashboardContainer} 
+      gutter={[ 16, 16]}
+      justify="space-around" align="middle"
+    >
+      <Col className={styles.chart} span={11}>
+        <Line  {...config} />
+      </Col>
+      <Col className={styles.chart} span={11}>
+        <Column  {...config}/>
+      </Col>
+      <Col  className={styles.chart} span={11}>
         <Line {...config} />
-      </div>
-      <div className={styles.chart}>
-        <Column {...config} />
-      </div>
-    </>
+      </Col>
+      <Col className={styles.chart} span={11}>
+        <Column  {...config}/>
+      </Col>
+    </Row>
+    // <div className={styles.dashboardContainer}>
+    //   <div className={styles.chart}>
+    //     <Line {...config} />
+    //   </div>
+    //   <div className={styles.chart}>
+    //     <Column {...config} />
+    //   </div>
+    // </div>
   )
 }
 
