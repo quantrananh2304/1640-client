@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Avatar, Button, Card, Form, List, Statistic, message } from 'antd'
 import {
   LikeOutlined,
@@ -16,7 +16,6 @@ import { setComment, updateAction } from '~/api/ideas';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
 
-
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
   dataIdeas?: any;
@@ -32,7 +31,14 @@ const IdeaList = (props: Prop) => {
   const [ideaId, setIdeaId] = useState('')
   const [isLoadingComment, setIsLoadingComment] = useState(false)
   const [form] = Form.useForm();
+  const [dataSource, setDataSource] = useState<any>([]);
 
+  useEffect(() => {
+    if (dataIdeas){
+      setDataSource(dataIdeas)
+    }
+  }, [dataIdeas])
+  
   const handleShowComment = (itemId: string) => {
     setShowCommentMap({
       // ...showCommentMap,
@@ -47,11 +53,58 @@ const IdeaList = (props: Prop) => {
   }
 
   const handleLike_Dislike = async (itemId: string, action: string) => {
+    const postIndex = dataSource.findIndex((item: any) => item._id === itemId);
+    if (postIndex === -1) return;
+    const post = dataSource[postIndex];
+    let newLike = post.likeCount;
+    let newDislike = post.dislikeCount;
+    const userLiked = post.like?.find((item: any) => item.user._id === userData?._id)
+    const userDisliked = post.dislike?.find((item: any) => item.user._id === userData?._id)
+    if (action === 'like') {
+      if (!userLiked && !userDisliked) {
+        newLike += 1;
+      }
+      else if (userLiked) {
+        newLike -=1;
+      } else if (!userLiked && userDisliked) {
+        newLike += 1;
+        newDislike -=1;
+      } 
+    }else {
+      if (!userLiked && !userDisliked) {
+        newDislike += 1;
+      }
+      else if (userDisliked) {
+        newDislike -=1;
+      } else if (userLiked && !userDisliked) {
+        newLike -= 1;
+        newDislike +=1;
+      }
+    }
+    const updatedPost = {
+      ...post,
+      likeCount: newLike,
+      dislikeCount: newDislike,
+    };
+    const newDataSourse = [...dataSource];
+    newDataSourse[postIndex] = updatedPost;
+    setDataSource(newDataSourse);
     const res = await updateAction(itemId, action)
     if (res.message === SUCCESS) {
-      refetch()
+      const updatedData = [...dataSource];
+      updatedData[postIndex] = res?.data;
+      setDataSource(updatedData)
     }
-  }
+  };
+  
+  console.log(dataSource)
+  // // console.log(dataSource)
+  // const handleLike_Dislike = async (itemId: string, action: string) => {
+  //   const res = await updateAction(itemId, action)
+  //   if (res.message === SUCCESS) {
+  //     refetch()
+  //   }
+  // }
 
   const handleKeyPress = (event: any, ideaId: string) => {
     setIdeaId(ideaId)
@@ -77,17 +130,19 @@ const IdeaList = (props: Prop) => {
         itemLayout="vertical"
         size="small"
         style={{ maxHeight: '60vh', overflowY: 'scroll' }}
-        dataSource={dataIdeas}
+        dataSource={dataSource}
         renderItem={(item: any) => (
           <div key={item._id}>
             <Card
               className='mt-2'
+              headStyle={{border: 'none'}}
               actions={[
                 <Statistic 
-                  value={item?.likeCount} 
+                  value={item?.likeCount}
                   prefix={
                     item.like?.find((e: any) => e.user?._id === userData?._id) ?
                     <LikeTwoTone
+                      onClick={() => handleLike_Dislike(item._id, 'like')}
                     />
                     :
                     <LikeOutlined
@@ -100,7 +155,9 @@ const IdeaList = (props: Prop) => {
                   value={item.dislikeCount}
                   prefix={
                     item.dislike?.find((e: any) => e.user?._id === userData?._id) ?
-                    <DislikeTwoTone/>
+                    <DislikeTwoTone
+                      onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                    />
                     :
                     <DislikeOutlined 
                       onClick={() => handleLike_Dislike(item._id, 'dislike')}
@@ -121,9 +178,14 @@ const IdeaList = (props: Prop) => {
               extra={format(new Date(item.createdAt), DATE)}
             >
               <Meta
-                avatar={<Avatar src={'https://joesch.moe/api/v1/random'} />}
+                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
                 title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
+                description={(
+                  <>
+                    <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
+                    <div>{item.description}</div>
+                  </>
+                )}
               />
               {item.content}
             </Card>
