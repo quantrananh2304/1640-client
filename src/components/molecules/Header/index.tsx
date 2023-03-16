@@ -1,12 +1,10 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Dropdown, Layout, MenuProps } from 'antd';
+import React, { useMemo, useRef, useState } from 'react';
+import { Badge, Dropdown, Layout, MenuProps } from 'antd';
 import { removeCookie } from '~/utils/cookie';
 import { ROUTES } from '~/routes';
 
 import history from '~/utils/history';
 import loadable from '~/utils/loadable';
-import iconSearch from '~/assets/images/iconSearch.svg';
-import iconDetail from '~/assets/images/iconDetail.svg';
 import iconNotification from '~/assets/images/iconNotification.svg';
 import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
@@ -16,6 +14,8 @@ import { setUserInfo } from '~/store/userInfo';
 import { Authorization } from '~/wrapper/Authorization';
 import { UserRole } from '~/utils/constant';
 import styles from './styles.module.scss';
+import { useNotification } from '~/hooks/useNotifications';
+import { Link } from 'react-router-dom';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
@@ -23,7 +23,11 @@ const { Header: LayoutHeader } = Layout;
 export default function Header() {
   const me = useAppSelector((state: RootState) => state.userInfo.userData);
   const dispatch = useAppDispatch();
-
+  const {data} = useNotification()
+  const notifications: MenuProps['items'] = useMemo(() => 
+  data?.data?.map((item) => (
+    {key: item.id, label: (<div>{(<Link to={`/ideas/lists/${item.id}`}>{item.description}</Link>)}</div>)}
+  )), [data]);
   const logout = () => {
     removeCookie('token');
     dispatch(setUserInfo({}));
@@ -65,6 +69,7 @@ export default function Header() {
     }
   ];
 
+
   return (
     <Layout className={styles.header}>
       <LayoutHeader className={styles.coverHeader}>
@@ -77,9 +82,15 @@ export default function Header() {
           <h3>UniCollective</h3>
         </div>
         <div className={styles.info}>
-          <Svg src={iconSearch} alt='icon search' className={styles.iconSearch} />
-          <Svg src={iconDetail} alt='icon detail' className={styles.iconDetail} />
-          <Svg src={iconNotification} alt='icon notification' className={styles.iconNotification} />
+          <Dropdown  menu={{items: notifications}}>
+            <Badge count={notifications?.length} size='small'>
+            <Svg 
+              src={iconNotification} 
+              alt='icon notification' 
+              className={styles.iconNotification} 
+            />
+            </Badge>
+          </Dropdown> 
           <Dropdown menu={{items}}>
             <div className={styles.coverInfo}>
               <div className={styles.avatar}>

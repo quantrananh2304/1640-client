@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Avatar, Button, Card, Form, List, Statistic, message } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Avatar, Card, Form, List, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
@@ -9,12 +9,13 @@ import {
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
 
-import styles from './styles.module.scss'
-import { format } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
 import { setComment, updateAction } from '~/api/ideas';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
+import styles from './styles.module.scss'
+import { Link } from 'react-router-dom';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 interface Prop {
@@ -58,37 +59,68 @@ const IdeaList = (props: Prop) => {
     const post = dataSource[postIndex];
     let newLike = post.likeCount;
     let newDislike = post.dislikeCount;
-    const userLiked = post.like?.find((item: any) => item.user._id === userData?._id)
-    const userDisliked = post.dislike?.find((item: any) => item.user._id === userData?._id)
-    if (action === 'like') {
+    let updatedLike = post.like ? [...post.like] : [];
+    let updatedDislike = post.dislike ? [...post.dislike] : [];
+
+    const userLiked = updatedLike.find(
+      (item: any) => item.user?._id === userData?._id
+    );
+    const userDisliked = updatedDislike.find(
+      (item: any) => item.user?._id === userData?._id
+    );
+
+    if (action === "like") {
       if (!userLiked && !userDisliked) {
         newLike += 1;
-      }
-      else if (userLiked) {
-        newLike -=1;
+        updatedLike.push({ user: { _id: userData?._id } });
+      } else if (userLiked) {
+        newLike -= 1;
+        const userIndex = updatedLike.findIndex(
+          (item: any) => item.user?._id === userData?._id
+        );
+        updatedLike.splice(userIndex, 1);
       } else if (!userLiked && userDisliked) {
         newLike += 1;
-        newDislike -=1;
-      } 
-    }else {
+        newDislike -= 1;
+        const userIndex = updatedDislike.findIndex(
+          (item: any) => item.user?._id === userData?._id
+        );
+        updatedDislike.splice(userIndex, 1);
+        updatedLike.push({ user: { _id: userData?._id } });
+      }
+    } else {
       if (!userLiked && !userDisliked) {
         newDislike += 1;
-      }
-      else if (userDisliked) {
-        newDislike -=1;
+        updatedDislike.push({ user: { _id: userData?._id } });
+      } else if (userDisliked) {
+        newDislike -= 1;
+        const userIndex = updatedDislike.findIndex(
+          (item: any) => item.user?._id === userData?._id
+        );
+        updatedDislike.splice(userIndex, 1);
       } else if (userLiked && !userDisliked) {
         newLike -= 1;
-        newDislike +=1;
+        newDislike += 1;
+        const userIndex = updatedLike.findIndex(
+          (item: any) => item.user?._id === userData?._id
+        );
+        updatedLike.splice(userIndex, 1);
+        updatedDislike.push({ user: { _id: userData?._id } });
       }
     }
+
     const updatedPost = {
       ...post,
       likeCount: newLike,
       dislikeCount: newDislike,
+      like: updatedLike.length > 0 ? updatedLike : undefined,
+      dislike: updatedDislike.length > 0 ? updatedDislike : undefined,
     };
+
     const newDataSourse = [...dataSource];
     newDataSourse[postIndex] = updatedPost;
     setDataSource(newDataSourse);
+
     const res = await updateAction(itemId, action)
     if (res.message === SUCCESS) {
       const updatedData = [...dataSource];
@@ -97,7 +129,6 @@ const IdeaList = (props: Prop) => {
     }
   };
   
-  console.log(dataSource)
   // // console.log(dataSource)
   // const handleLike_Dislike = async (itemId: string, action: string) => {
   //   const res = await updateAction(itemId, action)
@@ -179,7 +210,14 @@ const IdeaList = (props: Prop) => {
             >
               <Meta
                 avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
-                title={<a href={item.href}>{item.title}</a>}
+                title={
+                  // <a href={item.href}>{item.title}</a>
+                  <Link
+                    to={`/ideas/lists/${item._id}`}
+                  >
+                    {item.title}
+                  </Link>
+                }
                 description={(
                   <>
                     <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
@@ -202,24 +240,27 @@ const IdeaList = (props: Prop) => {
                   />
                   ) 
                 }
-                <div className={styles.commentArea}>
-                <Form
-                  form={form}
-                  layout='vertical'
-                  onFinish={handleComment}
-                  key={item._id}
-                >
-                  <Form.Item
-                    name='content'
+                { (compareAsc(new Date(item?.thread?.finalClosureDate), new Date()) >= 0 ) ?
+                  <div className={styles.commentArea}>
+                  <Form
+                    form={form}
+                    layout='vertical'
+                    onFinish={handleComment}
+                    key={item._id}
                   >
-                    <TextArea
-                      className='mt-2'
-                      placeholder='Enter your comment'
-                      onKeyPress={(e: any) => handleKeyPress(e, item._id)}
-                    />
-                  </Form.Item>
-                </Form>
-                </div>
+                    <Form.Item
+                      name='content'
+                    >
+                      <TextArea
+                        className='mt-2'
+                        placeholder='Enter your comment'
+                        onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                      />
+                    </Form.Item>
+                  </Form>
+                  </div>
+                  : null
+                }
                 </div>
               </Spin>
             }

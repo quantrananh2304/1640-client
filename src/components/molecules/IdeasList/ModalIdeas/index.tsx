@@ -1,18 +1,21 @@
+import React, { useMemo, useState } from 'react';
 import { Button, Checkbox, Form, Switch, Upload, message } from 'antd';
-import React, { useMemo, useState } from 'react'
-import Modal from '~/components/atoms/Modal'
 import { UploadOutlined } from '@ant-design/icons';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import { Option } from '~/components/atoms/Select';
-import styles from './styles.module.scss'
-import Input from '~/components/atoms/Input';
-import Select from '~/components/atoms/Select';
 import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
-import storage from '~/utils/firebase';
 import { setIdea } from '~/api/ideas';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
-import { Link } from 'react-router-dom';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
+
+import storage from '~/utils/firebase';
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss'
+
+const Select = loadable(() => import('~/components/atoms/Select'));
+const Input = loadable(() => import('~/components/atoms/Input'));
+const Modal = loadable(() => import('~/components/atoms/Modal'));
 
 
 interface Props {
@@ -36,6 +39,7 @@ const ModalIdeas = (props: Props) => {
   const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
   const categories = data?.data?.categories;
   const [showModalTerms, setShowModalTerms] = useState(false)
+  const [agreeTerm, setAgreeTerm] = useState(false)
   const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
   const dataThread = threadList?.data?.threads;
 
@@ -61,7 +65,6 @@ const ModalIdeas = (props: Props) => {
     const file = doc?.file;
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-    
   
     try {
       // Wait for the upload to finish
@@ -87,9 +90,16 @@ const ModalIdeas = (props: Props) => {
     }
   };
 
+  const onCheckBoxChange = (e: CheckboxChangeEvent) => {
+    setAgreeTerm(e.target.checked)
+  };
+
   const handleSave = async (formValues: any) => {
     if (Object.keys(metaData).length === 0) {
       return message.error('Please upload your document')
+    }
+    if (!agreeTerm) {
+      return message.warning(`You haven't agreed to the terms and conditions yet`)
     }
     try {
       let res: any = null;
@@ -177,12 +187,12 @@ const ModalIdeas = (props: Props) => {
         </Select>
       </Form.Item>
       <Form.Item
-        label='Thread'
+        label='Campaign'
         name='thread'
         rules={rules}
       >
         <Select
-          placeholder={'Select thread'}
+          placeholder={'Select campaign'}
           loading={loadingThread || fetchingThread}
         >
           {threadOption?.map((item: any) =>
@@ -199,22 +209,19 @@ const ModalIdeas = (props: Props) => {
         <Switch
         />
       </Form.Item>
-      <Form.Item
-        name='termsAndConditions'
-        // label='Terms and conditions'
-      >
-        <>
-          <Checkbox
-          >
-            Agree terms and conditions
-          </Checkbox>
-          <a
-            onClick={() => setShowModalTerms(true)}
-          >
-            Read here
-          </a>
-        </>
-      </Form.Item>
+
+      <div className={styles.checkbox}>
+        <Checkbox
+          onChange={onCheckBoxChange}
+        >
+          Agree terms and conditions
+        </Checkbox>
+        <a
+          onClick={() => setShowModalTerms(true)}
+        >
+          Read here
+        </a>
+      </div>
       <div className={styles.btnGroup}>
         <Button
           className={styles.btnClose}
@@ -235,6 +242,7 @@ const ModalIdeas = (props: Props) => {
       centered
       footer={false}
       closable
+      onCancel={() => setShowModalTerms(false)}
       className={styles.modalTerm}
     >
       <div>
