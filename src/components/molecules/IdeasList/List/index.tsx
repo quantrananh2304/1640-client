@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Form, List, Statistic, message } from 'antd'
+import { Avatar, Card, Form, List, Popover, Statistic, message } from 'antd'
 import {
   LikeOutlined,
   MessageOutlined,
@@ -172,13 +172,35 @@ const IdeaList = (props: Prop) => {
                   value={item?.likeCount}
                   prefix={
                     item.like?.find((e: any) => e.user?._id === userData?._id) ?
-                    <LikeTwoTone
-                      onClick={() => handleLike_Dislike(item._id, 'like')}
-                    />
+                    <Popover
+                      trigger={'hover'}
+                      content={(
+                        item.like?.map((userLike: any) => 
+                          <div>
+                            {userLike.user.firstName} {userLike.user.lastName}
+                          </div>
+                        )
+                      )}
+                    >
+                      <LikeTwoTone
+                        onClick={() => handleLike_Dislike(item._id, 'like')}
+                      />
+                    </Popover>
                     :
-                    <LikeOutlined
-                      onClick={() => handleLike_Dislike(item._id, 'like')}
-                    />
+                    <Popover
+                      trigger={'hover'}
+                      content={(
+                        item.like?.map((userLike: any) => 
+                          <div>
+                            {userLike.user.firstName} {userLike.user.lastName}
+                          </div>
+                        )
+                      )}
+                    >
+                      <LikeOutlined
+                        onClick={() => handleLike_Dislike(item._id, 'like')}
+                      />
+                    </Popover>
                   }
                   valueStyle={{fontSize: '16px'}}
                 />,
@@ -186,13 +208,35 @@ const IdeaList = (props: Prop) => {
                   value={item.dislikeCount}
                   prefix={
                     item.dislike?.find((e: any) => e.user?._id === userData?._id) ?
-                    <DislikeTwoTone
-                      onClick={() => handleLike_Dislike(item._id, 'dislike')}
-                    />
+                    <Popover
+                      trigger={'hover'}
+                      content={(
+                        item.dislike?.map((userDislike: any) => 
+                          <div>
+                            {userDislike.user.firstName} {userDislike.user.lastName}
+                          </div>
+                        )
+                      )}
+                    >
+                      <DislikeTwoTone
+                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                      />
+                    </Popover>
                     :
-                    <DislikeOutlined 
-                      onClick={() => handleLike_Dislike(item._id, 'dislike')}
-                    />
+                    <Popover
+                      trigger={'hover'}
+                      content={(
+                        item.dislike?.map((userDislike: any) => 
+                          <div>
+                            {userDislike.user.firstName} {userDislike.user.lastName}
+                          </div>
+                        )
+                      )}
+                    >
+                      <DislikeOutlined 
+                        onClick={() => handleLike_Dislike(item._id, 'dislike')}
+                      />
+                    </Popover>
                   }
                   valueStyle={{fontSize: '16px'}}
                 />,
