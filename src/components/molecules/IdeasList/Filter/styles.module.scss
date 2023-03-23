@@ -20,23 +20,13 @@
     .optionsWrapper {
       display        : flex;
       justify-content: space-between;
-      .searchName{ 
-        width: 190px;
-      }
       .filterWrapper {
         display: flex;
-
         :global {
           .ant-form-item {
             margin: 0;
           }
         }
-
-        .rangePicker {
-          width       : 256px;
-          margin-right: 8px;
-        }
-
         .selectSort,
         .filterOption{
           width       : 200px;

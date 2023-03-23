@@ -119,17 +119,17 @@ const Filter = (props: Props) => {
                   )}
                   </Select>
                 </Form.Item>
-                <Form.Item name='department'>
+                {/* <Form.Item name='department'>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select department"
                     // loading={loadingDepartment || fetchingDepartment}
                   >
-                  {/* {departmentOption?.map((item: any) =>
+                  {departmentOption?.map((item: any) =>
                     <Option key={item.id} value={item.id}>{item.name}</Option>
-                  )} */}
+                  )}
                   </Select>
-                </Form.Item>
+                </Form.Item> */}
               </div>
             </Form>
             <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>

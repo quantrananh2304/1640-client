@@ -1,6 +1,9 @@
 
 .listsThread{
   margin-top: 20px ;
+  overflow-y: scroll;
+  max-height: 60vh;
+  overflow-x: hidden;
   .groupSave {
     display: flex;
     justify-content: space-around;
