@@ -9,21 +9,16 @@ import styles from './styles.module.scss';
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalIdeas = loadable(() => import('~/components/molecules/IdeasList/ModalIdeas'));
 
-const Filter = () => {
-
-  const showAddModal = () => {
-    // setIsModalVisible(true);
-  };
+interface Props {
+  idea: any;
+}
+const Filter = (props: Props) => {
 
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.contentWrapper}
-        >
-          <Button className={styles.btnAdd} onClick={showAddModal}>
-            <DownloadOutlined />
-            Download file
-          </Button>
+        <div className={styles.contentWrapper}>
+          <h2>{props.idea?.title}</h2>
         </div>
       </div>
     </>

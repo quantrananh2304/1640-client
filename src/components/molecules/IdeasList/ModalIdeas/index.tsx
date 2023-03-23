@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Switch, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import { Option } from '~/components/atoms/Select';
-import { KEY_MESSAGE, PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
+import { PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
 import { setIdea } from '~/api/ideas';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
@@ -17,12 +17,12 @@ const Select = loadable(() => import('~/components/atoms/Select'));
 const Input = loadable(() => import('~/components/atoms/Input'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
 
-
 interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   userData?: any;
   afterSuccess?: () => void;
+  campaign?: string;
 }
 
 const ModalIdeas = (props: Props) => {
@@ -30,11 +30,10 @@ const ModalIdeas = (props: Props) => {
   const {
     visible,
     setVisible,
-    userData,
     afterSuccess,
+    campaign
   } = props;
 
-  const [metaData, setMetaData] = useState({});
   const rules = [{ required: true, message: '' }];
   const { data , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
   const categories = data?.data?.categories;
@@ -42,15 +41,16 @@ const ModalIdeas = (props: Props) => {
   const [agreeTerm, setAgreeTerm] = useState(false)
   const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
   const dataThread = threadList?.data?.threads;
-
+  const [fileList, setFileList] = useState<any>([]);
+  const [metadataList, setMetadataList] = useState<any>([]);
   const categoryOption = useMemo(() => 
-  // render options gender
+  // render options category
   categories?.map((item: any) => (
     { id: item._id, name: item.name, }
   )), [categories]);
 
   const threadOption = useMemo(() => 
-  // render options gender
+  // render options campaign
   dataThread?.map((item: any) => (
     { id: item._id, name: item.name, }
   )), [dataThread]);
@@ -61,41 +61,12 @@ const ModalIdeas = (props: Props) => {
     }
   };
 
-  const uploadFileToFirebase = async (doc: any) => {
-    const file = doc?.file;
-    const storageRef = ref(storage, `files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-  
-    try {
-      // Wait for the upload to finish
-      const snapshot = await uploadTask;
-      
-      // Get the metadata using getMetadata() method
-      const metadata = await getMetadata(storageRef);
-  
-      // Create the result object with metadata and download URL
-      const result = {
-        name: metadata.name,
-        contentType: metadata.contentType,
-        url: await getDownloadURL(snapshot.ref)
-      };
-      // Set the result in the state
-      setMetaData(result);
-  
-    } catch (error: any) {
-      message.error({
-        content: error,
-        key: KEY_MESSAGE
-      });
-    }
-  };
-
   const onCheckBoxChange = (e: CheckboxChangeEvent) => {
     setAgreeTerm(e.target.checked)
   };
 
   const handleSave = async (formValues: any) => {
-    if (Object.keys(metaData).length === 0) {
+    if (Object.keys(metadataList).length === 0) {
       return message.error('Please upload your document')
     }
     if (!agreeTerm) {
@@ -107,7 +78,7 @@ const ModalIdeas = (props: Props) => {
       const fmData = {
         isAnonymous: isAnonymous ? isAnonymous : false,
         ...rest,
-        documents: [metaData]
+        documents: metadataList
       }
       res = await setIdea(fmData)
       if (res.message === SUCCESS) {
@@ -117,12 +88,66 @@ const ModalIdeas = (props: Props) => {
         }
         setVisible(false)
       } else {
-        message.error(res.error)
+        message.error(res.message)
       }
     } catch (error) {
       console.log(error)
     }
   }
+
+  // const handleUpload = async (file: any) => {
+  //   const storageRef = ref(storage, `files/${file.name}`);
+  //   const uploadTask = uploadBytesResumable(storageRef, file);
+  
+  //   try {
+  //     // Wait for the upload to finish
+  //     const snapshot = await uploadTask;
+  
+  //     // Get the metadata using getMetadata() method
+  //     const metadata = await getMetadata(storageRef);
+  
+  //     // Create the result object with metadata and download URL
+  //     const result = {
+  //       name: metadata.name,
+  //       contentType: metadata.contentType,
+  //       url: await getDownloadURL(snapshot.ref)
+  //     };
+  
+  //     // Add the metadata to the list of metadata
+  //     setMetadataList((prevState: any) => [...prevState, result]);
+  
+  //   } catch (error: any) {
+  //     message.error({
+  //       content: error,
+  //       key: KEY_MESSAGE
+  //     });
+  //   }
+  // };
+  const uploadFileToFirebase = async (file: any, onSuccess: any, onError: any, onProgress: any) => {
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        onProgress({ percent: progress.toFixed(2) });
+      },
+      (error) => {
+        onError(error);
+      },
+      async () => {
+        const snapshot = await uploadTask;
+        const metadata = await getMetadata(storageRef);
+        const result = {
+          name: metadata.name,
+          contentType: metadata.contentType,
+          url: await getDownloadURL(snapshot.ref)
+        };
+        setMetadataList((prevState: any) => [...prevState, result]);
+        onSuccess(result);
+      }
+    );
+  };
 
   return (
     <Modal
@@ -142,6 +167,9 @@ const ModalIdeas = (props: Props) => {
       onFinish={handleSave}
       autoComplete="off"
       className={styles.formContainer}
+      initialValues={{
+        thread: campaign || null
+      }}
     >
       <Form.Item 
         label='Title'
@@ -164,12 +192,24 @@ const ModalIdeas = (props: Props) => {
         />
       </Form.Item>
       <div className={styles.uploadBtn}>
-        <Upload
-          onChange={(info) => info.file.status = 'done'}
-          customRequest={(file: any ) => uploadFileToFirebase(file)}
-        >
-          <Button icon={<UploadOutlined />}>Upload Ideas</Button>
-        </Upload>
+      <Upload
+        multiple={true}
+        customRequest={({ file, onSuccess, onError, onProgress }) => uploadFileToFirebase(file, onSuccess, onError, onProgress)}
+        onChange={(info) => {
+          const fileList = info.fileList.map(file => {
+            if (file.status === 'done') {
+              return {
+                ...file,
+                url: file.response.url
+              }
+            }
+            return file;
+          });
+          setFileList(fileList);
+        }}
+      >
+        <Button icon={<UploadOutlined />}>Upload Ideas</Button>
+      </Upload>
       </div>
       <Form.Item
         label='Categoty'
@@ -177,7 +217,6 @@ const ModalIdeas = (props: Props) => {
         rules={rules}
       >
         <Select
-          mode='multiple'
           placeholder={'Select category'}
           loading={loadingCategories || fetchingCategories}
         >
@@ -194,6 +233,7 @@ const ModalIdeas = (props: Props) => {
         <Select
           placeholder={'Select campaign'}
           loading={loadingThread || fetchingThread}
+          disabled={Boolean(campaign)}
         >
           {threadOption?.map((item: any) =>
             <Option key={item.id} value={item.id}>{item.name}</Option>

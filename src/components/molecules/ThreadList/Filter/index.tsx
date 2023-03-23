@@ -3,9 +3,10 @@ import { Button } from 'antd'
 
 import Svg from '~/components/atoms/Svg'
 import iconPlus from '~/assets/images/iconPlus.svg'
-
+import loadable from '~/utils/loadable'
 import styles from './styles.module.scss'
-import ThreadModal from '../ThreadModal'
+
+const ThreadModal = loadable(() => import('~/components/molecules/ThreadList/ThreadModal'));
 
 interface Props {
   refetch: () => void;

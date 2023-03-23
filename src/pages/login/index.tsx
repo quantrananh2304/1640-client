@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '~/routes';
 import { setActive, setLogin } from '~/api/login';
 import { handleLogin } from '~/utils/helper';
-import { getCookie } from '~/utils/cookie';
+import { getCookie, setCookie } from '~/utils/cookie';
 import { SUCCESS } from '~/utils/constant';
 
 import loadable from '~/utils/loadable';
@@ -48,6 +48,7 @@ const Login = () => {
           }
           if (res.message === SUCCESS) {
             const token = res?.data?.token
+            setCookie('userName', `${res.data.firstName} ${res.data.lastName}`)
             handleLogin({
               accessToken: token,
             })

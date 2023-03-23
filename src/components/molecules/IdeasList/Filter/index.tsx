@@ -1,13 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form } from 'antd';
 import { Option } from '~/components/atoms/Select';
-import { NAME_ASC, SortIdeas } from '~/utils/constant';
+import { PARAMS_GET_ALL, SortIdeas, UserRole } from '~/utils/constant';
+import { useCategories } from '~/hooks/useCategory';
+import { useThread } from '~/hooks/useThread';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
 import iconPlus from '~/assets/images/iconPlus.svg';
 
 import styles from './styles.module.scss';
+import { useDepartment } from '~/hooks/useDepartment';
+import { useAppSelector } from '~/store';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalIdeas = loadable(() => import('~/components/molecules/IdeasList/ModalIdeas'));
@@ -23,12 +27,41 @@ const Filter = (props: Props) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const userData = useAppSelector((state) => state.userInfo.userData);
+  const userRole = userData?.role;
+  
+  const { data: categoryList , isLoading: loadingCategories, isFetching: fetchingCategories } = useCategories(PARAMS_GET_ALL);
+  const categories = categoryList?.data?.categories;
+  const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
+  const dataThread = threadList?.data?.threads;
+  
+  // const {data: departmentList, isLoading: loadingDepartment, isFetching: fetchingDepartment} = useDepartment(PARAMS_GET_ALL);
+  // const dataDepartment = departmentList?.data?.departments;
+
   const sortOption = useMemo(() => Object.entries(SortIdeas)
   // render options sort by
   .map((item: any, index) => (
     { id: index, name: item[1], value: item[0] }
   )), []);
-  
+
+  const categoryOption = useMemo(() => 
+  // render options category
+  categories?.map((item: any) => (
+    { id: item._id, name: item.name, }
+  )), [categories]);
+
+  const threadOption = useMemo(() => 
+  // render options campaign
+  dataThread?.map((item: any) => (
+    { id: item._id, name: item.name, }
+  )), [dataThread]);
+
+  // const departmentOption = useMemo(() => 
+  // // render options department
+  // dataDepartment?.map((item: any) => (
+  //   { id: item._id, name: item.name, }
+  // )), [dataDepartment ])
+
   const showAddModal = () => {
     setIsModalVisible(true);
   };
@@ -48,7 +81,7 @@ const Filter = (props: Props) => {
               form={form}
               onValuesChange={handleValuesChange}
               initialValues={{
-                sort: SortIdeas.POPULARITY_DESC
+                sort: sortOption[0].value
               }}
             >
               <div className={styles.filterWrapper}>
@@ -60,6 +93,41 @@ const Filter = (props: Props) => {
                   {sortOption?.map((item: any) =>
                     <Option key={item.id} value={item.value}>{item.name}</Option>
                   )}
+                  </Select>
+                </Form.Item>
+                <Form.Item name='thread'>
+                  <Select
+                    className={styles.filterOption}
+                    placeholder="Select Campaign"
+                    mode='multiple'
+                    loading={loadingThread || fetchingThread}
+                  >
+                  {threadOption?.map((item: any) =>
+                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                  )}
+                  </Select>
+                </Form.Item>
+                <Form.Item name='category'>
+                  <Select
+                    className={styles.filterOption}
+                    placeholder="Select category"
+                    mode='multiple'
+                    loading={loadingCategories || fetchingCategories}
+                  >
+                  {categoryOption?.map((item: any) =>
+                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                  )}
+                  </Select>
+                </Form.Item>
+                <Form.Item name='department'>
+                  <Select
+                    className={styles.filterOption}
+                    placeholder="Select department"
+                    // loading={loadingDepartment || fetchingDepartment}
+                  >
+                  {/* {departmentOption?.map((item: any) =>
+                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                  )} */}
                   </Select>
                 </Form.Item>
               </div>

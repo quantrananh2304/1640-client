@@ -21,15 +21,7 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogi
   setCookie('token', accessToken, {
     expires,
   });
-  if (expires) {
-    setTimeout(() => {
-      message.warning('Your token has expired, please log in again!')
-      setTimeout(() => {
-        history.push(ROUTES.Login)
-      }, 2000);
-      removeCookie('token');
-    }, expires);
-  }
+
   if (getCookie('token')) {
     history.push(callbackUrl ?? ROUTES.Ideas);
     // window.location.reload();
@@ -39,6 +31,7 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogi
 export const handleLogout = (callbackUrl = ROUTES.Ideas) => {
   removeCookie('token');
   removeCookie('refreshToken');
+  removeCookie('userName');
   localStorage.clear();
   if (callbackUrl) {
     history.push(callbackUrl);
