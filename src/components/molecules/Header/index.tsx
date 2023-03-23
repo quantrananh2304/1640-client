@@ -1,6 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Dropdown, Layout, MenuProps } from 'antd';
-import { removeCookie } from '~/utils/cookie';
+import { getCookie, removeCookie } from '~/utils/cookie';
 import { ROUTES } from '~/routes';
 
 import history from '~/utils/history';
@@ -9,7 +9,7 @@ import iconNotification from '~/assets/images/iconNotification.svg';
 import iconAvatar from '~/assets/images/iconAvatar.svg';
 import logo from '~/assets/images/1640-logos_white.png';
 
-import { RootState, useAppDispatch, useAppSelector } from '~/store';
+import { useAppDispatch } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
 import { Authorization } from '~/wrapper/Authorization';
 import { UserRole } from '~/utils/constant';
@@ -21,18 +21,27 @@ const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
 
 export default function Header() {
-  const me = useAppSelector((state: RootState) => state.userInfo.userData);
+  const userName = getCookie('userName')
   const dispatch = useAppDispatch();
   const {data} = useNotification()
+  const [user, setUser] = useState('')
   const notifications: MenuProps['items'] = useMemo(() => 
   data?.data?.map((item) => (
     {key: item.id, label: (<div>{(<Link to={`/ideas/lists/${item.id}`}>{item.description}</Link>)}</div>)}
   )), [data]);
+  
   const logout = () => {
     removeCookie('token');
     dispatch(setUserInfo({}));
     history.push(ROUTES.Login);
   };
+
+  useEffect(() => {
+    if (userName) {
+      setUser(userName)
+    }
+  }, [userName])
+  
 
   const handleClickLogo = () => {
     history.push('/');
@@ -96,7 +105,7 @@ export default function Header() {
               <div className={styles.avatar}>
                 <Svg src={iconAvatar} alt='icon avatar' className={styles.iconAvatar} />
               </div>
-              <div className={styles.name}>{me?.firstName} {me?.lastName}</div>
+              <div className={styles.name}>{user}</div>
             </div>
           </Dropdown>
         </div>

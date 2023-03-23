@@ -1,5 +1,6 @@
 import dotGreen from '~/assets/images/dotGreen.svg';
 import dotOrange from '~/assets/images/dotOrange.svg';
+import dotRed from '~/assets/images/dotRed.svg';
 
 export const DATE = 'yyyy/MM/dd';
 export const DATE_VI_FORMAT = 'dd/MM/yyyy';
@@ -28,8 +29,8 @@ export const PARAMS_FILTER = {
 }
 
 export enum SortIdeas {
-  'POPULARITY_ASC' = 'Popularity (Ascending)',
   'POPULARITY_DESC' = 'Popularity (Descending)',
+  'POPULARITY_ASC' = 'Popularity (Ascending)',
   'DATE_CREATED_ASC' = 'Date create (Ascending)',
   'DATE_CREATED_DESC' = 'Date create (Descending)',
   'LIKE_ASC' = 'Like (Accending)',
@@ -50,6 +51,11 @@ export enum SortAccount {
 export enum UserStatus {
   'ACTIVE' = 'Active',
   'INACTIVE' = 'Inactive',
+}
+export enum CampaignStatus {
+  'ACTIVE' = 'Active',
+  'SOFT_EXPIRED' = 'Soft expired',
+  'EXPIRED' = 'Expired'
 }
 
 export enum Gender {
@@ -83,6 +89,13 @@ export const userIcon = {
   [UserStatus.ACTIVE]: dotGreen,
   [UserStatus.INACTIVE]: dotOrange,
 };
+
+export const campaignIcon = {
+  [-1]: '',
+  [CampaignStatus.ACTIVE]: dotGreen,
+  [CampaignStatus.SOFT_EXPIRED]: dotOrange,
+  [CampaignStatus.EXPIRED]: dotRed,
+}
 
 export interface Status {
   value: 'ACTIVE' | 'INACTIVE'
