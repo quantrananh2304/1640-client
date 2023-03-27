@@ -74,6 +74,7 @@
       .optionsWrapper {
         display        : flex;
         justify-content: space-between;
+        
         .searchName{ 
           width: 190px;
         }
@@ -86,17 +87,11 @@
             }
           }
   
-          .rangePicker {
-            width       : 256px;
-            margin-right: 8px;
-          }
-  
-          .selectProject,
-          .selectStatus,
-          .selectMember {
-            width       : 160px;
-            margin-right: 8px;
-          }
+        .selectSort,
+        .filterOption{
+          width       : 160px;
+          margin-right: 8px;
+        }
   
         }
   
@@ -141,29 +136,20 @@
       .optionsWrapper {
         display        : flex;
         justify-content: space-between;
-        .searchName{ 
-          width: 190px;
-        }
+
         .filterWrapper {
           display: flex;
-  
           :global {
             .ant-form-item {
               margin: 0;
             }
           }
   
-          .rangePicker {
-            width       : 256px;
-            margin-right: 8px;
-          }
-  
-          .selectProject,
-          .selectStatus,
-          .selectMember {
-            width       : 97px;
-            margin-right: 8px;
-          }
+        .selectSort,
+        .filterOption{
+          width       : 80px;
+          margin-right: 8px;
+        }
   
         }
   

@@ -48,9 +48,9 @@ const Login = () => {
           }
           if (res.message === SUCCESS) {
             const token = res?.data?.token
-            setCookie('userName', `${res.data.firstName} ${res.data.lastName}`)
             handleLogin({
               accessToken: token,
+              userName: `${res.data.firstName} ${res.data.lastName}`
             })
             setLoading(false)
           }

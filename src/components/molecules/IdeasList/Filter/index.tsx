@@ -35,8 +35,8 @@ const Filter = (props: Props) => {
   const {data: threadList, isLoading: loadingThread, isFetching: fetchingThread} = useThread(PARAMS_GET_ALL);
   const dataThread = threadList?.data?.threads;
   
-  // const {data: departmentList, isLoading: loadingDepartment, isFetching: fetchingDepartment} = useDepartment(PARAMS_GET_ALL);
-  // const dataDepartment = departmentList?.data?.departments;
+  const {data: departmentList, isLoading: loadingDepartment, isFetching: fetchingDepartment} = useDepartment(PARAMS_GET_ALL);
+  const dataDepartment = departmentList?.data?.departments;
 
   const sortOption = useMemo(() => Object.entries(SortIdeas)
   // render options sort by
@@ -56,11 +56,11 @@ const Filter = (props: Props) => {
     { id: item._id, name: item.name, }
   )), [dataThread]);
 
-  // const departmentOption = useMemo(() => 
-  // // render options department
-  // dataDepartment?.map((item: any) => (
-  //   { id: item._id, name: item.name, }
-  // )), [dataDepartment ])
+  const departmentOption = useMemo(() => 
+  // render options department
+  dataDepartment?.map((item: any) => (
+    { id: item._id, name: item.name, }
+  )), [dataDepartment ])
 
   const showAddModal = () => {
     setIsModalVisible(true);
