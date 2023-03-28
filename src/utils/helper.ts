@@ -13,12 +13,17 @@ interface IHandleLogin {
   accessToken?: string;
   expiresOn?: Date | null;
   callbackUrl?: string;
+  userName: any;
 }
 
-export const handleLogin = ({ accessToken, expiresOn, callbackUrl }: IHandleLogin) => {
+export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userName }: IHandleLogin) => {
   if (typeof window === 'undefined' || !accessToken) return;
   const expires = expiresOn ? +new Date(expiresOn) : hoursToMilliseconds(5);
   setCookie('token', accessToken, {
+    expires,
+  });
+
+  setCookie('userName', userName, {
     expires,
   });
 
