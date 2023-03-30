@@ -12,10 +12,11 @@ import logo from '~/assets/images/1640-logos_white.png';
 import { useAppDispatch } from '~/store';
 import { setUserInfo } from '~/store/userInfo';
 import { Authorization } from '~/wrapper/Authorization';
-import { UserRole } from '~/utils/constant';
+import { PARAMS_GET_ALL, UserRole } from '~/utils/constant';
 import styles from './styles.module.scss';
 import { useNotification } from '~/hooks/useNotifications';
 import { Link } from 'react-router-dom';
+import { readNotification } from '~/api/notification';
 
 const Svg = loadable(() => import('~/components/atoms/Svg'));
 const { Header: LayoutHeader } = Layout;
@@ -23,11 +24,20 @@ const { Header: LayoutHeader } = Layout;
 export default function Header() {
   const userName = getCookie('userName')
   const dispatch = useAppDispatch();
-  const {data} = useNotification()
+  const {data, refetch} = useNotification({
+    page: 1,
+    limit: 30
+  })
   const [user, setUser] = useState('')
+
+  const handleReadNotification = (notificationId: string) => {
+    readNotification(notificationId)
+    refetch();
+  }
+
   const notifications: MenuProps['items'] = useMemo(() => 
-  data?.data?.map((item) => (
-    {key: item.id, label: (<div>{(<Link to={`/ideas/lists/${item.id}`}>{item.description}</Link>)}</div>)}
+  data?.data?.notifications?.map((item: any) => (
+    {key: item._id, label: (<div onClick={() => handleReadNotification(item._id)}>{(<Link to={`/ideas/lists/${item.idea._id}`}>{item.content}</Link>)}</div>)}
   )), [data]);
   
   const logout = () => {
