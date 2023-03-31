@@ -5,4 +5,17 @@
   .cardColumnChart{
     background-image: linear-gradient(to top right, #0038a4, #978aff);
   }
+  .cardInfoValue{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .statistic{
+    display: flex;
+    align-items: center;
+  }
+  .dualLineChart{
+    height: 100%;
+  }
 }

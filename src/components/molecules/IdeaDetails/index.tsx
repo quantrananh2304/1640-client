@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, Button, Card, Form, List, Spin, Statistic, message } from 'antd';
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
@@ -6,7 +6,7 @@ import { MessageOutlined, EyeOutlined } from '@ant-design/icons';
 import { DownloadOutlined } from '@ant-design/icons'
 import { useDetailIdea } from '~/hooks/useIdeas';
 import { TextArea } from '~/components/atoms/Input';
-import { setComment } from '~/api/ideas';
+import { setComment, viewIdea } from '~/api/ideas';
 
 import wordFile from '~/assets/images/file-word-solid.svg'
 import pdfFile from '~/assets/images/file-pdf-solid.svg'
@@ -51,6 +51,13 @@ const IdeaDetails = (props: Props) => {
       message.error(res.message)
     }
   }
+
+  useEffect(() => {
+    if (ideaId) {
+      viewIdea(ideaId)
+    }
+  }, [ideaId])
+  
   return (
     <>
       <Spin spinning={isLoading || isFetching}>
