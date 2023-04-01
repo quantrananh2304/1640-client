@@ -95,34 +95,6 @@ const ModalIdeas = (props: Props) => {
     }
   }
 
-  // const handleUpload = async (file: any) => {
-  //   const storageRef = ref(storage, `files/${file.name}`);
-  //   const uploadTask = uploadBytesResumable(storageRef, file);
-  
-  //   try {
-  //     // Wait for the upload to finish
-  //     const snapshot = await uploadTask;
-  
-  //     // Get the metadata using getMetadata() method
-  //     const metadata = await getMetadata(storageRef);
-  
-  //     // Create the result object with metadata and download URL
-  //     const result = {
-  //       name: metadata.name,
-  //       contentType: metadata.contentType,
-  //       url: await getDownloadURL(snapshot.ref)
-  //     };
-  
-  //     // Add the metadata to the list of metadata
-  //     setMetadataList((prevState: any) => [...prevState, result]);
-  
-  //   } catch (error: any) {
-  //     message.error({
-  //       content: error,
-  //       key: KEY_MESSAGE
-  //     });
-  //   }
-  // };
   const uploadFileToFirebase = async (file: any, onSuccess: any, onError: any, onProgress: any) => {
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);

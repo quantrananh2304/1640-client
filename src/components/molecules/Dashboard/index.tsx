@@ -2,11 +2,11 @@ import React, { useMemo } from "react";
 import { Column, Bar, Pie, DualAxes } from "@ant-design/plots";
 import { Row, Col, Card, Statistic } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-
-import styles from "./styles.module.scss";
-import Meta from "antd/es/card/Meta";
 import { useDashboard } from "~/hooks/useDashboard";
+
+import Meta from "antd/es/card/Meta";
 import Spin from "~/components/atoms/Spin";
+import styles from "./styles.module.scss";
 
 const Dashboards = () => {
   const today = new Date();
@@ -15,7 +15,6 @@ const Dashboards = () => {
   const { data, isFetching, isLoading } = useDashboard(true);
   const dataDashBoard = data?.data;
 
-  console.log(dataDashBoard);
   // number user contributors by month
   const dataColumnChart = useMemo(() => {
     if (dataDashBoard) {

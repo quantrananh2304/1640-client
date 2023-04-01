@@ -37,7 +37,17 @@ export default function Header() {
 
   const notifications: MenuProps['items'] = useMemo(() => 
   data?.data?.notifications?.map((item: any) => (
-    {key: item._id, label: (<div onClick={() => handleReadNotification(item._id)}>{(<Link to={`/ideas/lists/${item.idea._id}`}>{item.content}</Link>)}</div>)}
+    {
+      key: item._id,
+      read: item.read,
+      label: (
+        <div 
+          className={item.read ? styles.notificationReaded : styles.notificationUnread} 
+          onClick={() => handleReadNotification(item._id)}
+        >
+          {(<Link to={`/ideas/lists/${item.idea._id}`}>{item.content}</Link>)}
+        </div>
+      )}
   )), [data]);
   
   const logout = () => {
@@ -102,7 +112,12 @@ export default function Header() {
         </div>
         <div className={styles.info}>
           <Dropdown  menu={{items: notifications}}>
-            <Badge count={notifications?.length} size='small'>
+            <Badge 
+              count={
+                notifications?.filter((item: any) => item?.read !== true)?.length
+              } 
+              size='small'
+            >
             <Svg 
               src={iconNotification} 
               alt='icon notification' 
