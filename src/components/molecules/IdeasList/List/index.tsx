@@ -1,23 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { Avatar, Card, Form, List, Popover, Statistic, message } from 'antd'
+import React, { useEffect, useState } from 'react';
+import {
+  Avatar,
+  Card,
+  Dropdown,
+  Form,
+  List,
+  Popover,
+  Statistic,
+  Switch,
+  message } from 'antd';
 import {
   LikeOutlined,
   MessageOutlined,
   DislikeOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EllipsisOutlined,
   LikeTwoTone,
   DislikeTwoTone} from '@ant-design/icons';
 import Meta from 'antd/es/card/Meta';
 import loadable from '~/utils/loadable';
-
+import avatar from '~/assets/images/iconAvatar.svg'
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
-import { setComment, updateAction } from '~/api/ideas';
+import { deleteComment, setComment, updateAction } from '~/api/ideas';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
-import styles from './styles.module.scss'
 import { Link } from 'react-router-dom';
 
+import styles from './styles.module.scss'
+
 const Spin = loadable(() => import('~/components/atoms/Spin'));
+const ModalEditComment = loadable(() => import('~/components/molecules/IdeasList/ModalEditComment'));
 interface Prop {
   dataIdeas?: any;
   isLoading?: boolean;
@@ -28,11 +42,14 @@ interface Prop {
 const IdeaList = (props: Prop) => {
   const {dataIdeas, isFetching, isLoading, refetch} = props;
   const userData = useAppSelector((state) => state.userInfo.userData);
-  const [showCommentMap, setShowCommentMap] = useState<any>({})
-  const [ideaId, setIdeaId] = useState('')
-  const [isLoadingComment, setIsLoadingComment] = useState(false)
+  const [showCommentMap, setShowCommentMap] = useState<any>({});
+  const [ideaId, setIdeaId] = useState('');
+  const [isLoadingComment, setIsLoadingComment] = useState(false);
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState<any>([]);
+  const [anonymousComment, setSnonymousComment] = useState(false);
+  const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
+  const [itemEditComment, setItemEditComment] = useState<any>({});
 
   useEffect(() => {
     if (dataIdeas){
@@ -128,14 +145,6 @@ const IdeaList = (props: Prop) => {
       setDataSource(updatedData)
     }
   };
-  
-  // // console.log(dataSource)
-  // const handleLike_Dislike = async (itemId: string, action: string) => {
-  //   const res = await updateAction(itemId, action)
-  //   if (res.message === SUCCESS) {
-  //     refetch()
-  //   }
-  // }
 
   const handleKeyPress = (event: any, ideaId: string) => {
     setIdeaId(ideaId)
@@ -145,7 +154,11 @@ const IdeaList = (props: Prop) => {
   }
 
   const handleComment = async (formValues: any) => {
-    const res = await setComment(ideaId, formValues);
+    const commentValue = {
+      ...formValues,
+      isAnonymous: anonymousComment
+    }
+    const res = await setComment(ideaId, commentValue);
     if (res.message === SUCCESS) {
       message.success('Comment success')
       refetch()
@@ -154,6 +167,25 @@ const IdeaList = (props: Prop) => {
       message.error(res.message)
     }
   }
+
+  const handleEditComment = (ideaId: string, commentId: string) => {
+    setItemEditComment({
+      ideaId,
+      commentId
+    })
+    setVisibleModalEditComment(true)
+  }
+
+  const handleDeleteComment = async (ideaId: string, commentId: string) => {
+    const res = await deleteComment(ideaId, commentId);
+    if (res.message === SUCCESS) {
+      message.success('Delete comment succes')
+      refetch();
+    } else {
+      message.error(res.message)
+    }
+  }
+  
   return (
     <Spin spinning={isLoading || isFetching}>
       <List
@@ -253,7 +285,7 @@ const IdeaList = (props: Prop) => {
               extra={format(new Date(item.createdAt), DATE)}
             >
               <Meta
-                avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
+                avatar={<Avatar size={42} src={item.updatedBy.avatar}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -276,35 +308,96 @@ const IdeaList = (props: Prop) => {
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
                 {item?.comments?.map((comment: any) =>
-                  <Meta
-                    key={comment._id}
+                
+                  <div 
                     className={styles.comment}
-                    avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
-                    description={<p className={styles.commentContent}>{comment.content}</p>}
-                  />
+                  >
+                    <Meta
+                      key={comment._id}
+                      avatar={
+                        <>
+                          <Avatar src={'https://i.pravatar.cc'}/> 
+                          { (comment.isAnonymous) ?
+                            <strong className='ml-2'>Unknown</strong>
+                            :
+                            <strong className='ml-2'>
+                              {comment.createdBy?.firstName} {comment.createdBy?.lastName}
+                            </strong>
+                          }
+                        </>
+                      }
+                      description={<p className={styles.commentContent}>{comment.content}</p>}
+                    />
+                    { (comment.createdBy._id === userData?._id) ?
+                      <Dropdown 
+                        menu={
+                          { 
+                            items: [
+                              {
+                                label: <div onClick={() => handleEditComment(item._id, comment._id)}>Edit comment</div>,
+                                key: '0',
+                              },
+                              {
+                                type: 'divider',
+                              },
+                              {
+                                label: <div onClick={() => handleDeleteComment(item._id, comment._id)}>Delete comment</div>,
+                                key: '2',
+                                danger: true,
+                              },
+                            ] 
+                          }
+                        } 
+                        trigger={['click']}
+                      >
+                        <div
+                          className={styles.commentOption}
+                        >
+                          <EllipsisOutlined/>
+                        </div>
+                      </Dropdown>
+                      : null
+                    }
+                  </div>
                   ) 
                 }
                 { (compareAsc(new Date(item?.thread?.finalClosureDate), new Date()) >= 0 ) ?
                   <div className={styles.commentArea}>
-                  <Form
-                    form={form}
-                    layout='vertical'
-                    onFinish={handleComment}
-                    key={item._id}
-                  >
-                    <Form.Item
-                      name='content'
+                    <Form
+                      form={form}
+                      className={styles.formComment}
+                      onFinish={handleComment}
                     >
-                      <TextArea
-                        className='mt-2'
-                        placeholder='Enter your comment'
-                        onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                      <Form.Item
+                        name='content'
+                      >
+                        <TextArea
+                          className={styles.textInput}
+                          placeholder={`What's in your mind?`}
+                          onKeyPress={(e: any) => handleKeyPress(e, item._id)}
+                        />
+                      </Form.Item>
+                    </Form>
+                    <div
+                      className={styles.anonymousMode}
+                    >
+                      <p style={{margin: 0}}>Amonymous</p>
+                      <Switch
+                        onChange={setSnonymousComment}
+                        checkedChildren={<CheckOutlined />}
+                        unCheckedChildren={<CloseOutlined />}
                       />
-                    </Form.Item>
-                  </Form>
+                    </div>
                   </div>
                   : null
                 }
+                <ModalEditComment
+                  visible={visibleModalEditComment}
+                  setVisivle={setVisibleModalEditComment}
+                  ideaId={itemEditComment?.ideaId}
+                  commentId={itemEditComment?.commentId}
+                  refetch={refetch}
+                />  
                 </div>
               </Spin>
             }

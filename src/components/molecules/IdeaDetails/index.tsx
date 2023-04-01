@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Button, Card, Form, List, Spin, Statistic, message } from 'antd';
+import { Avatar, Button, Card, Dropdown, Form, List, Spin, Statistic, Switch, message } from 'antd';
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
-import { MessageOutlined, EyeOutlined } from '@ant-design/icons';
+import { MessageOutlined, EyeOutlined, EllipsisOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { DownloadOutlined } from '@ant-design/icons'
 import { useDetailIdea } from '~/hooks/useIdeas';
 import { TextArea } from '~/components/atoms/Input';
-import { setComment, viewIdea } from '~/api/ideas';
+import { deleteComment, setComment, viewIdea } from '~/api/ideas';
 
-import wordFile from '~/assets/images/file-word-solid.svg'
-import pdfFile from '~/assets/images/file-pdf-solid.svg'
+
 import Meta from 'antd/es/card/Meta';
 import Svg from '~/components/atoms/Svg';
 import styles from './styles.module.scss';
 import loadable from '~/utils/loadable';
+import ModalEditComment from '../IdeasList/ModalEditComment';
+import { useAppSelector } from '~/store';
+import FileCard from './ListFileCard';
 
 
 const Filter = loadable(() => import('~/components/molecules/IdeaDetails/Filter'));
@@ -24,9 +26,14 @@ interface Props {
 
 const IdeaDetails = (props: Props) => {
   const {ideaId} = props;
+  const userData = useAppSelector((state) => state.userInfo.userData);
   const {data, isLoading, isFetching, refetch} = useDetailIdea({ideaId: ideaId})
   const dataIdea = data?.data;
   const [form] = Form.useForm();
+  const [anonymousComment, setSnonymousComment] = useState(false);
+
+  const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
+  const [itemEditComment, setItemEditComment] = useState('');
 
   const [showComment, setShowComment] = useState(false)
   const handleShowComment = () => {
@@ -52,11 +59,26 @@ const IdeaDetails = (props: Props) => {
     }
   }
 
-  useEffect(() => {
-    if (ideaId) {
-      viewIdea(ideaId)
+  // useEffect(() => {
+  //   if (ideaId) {
+  //     viewIdea(ideaId)
+  //   }
+  // }, [])
+
+  const handleEditComment = (commentId: string) => {
+    setItemEditComment(commentId)
+    setVisibleModalEditComment(true)
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
+    const res = await deleteComment(ideaId, commentId);
+    if (res.message === SUCCESS) {
+      message.success('Delete comment succes')
+      refetch();
+    } else {
+      message.error(res.message)
     }
-  }, [ideaId])
+  }
   
   return (
     <>
@@ -108,32 +130,85 @@ const IdeaDetails = (props: Props) => {
               { showComment &&
                   <div className={styles.commentContainer}>
                   {dataIdea?.comments?.map((comment: any) =>
-                    <Meta
-                      key={comment._id}
-                      className={styles.comment}
-                      avatar={<><Avatar src={'https://joesch.moe/api/v1/random'}/> <strong>{comment.createdBy?.firstName} {comment.createdBy?.lastName}</strong></>}
-                      description={<p className={styles.commentContent}>{comment.content}</p>}
-                    />
+                    <div 
+                    className={styles.comment}
+                    >
+                      <Meta
+                        key={comment._id}
+                        avatar={
+                          <>
+                            <Avatar src={'https://joesch.moe/api/v1/random'}/> 
+                            { (comment.isAnonymous) ?
+                              <strong className='ml-2'>Unknown</strong>
+                              :
+                              <strong className='ml-2'>
+                                {comment.createdBy?.firstName} {comment.createdBy?.lastName}
+                              </strong>
+                            }
+                          </>
+                        }
+                        description={<p className={styles.commentContent}>{comment.content}</p>}
+                      />
+                      { (comment.createdBy._id === userData?._id) ?
+                        <Dropdown 
+                          menu={
+                            { 
+                              items: [
+                                {
+                                  label: <div onClick={() => handleEditComment(comment._id)}>Edit comment</div>,
+                                  key: '0',
+                                },
+                                {
+                                  type: 'divider',
+                                },
+                                {
+                                  label: <div onClick={() => handleDeleteComment(comment._id)}>Delete comment</div>,
+                                  key: '2',
+                                  danger: true,
+                                },
+                              ] 
+                            }
+                          } 
+                          trigger={['click']}
+                        >
+                          <div
+                            className={styles.commentOption}
+                          >
+                            <EllipsisOutlined/>
+                          </div>
+                        </Dropdown>
+                        : null
+                      }
+                      </div>
                     ) 
                   }
                   { (compareAsc(new Date(dataIdea?.thread?.finalClosureDate), new Date()) >= 0 ) ?
                     <div className={styles.commentArea}>
-                    <Form
-                      form={form}
-                      layout='vertical'
-                      onFinish={handleComment}
-                      key={dataIdea._id}
-                    >
-                      <Form.Item
-                        name='content'
+                      <Form
+                        form={form}
+                        className={styles.formComment}
+                        onFinish={handleComment}
                       >
-                        <TextArea
-                          className='mt-2'
-                          placeholder='Enter your comment'
-                          onKeyPress={(e: any) => handleKeyPress(e)}
+                        <Form.Item
+                          name='content'
+                        >
+                          <TextArea
+                            className={styles.textInput}
+                            placeholder='Enter your comment'
+                            onKeyPress={(e: any) => handleKeyPress(e)}
+                          />
+                        </Form.Item>
+                      </Form>
+                      <div
+                        className={styles.anonymousMode}
+                      >
+                        <p style={{margin: 0}}>Amonymous</p>
+                        <Switch
+                          onChange={setSnonymousComment}
+                          checkedChildren={<CheckOutlined />}
+                          unCheckedChildren={<CloseOutlined />}
                         />
-                      </Form.Item>
-                    </Form>
+                      </div>
                     </div>
                     : null
                   }
@@ -152,24 +227,19 @@ const IdeaDetails = (props: Props) => {
               dataSource={dataIdea?.documents}
               renderItem={((item: any) => (
                 <List.Item>
-                  <Card>
-                    { ((item.name.split('.').pop()) === 'docx') ?
-                      <div className='d-flex justify-content-center'>
-                        <Svg style={{width: 36}} src={wordFile} alt={item.name}/>
-                        <p>{item.name}</p>
-                      </div>
-                      :
-                      <div>
-                        <Svg style={{width: 36}} src={pdfFile} alt={item.name}/>
-                        <p>{item.name}</p>
-                      </div>
-                    }
-                  </Card>
+                  <FileCard name={item.name}/>
                 </List.Item>
               ))}
             />
             </Card>
         </div>
+        <ModalEditComment
+          visible={visibleModalEditComment}
+          setVisivle={setVisibleModalEditComment}
+          ideaId={ideaId}
+          commentId={itemEditComment}
+          refetch={refetch}
+        /> 
       </Spin>
     </>
   )

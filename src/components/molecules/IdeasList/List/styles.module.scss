@@ -26,7 +26,15 @@
     font-style: italic;
   }
   .commentContainer{
+    :global {
+      .ant-form-item{
+        margin: 0 !important;
+      }
+    }
     .comment{ 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #e6f7ff;
       padding: 15px 10px ;
       border-radius: 1rem;
@@ -36,6 +44,34 @@
       .commentContent{
         margin-bottom: 0;
       }
+      .commentOption{
+        margin: 0 1rem;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+      
+        &:hover {
+          background-color: #ccc;
+        }
+      }
+    }
+    .commentArea{
+      display: flex !important;
+      align-items: center;
+      margin: 1.5rem 0;
+      width: 100%;
+      .formComment{
+        width: 100% !important;
+      }
+      .anonymousMode{
+        margin: 0 1rem;
+      }
+      
     }
   }
 }
