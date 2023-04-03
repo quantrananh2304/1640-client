@@ -12,6 +12,7 @@ import iconPlus from '~/assets/images/iconPlus.svg';
 import styles from './styles.module.scss';
 import { useDepartment } from '~/hooks/useDepartment';
 import { useAppSelector } from '~/store';
+import { Authorization } from '~/wrapper/Authorization';
 
 const Select = loadable(() => import('~/components/atoms/Select'));
 const ModalIdeas = loadable(() => import('~/components/molecules/IdeasList/ModalIdeas'));
@@ -119,22 +120,24 @@ const Filter = (props: Props) => {
                   )}
                   </Select>
                 </Form.Item>
-                {/* <Form.Item name='department'>
+                <Form.Item name='department'>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select department"
-                    // loading={loadingDepartment || fetchingDepartment}
+                    loading={loadingDepartment || fetchingDepartment}
                   >
                   {departmentOption?.map((item: any) =>
                     <Option key={item.id} value={item.id}>{item.name}</Option>
                   )}
                   </Select>
-                </Form.Item> */}
+                </Form.Item>
               </div>
             </Form>
-            <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
-              <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
-            </Button>
+            <Authorization roles={[UserRole.Staff]}>
+              <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
+                <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
+              </Button>
+            </Authorization>
           </div>
         </div>
       </div>

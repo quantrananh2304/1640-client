@@ -11,6 +11,8 @@ import loadable from '~/utils/loadable';
 import Svg from '~/components/atoms/Svg';
 import iconWarning from '~/assets/images/warning.svg'
 import styles from './styles.module.scss';
+import { setUserInfo } from '~/store/userInfo';
+import { useAppDispatch } from '~/store';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const Modal = loadable(() => import('~/components/atoms/Modal'));
@@ -22,6 +24,7 @@ const Login = () => {
   const [activeCode, setActiveCode] = useState('')
   const [emailNotActive, setEmailNotActive] = useState('')
   const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
 
@@ -50,8 +53,10 @@ const Login = () => {
             const token = res?.data?.token
             handleLogin({
               accessToken: token,
-              userName: `${res.data.firstName} ${res.data.lastName}`
+              userName: `${res.data.firstName} ${res.data.lastName}`,
+              userRole: res.data.role
             })
+       
             setLoading(false)
           }
           else {

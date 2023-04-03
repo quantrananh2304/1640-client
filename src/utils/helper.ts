@@ -3,6 +3,7 @@ import { getCookie, removeCookie, setCookie } from "./cookie";
 import history from './history';
 import { hoursToMilliseconds } from "date-fns";
 import { message } from "antd";
+import { UserRole } from "./constant";
 
 export const getFileName = (path: string) => {
   const index = path.lastIndexOf('/');
@@ -14,11 +15,12 @@ interface IHandleLogin {
   expiresOn?: Date | null;
   callbackUrl?: string;
   userName: any;
+  userRole: any;
 }
 
-export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userName }: IHandleLogin) => {
+export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userName, userRole }: IHandleLogin) => {
   if (typeof window === 'undefined' || !accessToken) return;
-  const expires = expiresOn ? +new Date(expiresOn) : hoursToMilliseconds(5);
+  const expires = expiresOn ? +new Date(expiresOn) : 9999;
   setCookie('token', accessToken, {
     expires,
   });
@@ -28,7 +30,12 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userName }: I
   });
 
   if (getCookie('token')) {
-    history.push(callbackUrl ?? ROUTES.Ideas);
+    if (userRole === UserRole.Admin || userRole === UserRole.QA_M ) {
+      history.push(callbackUrl ?? ROUTES.DashBoard);
+    }
+    if (userRole === UserRole.Staff || userRole === UserRole.QA_C ) {
+      history.push(ROUTES.Ideas);
+    }
     // window.location.reload();
   }
 };
