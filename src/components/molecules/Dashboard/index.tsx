@@ -228,7 +228,14 @@ const Dashboards = () => {
     <div className={styles.dashboardContainer}>
       <Spin spinning={isLoading || isFetching}>
         <Row gutter={25}>
-          <Col span={12}>
+          <Col 
+            xxl={{ span: 12}}
+            xl={{ span: 12}}
+            lg={{ span: 12}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card>
               <h3>Today's ideas</h3>
               <div className={styles.statistic}>
@@ -248,7 +255,14 @@ const Dashboards = () => {
               </div>
             </Card>
           </Col>
-          <Col span={12}>
+          <Col 
+            xxl={{ span: 12}}
+            xl={{ span: 12}}
+            lg={{ span: 12}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card>
               <h3>Year's ideas</h3>
               <div className={styles.statistic}>
@@ -268,14 +282,21 @@ const Dashboards = () => {
           </Col>
         </Row>
         <Row className="mt-4" gutter={16}>
-          <Col span={10}>
+          <Col 
+            xxl={{ span: 10}}
+            xl={{ span: 10}}
+            lg={{ span: 10}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card>
               <Card className={styles.cardColumnChart}>
                 <Column {...config} height={300} color="#dfe7f7" />
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="Active Users"
+                title="user contribution"
                 description={
                   <Statistic
                     title="than last month"
@@ -294,7 +315,14 @@ const Dashboards = () => {
               />
             </Card>
           </Col>
-          <Col span={14}>
+          <Col 
+            xxl={{ span: 14}}
+            xl={{ span: 14}}
+            lg={{ span: 14}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card
               className={styles.dualLineChart}
             >
@@ -303,12 +331,26 @@ const Dashboards = () => {
           </Col>
         </Row>
         <Row className="mt-4" gutter={[16, 16]}>
-          <Col span={12}>
+          <Col 
+            xxl={{ span: 12}}
+            xl={{ span: 12}}
+            lg={{ span: 12}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card>
               <Pie {...configPieChart} height={300} />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col 
+            xxl={{ span: 12}}
+            xl={{ span: 12}}
+            lg={{ span: 12}}
+            md={{ span: 24}}
+            sm={{ span: 24}}
+            xs={{ span: 24}}
+          >
             <Card>
               <Bar {...configBarChart} height={300} />
             </Card>

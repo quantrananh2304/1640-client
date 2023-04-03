@@ -3,10 +3,11 @@ import { getUserInfo } from '~/api/user';
 
 export const QK_USER = 'user';
 
-export function useUser(enable: boolean) {
+export function useUser(token?: string) {
   const res = useQuery([QK_USER], () => getUserInfo(), {
-    enabled: enable,
+    enabled: Boolean(token),
     keepPreviousData: true,
+    refetchOnWindowFocus: false
   });
   return res;
 }

@@ -1,0 +1,19 @@
+.modalContainer{
+  :global {
+    .ant-picker,
+    .ant-input-number,
+    .ant-input-number-affix-wrapper {
+      width: 100%;
+    }
+    
+  }
+  .formContainer {
+    .btnGroup{
+      display: flex;
+      justify-content: flex-end;
+      .btnClose{
+        margin-right: 5.5px;
+      }
+    }
+  }
+}
