@@ -52,6 +52,7 @@ export default function Header() {
   
   const logout = () => {
     removeCookie('token');
+    removeCookie('userName');
     dispatch(setUserInfo({}));
     history.push(ROUTES.Login);
   };

@@ -1,22 +1,25 @@
 import React, { useMemo } from 'react';
-
 import { Link, useLocation } from 'react-router-dom';
-
 import {  Layout, MenuProps, theme } from 'antd';
-
 import { ROUTES } from '~/routes';
+import { Content, Footer } from 'antd/es/layout/layout';
 
-import styles from './styles.module.scss';
 import {
   UnorderedListOutlined,
   TagsOutlined,
   DashboardOutlined,
-  BookOutlined } from '@ant-design/icons'
-import { Content, Footer } from 'antd/es/layout/layout';
-import Header from '~/components/molecules/Header';
+  BookOutlined,
+  FlagOutlined } from '@ant-design/icons'
+
 import Sider from 'antd/es/layout/Sider';
 import history from '~/utils/history';
-import SideNav from '~/components/molecules/Sidebar';
+import loadable from '~/utils/loadable';
+import styles from './styles.module.scss';
+import { useAppSelector } from '~/store';
+import { UserRole } from '~/utils/constant';
+
+const SideNav = loadable(() => import('~/components/molecules/Sidebar'));
+const Header = loadable(() => import('~/components/molecules/Header'));
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -31,6 +34,9 @@ function Auth(props: Props) {
   } = theme.useToken();
 
   const { pathname } = useLocation();
+  const userData = useAppSelector((state) => state.userInfo.userData);
+  const userRole = userData?.role;
+
   const convertPathName = pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2);
 
   const menuLeft: MenuItem[] = useMemo(() => [
@@ -47,21 +53,28 @@ function Auth(props: Props) {
       icon: <BookOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.Campaign,
     },
-    {
+    (userRole && userRole === UserRole.QA_M) && {
       key: ROUTES.Category,
       label: <Link to={ROUTES.Category}>Category</Link>,
       icon: <TagsOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.Category,
       content: 'Category'
     },
-    {
+    (userRole && userRole === UserRole.Admin) && {
+      key: ROUTES.Department,
+      label: <Link to={ROUTES.Department}>Department</Link>,
+      icon: <FlagOutlined style={{fontSize: '18px'}}/>,
+      url: ROUTES.Department,
+      content: 'Department'
+    },
+    (userRole && (userRole === UserRole.Admin || userRole === UserRole.QA_M)) && {
       key: ROUTES.DashBoard,
       label: <Link to={ROUTES.DashBoard}>DashBoard</Link>,
       icon: <DashboardOutlined style={{fontSize: '18px'}}/>,
       url: ROUTES.DashBoard,
       content: 'DashBoard'
     },
-  ], []);
+  ], [userData]);
 
   return (
     <Layout className={styles.layoutContainer}>

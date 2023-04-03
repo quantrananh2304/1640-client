@@ -8,31 +8,25 @@ import NotFound from '~/pages/404';
 import { useAppDispatch,  } from '~/store';
 import { useUser } from '~/hooks/useUser';
 import { setUserInfo } from '~/store/userInfo';
+import Spin from '~/components/atoms/Spin';
 
 function Wrapper() {
   const token = getCookie('token');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [enable, setEnable] = useState(false)
-  const { data: user, refetch } = useUser(enable);
+  const { data: user, refetch, isLoading } = useUser(token);
 
   useEffect(() => {
     if (!token) {
       navigate(ROUTES.Login)
     }
   }, [token, dispatch])
-
-  useEffect(() => {
-    if (token) {
-      setEnable(true)
-    }
-  }, [user?.data?._id, token, dispatch])
   
   useEffect(() => {
     if (user){
       dispatch(setUserInfo(user?.data))
     }
-  }, [user])
+  }, [user, token])
   
   return (
     <Routes>
@@ -41,19 +35,19 @@ function Wrapper() {
         if (route.isAuth) {
           return (
             <Route
-              key={index}
-              path={route.path}
-              element={
-                (
-                  <React.Fragment>
-                    <Blank>
-                      <Layout>
-                        <route.component />
-                      </Layout>
-                    </Blank>
-                  </React.Fragment>
-                )}
-            />
+                key={index}
+                path={route.path}
+                element={
+                  (
+                    <React.Fragment>
+                      <Blank>
+                        <Layout>
+                          <route.component />
+                        </Layout>
+                      </Blank>
+                    </React.Fragment>
+                  )}
+              />
           );
         }
         return (
