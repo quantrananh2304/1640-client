@@ -79,6 +79,7 @@ const Filter = (props: Props) => {
         >
           <div className={styles.optionsWrapper}>
             <Form
+              className={styles.optionsWrapperForm}
               form={form}
               onValuesChange={handleValuesChange}
               initialValues={{
@@ -86,7 +87,7 @@ const Filter = (props: Props) => {
               }}
             >
               <div className={styles.filterWrapper}>
-                <Form.Item name='sort'>
+                <Form.Item name='sort' className={styles.formItem}>
                   <Select
                     className={styles.selectSort}
                     placeholder="Sort ideas"
@@ -96,7 +97,7 @@ const Filter = (props: Props) => {
                   )}
                   </Select>
                 </Form.Item>
-                <Form.Item name='thread'>
+                <Form.Item name='thread' className={styles.formItem}>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select Campaign"
@@ -108,7 +109,7 @@ const Filter = (props: Props) => {
                   )}
                   </Select>
                 </Form.Item>
-                <Form.Item name='category'>
+                <Form.Item name='category' className={styles.formItem}>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select category"
@@ -120,7 +121,7 @@ const Filter = (props: Props) => {
                   )}
                   </Select>
                 </Form.Item>
-                <Form.Item name='department'>
+                <Form.Item name='department' className={styles.formItem}>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select department"

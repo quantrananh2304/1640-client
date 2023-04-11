@@ -73,26 +73,31 @@
   
       .optionsWrapper {
         display        : flex;
+        width: 100%;
         justify-content: space-between;
         
+        .optionsWrapperForm {
+          width: 100%;
+        }
         .searchName{ 
           width: 190px;
         }
         .filterWrapper {
           display: flex;
-  
+          width: 100%;
           :global {
             .ant-form-item {
               margin: 0;
             }
           }
-  
-        .selectSort,
-        .filterOption{
-          width       : 160px;
-          margin-right: 8px;
-        }
-  
+          .formItem{
+            width: 25%;
+            margin-right: 10px;
+          }
+          .selectSort,
+          .filterOption{
+            width: 100% !important;
+          }
         }
   
         .btnAdd {
@@ -139,18 +144,23 @@
 
         .filterWrapper {
           display: flex;
+          flex-wrap: wrap;
           :global {
             .ant-form-item {
               margin: 0;
             }
           }
+          .formItem{
+            width: 47%;
+            margin-right: 7px;
+            margin-top: 5px;
+          }
   
-        .selectSort,
-        .filterOption{
-          width       : 80px;
-          margin-right: 8px;
-        }
-  
+          .selectSort,
+          .filterOption{
+            width: 100%;
+            margin-right: 8px;
+          }
         }
   
         .btnAdd {
