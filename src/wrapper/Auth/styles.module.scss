@@ -20,6 +20,11 @@
 .layoutContainer{
   height: 100vh;
   width: 100vw;
+  :global {
+    .ant-layout-sider{
+      position: unset;
+    }
+  }
 }
 .contentMain{
   padding: 0 50px;

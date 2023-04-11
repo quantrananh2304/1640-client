@@ -27,7 +27,7 @@ import { deleteComment, setComment, updateAction } from '~/api/ideas';
 import { useAppSelector } from '~/store';
 import { TextArea } from '~/components/atoms/Input';
 import { Link } from 'react-router-dom';
-
+import userUnknown from '~/assets/images/user-secret-solid.svg'
 import styles from './styles.module.scss'
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
@@ -208,7 +208,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.like?.map((userLike: any) => 
-                          <div>
+                          <div key={userLike._id}>
                             {userLike.user.firstName} {userLike.user.lastName}
                           </div>
                         )
@@ -223,7 +223,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.like?.map((userLike: any) => 
-                          <div>
+                          <div key={userLike._id}>
                             {userLike.user.firstName} {userLike.user.lastName}
                           </div>
                         )
@@ -244,7 +244,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div>
+                          <div key={userDislike._id}>
                             {userDislike.user.firstName} {userDislike.user.lastName}
                           </div>
                         )
@@ -259,7 +259,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div>
+                          <div key={userDislike._id}>
                             {userDislike.user.firstName} {userDislike.user.lastName}
                           </div>
                         )
@@ -285,7 +285,7 @@ const IdeaList = (props: Prop) => {
               extra={format(new Date(item.createdAt), DATE)}
             >
               <Meta
-                avatar={<Avatar size={42} src={item.updatedBy.avatar}/>}
+                avatar={<Avatar size={42} src={ item.isAnonymous ? userUnknown : item.updatedBy.avatar}/>}
                 title={
                   // <a href={item.href}>{item.title}</a>
                   <Link
@@ -296,7 +296,15 @@ const IdeaList = (props: Prop) => {
                 }
                 description={(
                   <>
-                    <div className={styles.userIdea}>{item.updatedBy?.firstName} {item.updatedBy?.lastName}</div>
+                    { !item.isAnonymous ?
+                      <div className={styles.userIdea}>
+                        {item.updatedBy?.firstName} {item.updatedBy?.lastName}
+                      </div>
+                      :
+                      <div className={styles.userIdea}>
+                        Unknown
+                      </div>
+                    }
                     <div>{item.description}</div>
                   </>
                 )}
@@ -308,15 +316,15 @@ const IdeaList = (props: Prop) => {
               <Spin spinning={isLoadingComment}>
                 <div className={styles.commentContainer}>
                 {item?.comments?.map((comment: any) =>
-                
                   <div 
+                    key={comment._id}
                     className={styles.comment}
                   >
                     <Meta
                       key={comment._id}
                       avatar={
                         <>
-                          <Avatar src={'https://i.pravatar.cc'}/> 
+                          <Avatar src={ comment.isAnonymous ? userUnknown : 'https://i.pravatar.cc'}/> 
                           { (comment.isAnonymous) ?
                             <strong className='ml-2'>Unknown</strong>
                             :
