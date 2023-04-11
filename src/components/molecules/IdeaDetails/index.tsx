@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Avatar, Button, Card, Dropdown, Form, List, Spin, Statistic, Switch, message } from 'antd';
 import { compareAsc, format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
-import { MessageOutlined, EyeOutlined, EllipsisOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { DownloadOutlined } from '@ant-design/icons'
+import { MessageOutlined, EyeOutlined, EllipsisOutlined, CheckOutlined, CloseOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useDetailIdea } from '~/hooks/useIdeas';
 import { TextArea } from '~/components/atoms/Input';
 import { deleteComment, setComment, viewIdea } from '~/api/ideas';
@@ -11,6 +10,7 @@ import { deleteComment, setComment, viewIdea } from '~/api/ideas';
 
 import Meta from 'antd/es/card/Meta';
 import Svg from '~/components/atoms/Svg';
+import userUnknown from '~/assets/images/user-secret-solid.svg'
 import styles from './styles.module.scss';
 import loadable from '~/utils/loadable';
 import ModalEditComment from '../IdeasList/ModalEditComment';
@@ -60,6 +60,7 @@ const IdeaDetails = (props: Props) => {
   }
 
   // useEffect(() => {
+  //   console.log('useeffect')
   //   if (ideaId) {
   //     viewIdea(ideaId)
   //   }
@@ -111,15 +112,30 @@ const IdeaDetails = (props: Props) => {
                   <div className={styles.extraGroup}>
                     <EyeOutlined /> {dataIdea?.viewCount}
                   </div>
-
                 }
               >
                 <Meta
-                  avatar={<Avatar size={42} src={'https://joesch.moe/api/v1/random'}/>}
+                  avatar={<Avatar size={42} src={dataIdea?.isAnonymous ? userUnknown : 'https://joesch.moe/api/v1/random'}/>}
                   title={dataIdea?.title}
                   description={(
                     <>
-                      <div className={styles.userIdea}>{dataIdea?.updatedBy?.firstName} {dataIdea?.updatedBy?.lastName} - {dataIdea ? format(new Date(dataIdea?.createdAt), DATE) : '-'}</div>
+                      <div className={styles.userIdea}>
+                        { !dataIdea?.isAnonymous ?
+                          <div>
+                            {dataIdea?.updatedBy?.firstName} {dataIdea?.updatedBy?.lastName}
+                              - 
+                            {dataIdea ? format(new Date(dataIdea?.createdAt), DATE) : '-'}
+                          </div>
+                          :
+                          <div>
+                            Unknown
+                              - 
+                            {dataIdea ? format(new Date(dataIdea?.createdAt), DATE) : '-'}
+                          </div>
+                          
+                        }
+                        
+                      </div>
                       <div>{dataIdea?.description}</div>
                     </>
                   )}
@@ -137,7 +153,7 @@ const IdeaDetails = (props: Props) => {
                         key={comment._id}
                         avatar={
                           <>
-                            <Avatar src={'https://joesch.moe/api/v1/random'}/> 
+                            <Avatar src={comment.isAnonymous ? userUnknown : 'https://joesch.moe/api/v1/random'}/> 
                             { (comment.isAnonymous) ?
                               <strong className='ml-2'>Unknown</strong>
                               :
@@ -218,19 +234,25 @@ const IdeaDetails = (props: Props) => {
             </div>
           </div>
             <Card className={styles.listFile}>
-            <Button className={styles.btnAdd}>
-              <DownloadOutlined />
-              Download file
-            </Button>
-            <List
-              grid={{ gutter: 16, column: 4 }}
-              dataSource={dataIdea?.documents}
-              renderItem={((item: any) => (
-                <List.Item>
-                  <FileCard name={item.name}/>
-                </List.Item>
-              ))}
-            />
+              <List
+                 grid={
+                  {
+                    gutter: 16,
+                    xs: 1,
+                    sm: 1,
+                    md: 2,
+                    lg: 2,
+                    xl: 2,
+                    xxl: 4,
+                  }
+                }
+                dataSource={dataIdea?.documents}
+                renderItem={((item: any) => (
+                  <List.Item style={{alignItems: 'center'}}>
+                    <FileCard name={item.name}/>
+                  </List.Item>
+                ))}
+              />
             </Card>
         </div>
         <ModalEditComment

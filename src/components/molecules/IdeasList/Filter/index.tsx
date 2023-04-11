@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Form } from 'antd';
+import { Button, Dropdown, Form, Row } from 'antd';
 import { Option } from '~/components/atoms/Select';
 import { PARAMS_GET_ALL, SortIdeas, UserRole } from '~/utils/constant';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
+import { DownloadOutlined, ExportOutlined, MenuOutlined } from '@ant-design/icons';
 
 import Svg from '~/components/atoms/Svg';
 import loadable from '~/utils/loadable';
@@ -135,9 +136,39 @@ const Filter = (props: Props) => {
               </div>
             </Form>
             <Authorization roles={[UserRole.Staff]}>
-              <Button className={styles.btnAdd} type="primary" onClick={showAddModal}>
+              <Button className={styles.btnAdd} style={{alignSelf: 'center'}} type="primary" onClick={showAddModal}>
                 <Svg className={styles.iconPlus} src={iconPlus} alt="iconPlus" />
               </Button>
+            </Authorization>
+            <Authorization roles={[UserRole.QA_M]}>
+              <Dropdown
+                menu={
+                  { 
+                    items: [
+                      {
+                        label: 
+                          <div>
+                            <ExportOutlined/>
+                            <span className='ml-2'>Export ideas</span>
+                          </div>
+                        ,
+                        key: 'export',
+                      },
+                      {
+                        label:
+                          <div>
+                            <DownloadOutlined/>
+                            <span className='ml-2'>Download all files</span>
+                          </div>
+                        ,
+                        key: 'download',
+                      },
+                    ] 
+                  }
+                } 
+              >
+                <MenuOutlined style={{alignSelf: 'center'}} />
+              </Dropdown>
             </Authorization>
           </div>
         </div>

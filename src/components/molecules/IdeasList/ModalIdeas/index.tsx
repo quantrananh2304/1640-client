@@ -184,7 +184,7 @@ const ModalIdeas = (props: Props) => {
       </Upload>
       </div>
       <Form.Item
-        label='Categoty'
+        label='Category'
         name='category'
         rules={rules}
       >

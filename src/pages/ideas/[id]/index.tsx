@@ -5,7 +5,7 @@ import IdeaDetails from '~/components/molecules/IdeaDetails';
 const IdeaDetail = () => {
   const { id } = useParams();
   return (
-    <IdeaDetails ideaId={id}/>
+    <>{id ? <IdeaDetails ideaId={id}/> : null}</>
   );
 }
 

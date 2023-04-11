@@ -1,0 +1,16 @@
+.fileIcon {
+  width: 36px;
+}
+
+@media only screen and (max-width: 1023) and (min-width: 768px) {
+  .fileIcon {
+    width: 26px;
+  }
+}
+
+
+@media only screen and (max-width: 767px) {
+  .fileIcon {
+    width: 20px;
+  }
+}

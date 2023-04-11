@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import iconEdit from '~/assets/images/iconEdit.svg';
 import iconWarning from '~/assets/images/warning.svg';
@@ -39,8 +39,18 @@ const TableAccount = (props: Props) => {
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 5,
-    total: 7
+    total: 20
   });
+
+  useEffect(() => {
+    if (dataAccount) {
+      setPagination({
+        ...pagination,
+        total: dataAccount.total
+      })
+    }
+  }, [dataAccount])
+  
   
   const handleTableChange = (
     newPagination: TablePaginationConfig,
