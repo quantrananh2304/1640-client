@@ -4,65 +4,79 @@
   max-height: 64vh !important;
   margin: 0px 100px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
-  p{
+
+  p {
     margin: 0 0.5rem 0;
     align-self: self-end;
   }
+
   :global {
     .ant-card .ant-card-actions {
       padding-left: 24px;
+
       li {
         width: fit-content !important;
         margin-right: 15px;
         margin-left: 15px;
       }
     }
-    .ant-card-actions>li:not(:last-child){
+
+    .ant-card-actions>li:not(:last-child) {
       border: none;
     }
+
     .ant-card-meta-title {
       margin-bottom: 0 !important;
     }
+
     .ant-card-head {
       min-height: 22px !important;
       margin-top: 15px;
     }
   }
+
   .contentWrapper {
     display: flex;
     flex-direction: column;
+
     .infoContainer {
       margin: 16px;
     }
   }
+
   .listFile {
     margin: 16px;
-    .btnAdd{
+
+    .btnAdd {
       margin-bottom: 30px;
       align-self: flex-end;
     }
   }
 }
-.commentContainer{
+
+.commentContainer {
   :global {
-    .ant-form-item{
+    .ant-form-item {
       margin: 0 !important;
     }
   }
-  .comment{ 
+
+  .comment {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #e6f7ff;
-    padding: 15px 10px ;
+    padding: 15px 10px;
     border-radius: 1rem;
     margin-top: 10px;
     margin-left: 50px;
     margin-right: 50px;
-    .commentContent{
+
+    .commentContent {
       margin-bottom: 0;
     }
-    .commentOption{
+
+    .commentOption {
       margin: 0 1rem;
       width: 30px;
       height: 30px;
@@ -72,24 +86,27 @@
       align-items: center;
       background-color: transparent;
       transition: background-color 0.3s ease;
-    
+
       &:hover {
         background-color: #ccc;
       }
     }
   }
-  .commentArea{
+
+  .commentArea {
     display: flex !important;
     align-items: center;
     margin: 1.5rem 0;
     width: 100%;
-    .formComment{
+
+    .formComment {
       width: 100% !important;
     }
-    .anonymousMode{
+
+    .anonymousMode {
       margin: 0 1rem;
     }
-    
+
   }
 }
 
@@ -99,7 +116,7 @@
   }
 }
 
-@media only screen and (max-width: 1024px) and (min-width: 501px){
+@media only screen and (max-width: 1024px) and (min-width: 501px) {
   .container {
     margin: 0;
   }
