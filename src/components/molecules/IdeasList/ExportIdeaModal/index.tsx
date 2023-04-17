@@ -101,7 +101,8 @@ export default function ExportIdeaModal({
                 return prev;
               }, [])
               .toString()
-              .replaceAll(",", "_") + "Ideas",
+              .replaceAll(",", "_")
+              .replaceAll(" ", "") + "-Ideas",
             true
           );
         } else {
