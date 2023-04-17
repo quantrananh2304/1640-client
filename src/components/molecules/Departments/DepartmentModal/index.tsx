@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { Button, DatePicker, Form, Modal, message } from 'antd';
+import { Button, Form, Modal, message } from 'antd';
 import styles from './styles.module.scss'
 import Input, { TextArea } from '~/components/atoms/Input';
 import { SUCCESS } from '~/utils/constant';
