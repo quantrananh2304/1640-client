@@ -118,8 +118,6 @@ export default function ExportIdeaModal({
     setLoading(() => false);
   };
 
-  console.log(threadOptions);
-
   return (
     <Modal
       width={600}
