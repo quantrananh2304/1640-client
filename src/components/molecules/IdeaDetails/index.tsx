@@ -169,7 +169,7 @@ const IdeaDetails = (props: Props) => {
                 {showComment && (
                   <div className={styles.commentContainer}>
                     {dataIdea?.comments?.map((comment: any) => (
-                      <div className={styles.comment}>
+                      <div className={styles.comment} key={comment._id}>
                         <Meta
                           key={comment._id}
                           avatar={
