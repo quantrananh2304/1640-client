@@ -130,12 +130,6 @@ export default function DownloadAllDocumentModal({
       closable={false}
       className={styles.modalContainer}
     >
-      <a
-        href="https://firebasestorage.googleapis.com/v0/b/project-1300899936117119693.appspot.com/o/files%2F147144.png?alt=media&amp;token=e89724fb-5c06-406a-8f86-d217b0a6ec36"
-        download="file"
-      >
-        Click here to download
-      </a>
       <div>
         <h3>Download documents</h3>
       </div>
