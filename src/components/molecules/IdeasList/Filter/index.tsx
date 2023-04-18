@@ -19,6 +19,7 @@ import { useDepartment } from "~/hooks/useDepartment";
 import { useAppSelector } from "~/store";
 import { Authorization } from "~/wrapper/Authorization";
 import ExportIdeaModal from "../ExportIdeaModal";
+import DownloadAllDocumentModal from "../DownloadAllDocumentsModal";
 
 const Select = loadable(() => import("~/components/atoms/Select"));
 const ModalIdeas = loadable(
@@ -36,6 +37,7 @@ const Filter = (props: Props) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [exportIdeaOpen, setExportIdeaOpen] = useState<boolean>(false);
+  const [downloadModalOpen, setDownloadModalOpen] = useState<boolean>(false);
 
   const userData = useAppSelector((state) => state.userInfo.userData);
   const userRole = userData?.role;
@@ -211,7 +213,7 @@ const Filter = (props: Props) => {
                     },
                     {
                       label: (
-                        <div>
+                        <div onClick={() => setDownloadModalOpen(true)}>
                           <DownloadOutlined />
                           <span className="ml-2">Download all files</span>
                         </div>
@@ -228,6 +230,12 @@ const Filter = (props: Props) => {
                 visible={exportIdeaOpen}
                 threadOptions={threadOption}
                 setVisible={setExportIdeaOpen}
+              />
+
+              <DownloadAllDocumentModal
+                visible={downloadModalOpen}
+                threadOptions={threadOption}
+                setVisible={setDownloadModalOpen}
               />
             </Authorization>
           </div>
