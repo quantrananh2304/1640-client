@@ -1,29 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import {UserRole } from '~/utils/constant'
-import { useThread } from '~/hooks/useThread'
-import { Authorization } from '~/wrapper/Authorization'
-import loadable from '~/utils/loadable'
+import { UserRole } from "~/utils/constant";
+import { useThread } from "~/hooks/useThread";
+import { Authorization } from "~/wrapper/Authorization";
+import loadable from "~/utils/loadable";
 
-const ThreadTable = loadable(() => import('~/components/molecules/ThreadList/TableThread'));
-const Filter = loadable(() => import('~/components/molecules/ThreadList/Filter'));
-
+const ThreadTable = loadable(
+  () => import("~/components/molecules/ThreadList/TableThread")
+);
+const Filter = loadable(
+  () => import("~/components/molecules/ThreadList/Filter")
+);
 
 const Threads = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 999,
-    sort: 'NAME_DESC'
-  })
-  const {data, isFetching, isLoading, refetch} = useThread(params)
+    sort: "NAME_DESC",
+  });
+  const { data, isFetching, isLoading, refetch } = useThread(params);
   const dataThread = data?.data.threads;
   return (
     <>
       <Authorization roles={[UserRole.Admin]}>
-        <Filter
-          refetch={refetch}
-        />
+        <Filter refetch={refetch} />
       </Authorization>
+
       <ThreadTable
         setParams={setParams}
         threads={dataThread}
@@ -32,7 +34,7 @@ const Threads = () => {
         isLoading={isLoading}
       />
     </>
-  )
-}
+  );
+};
 
-export default Threads
+export default Threads;
