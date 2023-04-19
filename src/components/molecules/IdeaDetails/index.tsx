@@ -26,13 +26,14 @@ import { TextArea } from "~/components/atoms/Input";
 import { deleteComment, setComment, viewIdea } from "~/api/ideas";
 
 import Meta from "antd/es/card/Meta";
-import Svg from "~/components/atoms/Svg";
 import userUnknown from "~/assets/images/user-secret-solid.svg";
 import styles from "./styles.module.scss";
 import loadable from "~/utils/loadable";
 import ModalEditComment from "../IdeasList/ModalEditComment";
 import { useAppSelector } from "~/store";
 import FileCard from "./ListFileCard";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 const Filter = loadable(
   () => import("~/components/molecules/IdeaDetails/Filter")
@@ -68,7 +69,10 @@ const IdeaDetails = (props: Props) => {
   };
 
   const handleComment = async (formValues: any) => {
-    const res = await setComment(ideaId, formValues);
+    const res = await setComment(ideaId, {
+      ...formValues,
+      isAnonymous: anonymousComment,
+    });
     if (res.message === SUCCESS) {
       message.success("Comment success");
       refetch();
@@ -77,13 +81,6 @@ const IdeaDetails = (props: Props) => {
       message.error(res.message);
     }
   };
-
-  // useEffect(() => {
-  //   console.log('useeffect')
-  //   if (ideaId) {
-  //     viewIdea(ideaId)
-  //   }
-  // }, [])
 
   const handleEditComment = (commentId: string) => {
     setItemEditComment(commentId);
@@ -98,6 +95,22 @@ const IdeaDetails = (props: Props) => {
     } else {
       message.error(res.message);
     }
+  };
+
+  const handleDownload = (name: string, url: string) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
+    xhr.send();
+    xhr.onreadystatechange = async function () {
+      if (xhr.readyState === 4) {
+        const zip = new JSZip();
+        zip.file(name, xhr.response);
+        const content = await zip.generateAsync({ type: "blob" });
+
+        saveAs(content, name.split(".")[0]);
+      }
+    };
   };
 
   return (
@@ -291,7 +304,10 @@ const IdeaDetails = (props: Props) => {
                     alignItems: "center",
                   }}
                 >
-                  <FileCard name={item.name} />
+                  <FileCard
+                    name={item.name}
+                    handleDownload={() => handleDownload(item.name, item.url)}
+                  />
                 </List.Item>
               )}
             />
