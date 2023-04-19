@@ -29,10 +29,11 @@ const ModalIdeas = loadable(
 interface Props {
   afterSuccess?: () => void;
   onChange: (value: any) => void;
+  initialThread: string;
 }
 
 const Filter = (props: Props) => {
-  const { afterSuccess, onChange } = props;
+  const { afterSuccess, onChange, initialThread } = props;
 
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -121,6 +122,7 @@ const Filter = (props: Props) => {
               onValuesChange={handleValuesChange}
               initialValues={{
                 sort: sortOption[0].value,
+                thread: initialThread ? initialThread : "",
               }}
             >
               <div className={styles.filterWrapper}>
