@@ -67,7 +67,7 @@ function Auth(props: Props) {
       url: ROUTES.Department,
       content: 'Department'
     },
-    (userRole && (userRole === UserRole.Admin || userRole === UserRole.QA_M)) && {
+    (userRole && (userRole === UserRole.Admin)) && {
       key: ROUTES.DashBoard,
       label: <Link to={ROUTES.DashBoard}>DashBoard</Link>,
       icon: <DashboardOutlined style={{fontSize: '18px'}}/>,

@@ -9,3 +9,5 @@ export const changeDepartment = (userId: any, params: any) =>
   sendPut(`/admin/user/${userId}/change-department`, params);
 export const updateUserInfoForAdmin = (userId: string, params: any) =>
   sendPut(`/admin/user/${userId}/update`, params);
+export const changePassword = (userId: string, params: any) =>
+  sendPut(`/user/${userId}/change-password`, params);

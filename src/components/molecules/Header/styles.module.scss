@@ -59,6 +59,16 @@
     }
   }
 }
+
+.formContainer {
+  .btnGroup{
+    display: flex;
+    justify-content: flex-end;
+    .btnClose{
+      margin-right: 5.5px;
+    }
+  }
+}
 .notificationReaded{
   text-decoration: line-through;
 }

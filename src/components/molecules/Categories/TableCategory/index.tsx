@@ -88,13 +88,11 @@ const CategoryTable = (props: Props) => {
       title: 'Name',
       dataIndex: 'name',
       width: '35%',
-      sorter: true
     },
     {
       title: 'Create date',
       dataIndex: 'createdAt',
       width: '35%',
-      sorter: true,
       render: (date: any) => 
       <div>
         {date && format(new Date(date), DATE)}

@@ -296,22 +296,22 @@ const Dashboards = () => {
               </Card>
               <Meta
                 style={{ marginTop: 23 }}
-                title="user contribution"
-                description={
-                  <Statistic
-                    title="than last month"
-                    value={5.63}
-                    style={{ display: "flex" }}
-                    precision={2}
-                    valueStyle={{
-                      color: "#3f8600",
-                      fontSize: 14,
-                      marginLeft: 5,
-                    }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="%"
-                  />
-                }
+                // title="user contribution"
+                // description={
+                //   <Statistic
+                //     title="than last month"
+                //     // value={5.63}
+                //     style={{ display: "flex" }}
+                //     precision={2}
+                //     valueStyle={{
+                //       color: "#3f8600",
+                //       fontSize: 14,
+                //       marginLeft: 5,
+                //     }}
+                //     prefix={<ArrowUpOutlined />}
+                //     suffix="%"
+                //   />
+                // }
               />
             </Card>
           </Col>

@@ -19,10 +19,9 @@ export default function Home() {
     if (!getCookie('token')) {
      navigate(ROUTES.Login) 
     } 
-    if (userRole && ((userRole === UserRole.Admin) || (userRole === UserRole.QA_M))) {
+    if (userRole && ((userRole === UserRole.Admin))) {
       navigate(ROUTES.DashBoard);
-    } 
-    if (userRole && ((userRole === UserRole.Staff) || (userRole === UserRole.QA_C))) {
+    } else {
       navigate(ROUTES.Ideas);
     }
   }, [navigate, getCookie, userRole]);
