@@ -14,6 +14,7 @@ import {
   MessageOutlined,
   DislikeOutlined,
   CheckOutlined,
+  MoreOutlined,
   CloseOutlined,
   EllipsisOutlined,
   LikeTwoTone,
@@ -29,6 +30,7 @@ import { TextArea } from '~/components/atoms/Input';
 import { Link } from 'react-router-dom';
 import userUnknown from '~/assets/images/user-secret-solid.svg'
 import styles from './styles.module.scss'
+import ModalIdeas from '../ModalIdeas';
 
 const Spin = loadable(() => import('~/components/atoms/Spin'));
 const ModalEditComment = loadable(() => import('~/components/molecules/IdeasList/ModalEditComment'));
@@ -49,7 +51,9 @@ const IdeaList = (props: Prop) => {
   const [dataSource, setDataSource] = useState<any>([]);
   const [anonymousComment, setSnonymousComment] = useState(false);
   const [visibleModalEditComment, setVisibleModalEditComment] = useState(false);
+  const [visibleModalEditIdea, setVisibleModalEditIdea] = useState(false);
   const [itemEditComment, setItemEditComment] = useState<any>({});
+  const [itemEditIdea, setItemEditIdea] = useState<any>({});
 
   useEffect(() => {
     if (dataIdeas){
@@ -185,6 +189,11 @@ const IdeaList = (props: Prop) => {
       message.error(res.message)
     }
   }
+
+  const handleShowModalEditIdea = (idea: any) => {
+    setItemEditIdea(idea)
+    setVisibleModalEditIdea(true)
+  }
   
   return (
     <Spin spinning={isLoading || isFetching}>
@@ -282,7 +291,32 @@ const IdeaList = (props: Prop) => {
                   } 
                 />,
               ]}
-              extra={format(new Date(item.createdAt), DATE)}
+              extra={
+                <div className='d-flex'>
+                  <div className='mr-2'>
+                    {format(new Date(item.createdAt), DATE)}
+                  </div>
+                  { (item.updatedBy?._id === userData?._id) ?
+                    <Dropdown
+                      className={styles.dropDown}
+                      menu={
+                        { 
+                          items: [
+                            {
+                              label: <div onClick={() => handleShowModalEditIdea(item)}>Edit idea</div>,
+                              key: '0',
+                            },
+                          ]  
+                        }
+                      } 
+                      trigger={['click']}
+                    >
+                      <MoreOutlined style={{fontSize: 16}} />
+                    </Dropdown>
+                    : null
+                  }
+                </div>
+              }
             >
               <Meta
                 avatar={<Avatar size={42} src={ item.isAnonymous ? userUnknown : item.updatedBy.avatar}/>}
@@ -411,6 +445,12 @@ const IdeaList = (props: Prop) => {
             }
           </div>
         )}
+      />
+      <ModalIdeas
+        visible={visibleModalEditIdea}
+        setVisible={setVisibleModalEditIdea}
+        idea={itemEditIdea}
+        afterSuccess={refetch}
       />
     </Spin>
   )

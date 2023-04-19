@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Row } from "antd";
+import { Button, Form, Modal, Row, message } from "antd";
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import loadable from "~/utils/loadable";
@@ -108,10 +108,11 @@ export default function DownloadAllDocumentModal({
 
           downloadFile(fileUrls[count], onDownloadComplete);
         } else {
-          // make error no idea available toast
+          message.error('No idea available!')
+
         }
       } else {
-        // make error get idea toast
+        message.error(res.message)
       }
     } catch (error) {
       // make error get idea toast

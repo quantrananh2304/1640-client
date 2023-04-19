@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Checkbox, Form, Switch, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ref, getDownloadURL, uploadBytesResumable, getMetadata } from "firebase/storage";
 import { Option } from '~/components/atoms/Select';
 import { PARAMS_GET_ALL, SUCCESS, termAndCondition } from '~/utils/constant';
-import { setIdea } from '~/api/ideas';
+import { setIdea, updateIdea } from '~/api/ideas';
 import { useCategories } from '~/hooks/useCategory';
 import { useThread } from '~/hooks/useThread';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -21,6 +21,7 @@ interface Props {
   visible?: boolean;
   setVisible: React.Dispatch<boolean>;
   userData?: any;
+  idea?: any;
   afterSuccess?: () => void;
   campaign?: string;
 }
@@ -31,7 +32,8 @@ const ModalIdeas = (props: Props) => {
     visible,
     setVisible,
     afterSuccess,
-    campaign
+    campaign,
+    idea
   } = props;
 
   const rules = [{ required: true, message: '' }];
@@ -58,8 +60,27 @@ const ModalIdeas = (props: Props) => {
   const handleClose = () => {
     if (setVisible) {
       setVisible(false);
+      form.resetFields()
+      setFileList({})
     }
   };
+
+  useEffect(() => {
+    if (idea) {
+      form.setFieldsValue({
+        title: idea.title,
+        description: idea.description,
+        category: idea.category?._id,
+        thread: idea.thread?._id,
+      })
+      if (idea.documents) {
+        setFileList(idea.documents)
+        setMetadataList(idea.documents)
+      }
+    }
+  
+  }, [idea])
+  
 
   const onCheckBoxChange = (e: CheckboxChangeEvent) => {
     setAgreeTerm(e.target.checked)
@@ -80,7 +101,11 @@ const ModalIdeas = (props: Props) => {
         ...rest,
         documents: metadataList
       }
-      res = await setIdea(fmData)
+      if (idea) {
+        res = await updateIdea(idea._id, fmData)
+      } else {
+        res = await setIdea(fmData)
+      }
       if (res.message === SUCCESS) {
         message.success('Upload idea success')
         if (afterSuccess) {
@@ -167,6 +192,7 @@ const ModalIdeas = (props: Props) => {
       <Upload
         multiple={true}
         customRequest={({ file, onSuccess, onError, onProgress }) => uploadFileToFirebase(file, onSuccess, onError, onProgress)}
+        fileList={fileList}
         onChange={(info) => {
           const fileList = info.fileList.map(file => {
             if (file.status === 'done') {

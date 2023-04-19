@@ -1,7 +1,7 @@
 import Modal from "antd/es/modal/Modal";
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
-import { Button, Form, Row } from "antd";
+import { Button, Form, Row, message } from "antd";
 import loadable from "~/utils/loadable";
 import { Option } from "~/components/atoms/Select";
 import { format, isBefore } from "date-fns";
@@ -106,13 +106,13 @@ export default function ExportIdeaModal({
             true
           );
         } else {
-          // make error no idea available toast
+          message.error('No idea available!')
         }
       } else {
-        // make error get idea toast
+        message.error(res.message)
       }
     } catch (error) {
-      // make error toast
+      console.log(error)
     }
 
     setLoading(() => false);

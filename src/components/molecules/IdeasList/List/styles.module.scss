@@ -25,6 +25,10 @@
     color: #4096ff;
     font-style: italic;
   }
+  .dropDown{
+    display: flex;
+    align-items: center;
+  }
   .commentContainer{
     :global {
       .ant-form-item{
