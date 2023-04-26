@@ -118,7 +118,7 @@ export default function DownloadAllDocumentModal({
       // make error get idea toast
       console.log(error);
     }
-
+    form.resetFields();
     setLoading(() => false);
   };
 

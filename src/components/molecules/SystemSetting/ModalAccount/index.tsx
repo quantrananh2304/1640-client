@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from "react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import { Button, Form, Modal, message } from "antd";
 import loadable from "~/utils/loadable";
 
@@ -36,7 +36,7 @@ interface Props {
 const AccountModal = (props: Props) => {
   const [form] = Form.useForm();
   const { visible, setVisible, userData, afterSuccess, handleRefetch } = props;
-
+  const [valueRole, setValueRole] = useState('')
   const { data, isLoading, isFetching } = useDepartment(PARAMS_GET_ALL);
   const dataDepartment = data?.data?.departments;
 
@@ -92,7 +92,7 @@ const AccountModal = (props: Props) => {
         if (thisUserData.role === UserRole.Admin) {
           res = await updateUserInfoForAdmin(userData?._id, {
             address: fmData.address,
-            department: fmData.department,
+            department: fmData.department || null,
             dob: fmData.dob,
             firstName: fmData.firstName,
             gender: fmData.gender,
@@ -190,7 +190,9 @@ const AccountModal = (props: Props) => {
           <Input maxLength={255} placeholder="Enter address" />
         </Form.Item>
         <Form.Item label="Role" name="role" required>
-          <Select placeholder="Select role">
+          <Select 
+            onChange={(value: any) => setValueRole(value)}
+            placeholder="Select role">
             {roleOption?.map((item: any) => (
               <Option key={item.id} value={item.value}>
                 {item.name}
@@ -198,19 +200,20 @@ const AccountModal = (props: Props) => {
             ))}
           </Select>
         </Form.Item>
-
-        <Form.Item label="Department" name="department" required>
-          <Select
-            placeholder="Select department"
-            loading={isLoading || isFetching}
-          >
-            {dataDepartment?.map((item: any) => (
-              <Option key={item._id} value={item._value}>
-                {item.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        { (valueRole !== UserRole.Admin && valueRole!== UserRole.QA_M) &&
+          <Form.Item label="Department" name="department" required>
+            <Select
+              placeholder="Select department"
+              loading={isLoading || isFetching}
+            >
+              {dataDepartment?.map((item: any) => (
+                <Option key={item._id} value={item._value}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        }
 
         <Form.Item label="Gender" name="gender" required>
           <Select placeholder="Select gender">

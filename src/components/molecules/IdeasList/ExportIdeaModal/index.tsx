@@ -114,7 +114,7 @@ export default function ExportIdeaModal({
     } catch (error) {
       console.log(error)
     }
-
+    form.resetFields();
     setLoading(() => false);
   };
 

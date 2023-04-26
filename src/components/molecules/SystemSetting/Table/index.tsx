@@ -137,7 +137,7 @@ const TableAccount = (props: Props) => {
           color="blue"
           onClick={() => handleOpenModal(record)}
         >
-          {record.department.name}
+          {record.department?.name ? record.department?.name : "-"}
         </Tag>
       ),
     },

@@ -122,7 +122,7 @@ const Filter = (props: Props) => {
               onValuesChange={handleValuesChange}
               initialValues={{
                 sort: sortOption[0].value,
-                thread: initialThread ? initialThread : "",
+                thread: initialThread ? initialThread : undefined,
               }}
             >
               <div className={styles.filterWrapper}>
@@ -169,7 +169,7 @@ const Filter = (props: Props) => {
                   </Select>
                 </Form.Item>
 
-                <Form.Item name="department" className={styles.formItem}>
+                <Form.Item name="departments" className={styles.formItem}>
                   <Select
                     className={styles.filterOption}
                     placeholder="Select department"

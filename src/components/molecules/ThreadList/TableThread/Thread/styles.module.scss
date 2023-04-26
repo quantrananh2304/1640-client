@@ -12,12 +12,19 @@
     width: 70%;
     display: flex;
     flex-direction: column;
-
+    .content {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .name {
       font-size: 16px;
       line-height: 24px;
       font-weight: 500;
       color: #096DD9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       &:hover {
         cursor: pointer;

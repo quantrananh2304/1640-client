@@ -82,6 +82,12 @@ const IdeaDetails = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (ideaId) {
+      viewIdea(ideaId)
+    }
+  }, [])
+
   const handleEditComment = (commentId: string) => {
     setItemEditComment(commentId);
     setVisibleModalEditComment(true);

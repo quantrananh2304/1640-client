@@ -30,10 +30,9 @@ export const handleLogin = ({ accessToken, expiresOn, callbackUrl, userName, use
   });
 
   if (getCookie('token')) {
-    if (userRole === UserRole.Admin || userRole === UserRole.QA_M ) {
+    if (userRole === UserRole.Admin) {
       history.push(callbackUrl ?? ROUTES.DashBoard);
-    }
-    if (userRole === UserRole.Staff || userRole === UserRole.QA_C ) {
+    } else {
       history.push(ROUTES.Ideas);
     }
     // window.location.reload();

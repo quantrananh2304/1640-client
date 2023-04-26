@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { format } from 'date-fns';
 import { DATE, SUCCESS } from '~/utils/constant';
@@ -22,6 +22,7 @@ interface Props {
   categories?: any;
   refetch: () => void;
   isFetching?: boolean;
+  total?: number;
   isLoading?: boolean;
   setParams?: (value: any) => void;
 }
@@ -32,7 +33,7 @@ interface DataType {
 }
 
 const CategoryTable = (props: Props) => {
-  const { categories, refetch, isFetching, isLoading, setParams } = props;
+  const { categories, refetch, isFetching, isLoading, setParams, total } = props;
   const [ isModalVisible, setIsModalVisible ] = useState(false);
   const [ visibleModalInactive, setVisibleModalInactive ] = useState(false);
   const [ idInactive, setIdInactive ] = useState();
@@ -42,6 +43,13 @@ const CategoryTable = (props: Props) => {
     pageSize: 5,
     total: 10
   });
+
+  useEffect(() => {
+    setPagination({
+      ...pagination,
+      total: total
+    })
+  },[total])
   
   const handleEdit = (record: any) => {
     setCategory(record)
