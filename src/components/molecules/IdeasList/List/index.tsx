@@ -216,8 +216,8 @@ const IdeaList = (props: Prop) => {
                     <Popover
                       trigger={'hover'}
                       content={(
-                        item.like?.map((userLike: any) => 
-                          <div key={userLike._id}>
+                        item.like?.map((userLike: any, i: number) => 
+                          <div key={`already-${userLike._id}` + i}>
                             {userLike.user.firstName} {userLike.user.lastName}
                           </div>
                         )
@@ -232,7 +232,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.like?.map((userLike: any) => 
-                          <div key={userLike._id}>
+                          <div key={`like-${userLike._id}`}>
                             {userLike.user.firstName} {userLike.user.lastName}
                           </div>
                         )
@@ -253,7 +253,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike._id}>
+                          <div key={`already-${userDislike._id}`}>
                             {userDislike.user.firstName} {userDislike.user.lastName}
                           </div>
                         )
@@ -268,7 +268,7 @@ const IdeaList = (props: Prop) => {
                       trigger={'hover'}
                       content={(
                         item.dislike?.map((userDislike: any) => 
-                          <div key={userDislike._id}>
+                          <div key={`dislike-${userDislike._id}`}>
                             {userDislike.user.firstName} {userDislike.user.lastName}
                           </div>
                         )

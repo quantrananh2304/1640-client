@@ -8,6 +8,7 @@ import { compareAsc, format } from "date-fns";
 import styles from "./styles.module.scss";
 import { Authorization } from "~/wrapper/Authorization";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "antd";
 
 const ModalIdeas = loadable(
   () => import("~/components/molecules/IdeasList/ModalIdeas")
@@ -43,8 +44,12 @@ function Thread(props: Props) {
               alt="status"
             />
           </div>
-
-          <div className={styles.content}>{item?.description}</div>
+          <Tooltip
+            title={item?.description}
+            placement="topLeft"
+          >
+            <div className={styles.content}>{item?.description}</div>
+          </Tooltip>
 
           <div className={styles.infoGroup}>
             <div className={styles.dateRange}>
@@ -59,7 +64,7 @@ function Thread(props: Props) {
           </div>
         </div>
 
-        {compareAsc(new Date(item?.finalClosureDate), new Date()) >= 0 ? (
+        {compareAsc(new Date(item?.closureDate), new Date()) >= 0 ? (
           <Authorization roles={[UserRole.Staff]}>
             <div
               className={styles.btnEdit}

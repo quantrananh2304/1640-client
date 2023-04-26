@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { Button, Form, Modal, message } from 'antd';
 import Input from '~/components/atoms/Input';
-import { createCategory } from '~/api/categories';
+import { createCategory, updateCategory } from '~/api/categories';
 import { SUCCESS } from '~/utils/constant';
 
 import styles from './styles.module.scss'
@@ -46,7 +46,11 @@ const CategoryModal = (props: Props) => {
   const handleSave = async (formValues: any) => {
     try {
       let res: any = null;
-      res = await createCategory(formValues)
+      if (category) {
+        res = await updateCategory(category._id,formValues)
+      } else {
+        res = await createCategory(formValues)
+      }
       if (res.message === SUCCESS) {
         message.success(!category ? 'Add category success' : 'Update category success')
         setVisible(false);

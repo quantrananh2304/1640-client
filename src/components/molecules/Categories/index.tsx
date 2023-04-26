@@ -18,6 +18,7 @@ const Categories = () => {
       <CategoryTable  
         categories={data?.data?.categories}
         refetch={refetch}  
+        total={data?.data?.total}
         isLoading={isLoading}
         isFetching={isFetching}
         setParams={setParams}
